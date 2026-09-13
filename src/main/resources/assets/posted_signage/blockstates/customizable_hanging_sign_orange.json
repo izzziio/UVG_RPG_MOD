@@ -1,0 +1,19 @@
+{
+    "variants":  {
+                     "facing=north":  {
+                                          "model":  "posted_signage:block/customizable_hanging_sign_orange"
+                                      },
+                     "facing=east":  {
+                                         "model":  "posted_signage:block/customizable_hanging_sign_orange",
+                                         "y":  90
+                                     },
+                     "facing=south":  {
+                                          "model":  "posted_signage:block/customizable_hanging_sign_orange",
+                                          "y":  180
+                                      },
+                     "facing=west":  {
+                                         "model":  "posted_signage:block/customizable_hanging_sign_orange",
+                                         "y":  270
+                                     }
+                 }
+}

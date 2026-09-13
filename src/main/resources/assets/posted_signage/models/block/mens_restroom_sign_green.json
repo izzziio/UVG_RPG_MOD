@@ -1,0 +1,642 @@
+{
+    "ambientocclusion":  false,
+    "render_type":  "minecraft:cutout",
+    "textures":  {
+                     "sign":  "posted_signage:item/mens_restroom_sign_green",
+                     "materials":  "posted_signage:block/hanging_sign_materials",
+                     "particle":  "posted_signage:item/mens_restroom_sign_green"
+                 },
+    "elements":  [
+                     {
+                         "from":  [
+                                      7.4,
+                                      3.5,
+                                      5.75
+                                  ],
+                         "to":  [
+                                    8.6,
+                                    12.5,
+                                    14.75
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                8,
+                                                                8
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#sign"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                8,
+                                                                8
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#sign"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             8,
+                                                             8
+                                                         ],
+                                                  "texture":  "#materials"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      7.2,
+                                      12.5,
+                                      5.25
+                                  ],
+                         "to":  [
+                                    8.8,
+                                    13,
+                                    15.25
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                8,
+                                                                8
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                8,
+                                                                8
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             8,
+                                                             8
+                                                         ],
+                                                  "texture":  "#materials"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      7.2,
+                                      3,
+                                      5.25
+                                  ],
+                         "to":  [
+                                    8.8,
+                                    3.5,
+                                    15.25
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                8,
+                                                                8
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                8,
+                                                                8
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             8,
+                                                             8
+                                                         ],
+                                                  "texture":  "#materials"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      7.2,
+                                      3.5,
+                                      14.75
+                                  ],
+                         "to":  [
+                                    8.8,
+                                    12.5,
+                                    15.25
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                8,
+                                                                8
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                8,
+                                                                8
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             8,
+                                                             8
+                                                         ],
+                                                  "texture":  "#materials"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      7.2,
+                                      3.5,
+                                      5.25
+                                  ],
+                         "to":  [
+                                    8.8,
+                                    12.5,
+                                    5.75
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                8,
+                                                                8
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                8,
+                                                                8
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             8,
+                                                             8
+                                                         ],
+                                                  "texture":  "#materials"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               8,
+                                                               8
+                                                           ],
+                                                    "texture":  "#materials"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      6.25,
+                                      2.5,
+                                      15.25
+                                  ],
+                         "to":  [
+                                    9.75,
+                                    13.5,
+                                    16
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                8,
+                                                                8,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               8,
+                                                               8,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                8,
+                                                                8,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               8,
+                                                               8,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             8,
+                                                             8,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  "#materials"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               8,
+                                                               8,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#materials"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      7,
+                                      10.75,
+                                      14
+                                  ],
+                         "to":  [
+                                    9,
+                                    11.75,
+                                    15.25
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                8,
+                                                                8,
+                                                                16
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               8,
+                                                               8,
+                                                               16
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                8,
+                                                                8,
+                                                                16
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               8,
+                                                               8,
+                                                               16
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             8,
+                                                             8,
+                                                             16
+                                                         ],
+                                                  "texture":  "#materials"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               8,
+                                                               8,
+                                                               16
+                                                           ],
+                                                    "texture":  "#materials"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      7,
+                                      4.25,
+                                      14
+                                  ],
+                         "to":  [
+                                    9,
+                                    5.25,
+                                    15.25
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                8,
+                                                                8,
+                                                                16
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               8,
+                                                               8,
+                                                               16
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                8,
+                                                                8,
+                                                                16
+                                                            ],
+                                                     "texture":  "#materials"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               8,
+                                                               8,
+                                                               16
+                                                           ],
+                                                    "texture":  "#materials"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             8,
+                                                             8,
+                                                             16
+                                                         ],
+                                                  "texture":  "#materials"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               8,
+                                                               8,
+                                                               16
+                                                           ],
+                                                    "texture":  "#materials"
+                                                }
+                                   }
+                     }
+                 ],
+    "display":  {
+                    "gui":  {
+                                "rotation":  [
+                                                 0,
+                                                 90,
+                                                 0
+                                             ],
+                                "translation":  [
+                                                    0,
+                                                    0,
+                                                    0
+                                                ],
+                                "scale":  [
+                                              1.15,
+                                              1.15,
+                                              1.15
+                                          ]
+                            },
+                    "ground":  {
+                                   "rotation":  [
+                                                    0,
+                                                    90,
+                                                    0
+                                                ],
+                                   "translation":  [
+                                                       0,
+                                                       3,
+                                                       0
+                                                   ],
+                                   "scale":  [
+                                                 0.5,
+                                                 0.5,
+                                                 0.5
+                                             ]
+                               },
+                    "fixed":  {
+                                  "rotation":  [
+                                                   0,
+                                                   90,
+                                                   0
+                                               ],
+                                  "translation":  [
+                                                      0,
+                                                      0,
+                                                      0
+                                                  ],
+                                  "scale":  [
+                                                1,
+                                                1,
+                                                1
+                                            ]
+                              },
+                    "firstperson_righthand":  {
+                                                  "rotation":  [
+                                                                   0,
+                                                                   90,
+                                                                   0
+                                                               ],
+                                                  "translation":  [
+                                                                      1.13,
+                                                                      3.2,
+                                                                      1.13
+                                                                  ],
+                                                  "scale":  [
+                                                                0.68,
+                                                                0.68,
+                                                                0.68
+                                                            ]
+                                              },
+                    "firstperson_lefthand":  {
+                                                 "rotation":  [
+                                                                  0,
+                                                                  90,
+                                                                  0
+                                                              ],
+                                                 "translation":  [
+                                                                     1.13,
+                                                                     3.2,
+                                                                     1.13
+                                                                 ],
+                                                 "scale":  [
+                                                               0.68,
+                                                               0.68,
+                                                               0.68
+                                                           ]
+                                             }
+                }
+}

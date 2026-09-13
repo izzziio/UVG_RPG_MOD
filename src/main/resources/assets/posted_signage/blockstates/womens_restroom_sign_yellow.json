@@ -1,0 +1,19 @@
+{
+    "variants":  {
+                     "facing=north":  {
+                                          "model":  "posted_signage:block/womens_restroom_sign_yellow"
+                                      },
+                     "facing=east":  {
+                                         "model":  "posted_signage:block/womens_restroom_sign_yellow",
+                                         "y":  90
+                                     },
+                     "facing=south":  {
+                                          "model":  "posted_signage:block/womens_restroom_sign_yellow",
+                                          "y":  180
+                                      },
+                     "facing=west":  {
+                                         "model":  "posted_signage:block/womens_restroom_sign_yellow",
+                                         "y":  270
+                                     }
+                 }
+}

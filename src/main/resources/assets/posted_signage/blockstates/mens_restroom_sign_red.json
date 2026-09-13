@@ -1,0 +1,19 @@
+{
+    "variants":  {
+                     "facing=north":  {
+                                          "model":  "posted_signage:block/mens_restroom_sign_red"
+                                      },
+                     "facing=east":  {
+                                         "model":  "posted_signage:block/mens_restroom_sign_red",
+                                         "y":  90
+                                     },
+                     "facing=south":  {
+                                          "model":  "posted_signage:block/mens_restroom_sign_red",
+                                          "y":  180
+                                      },
+                     "facing=west":  {
+                                         "model":  "posted_signage:block/mens_restroom_sign_red",
+                                         "y":  270
+                                     }
+                 }
+}
