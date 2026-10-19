@@ -1,0 +1,506 @@
+{
+    "ambientocclusion":  false,
+    "render_type":  "minecraft:cutout",
+    "textures":  {
+                     "pot":  "minecraft:block/quartz_block_side",
+                     "soil":  "minecraft:block/rooted_dirt",
+                     "foliage":  "posted_signage:block/sansevieria_foliage",
+                     "particle":  "minecraft:block/white_concrete"
+                 },
+    "elements":  [
+                     {
+                         "from":  [
+                                      2,
+                                      0,
+                                      0
+                                  ],
+                         "to":  [
+                                    14,
+                                    1.5,
+                                    14
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#pot"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#pot"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#pot"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#pot"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  "#pot"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#pot"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      2,
+                                      1.5,
+                                      0
+                                  ],
+                         "to":  [
+                                    3,
+                                    6,
+                                    14
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#pot"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#pot"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#pot"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#pot"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  "#pot"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#pot"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      13,
+                                      1.5,
+                                      0
+                                  ],
+                         "to":  [
+                                    14,
+                                    6,
+                                    14
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#pot"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#pot"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#pot"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#pot"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  "#pot"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#pot"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      2,
+                                      1.5,
+                                      13
+                                  ],
+                         "to":  [
+                                    14,
+                                    6,
+                                    14
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#pot"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#pot"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#pot"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#pot"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  "#pot"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#pot"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      3,
+                                      5.4,
+                                      0
+                                  ],
+                         "to":  [
+                                    13,
+                                    5.8,
+                                    13
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#soil"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#soil"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#soil"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#soil"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  "#soil"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#soil"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      1,
+                                      4.8,
+                                      7.99
+                                  ],
+                         "to":  [
+                                    15,
+                                    22.8,
+                                    8.01
+                                ],
+                         "rotation":  {
+                                          "origin":  [
+                                                         8,
+                                                         8,
+                                                         8
+                                                     ],
+                                          "axis":  "y",
+                                          "angle":  45
+                                      },
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#foliage"
+                                                 },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#foliage"
+                                                 }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      7.99,
+                                      4.8,
+                                      1
+                                  ],
+                         "to":  [
+                                    8.01,
+                                    22.8,
+                                    15
+                                ],
+                         "rotation":  {
+                                          "origin":  [
+                                                         8,
+                                                         8,
+                                                         8
+                                                     ],
+                                          "axis":  "y",
+                                          "angle":  45
+                                      },
+                         "faces":  {
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#foliage"
+                                                },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#foliage"
+                                                }
+                                   }
+                     }
+                 ],
+    "display":  {
+                    "gui":  {
+                                "rotation":  [
+                                                 25,
+                                                 135,
+                                                 0
+                                             ],
+                                "translation":  [
+                                                    0,
+                                                    -1,
+                                                    0
+                                                ],
+                                "scale":  [
+                                              0.62,
+                                              0.62,
+                                              0.62
+                                          ]
+                            },
+                    "ground":  {
+                                   "translation":  [
+                                                       0,
+                                                       1,
+                                                       0
+                                                   ],
+                                   "scale":  [
+                                                 0.45,
+                                                 0.45,
+                                                 0.45
+                                             ]
+                               },
+                    "fixed":  {
+                                  "scale":  [
+                                                0.65,
+                                                0.65,
+                                                0.65
+                                            ]
+                              },
+                    "firstperson_righthand":  {
+                                                  "rotation":  [
+                                                                   0,
+                                                                   45,
+                                                                   0
+                                                               ],
+                                                  "translation":  [
+                                                                      0,
+                                                                      1,
+                                                                      0
+                                                                  ],
+                                                  "scale":  [
+                                                                0.55,
+                                                                0.55,
+                                                                0.55
+                                                            ]
+                                              },
+                    "firstperson_lefthand":  {
+                                                 "rotation":  [
+                                                                  0,
+                                                                  225,
+                                                                  0
+                                                              ],
+                                                 "translation":  [
+                                                                     0,
+                                                                     1,
+                                                                     0
+                                                                 ],
+                                                 "scale":  [
+                                                               0.55,
+                                                               0.55,
+                                                               0.55
+                                                           ]
+                                             }
+                }
+}
