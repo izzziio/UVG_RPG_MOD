@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "posted_signage:block/smooth_quartz_vertical_slab",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=east": {
+      "model": "posted_signage:block/smooth_quartz_vertical_slab",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south": {
+      "model": "posted_signage:block/smooth_quartz_vertical_slab",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "posted_signage:block/smooth_quartz_vertical_slab",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

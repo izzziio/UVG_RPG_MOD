@@ -1,0 +1,44 @@
+{
+  "ambientocclusion": false,
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "sign": "posted_signage:item/do_not_use_elevator_sign",
+    "particle": "posted_signage:item/do_not_use_elevator_sign"
+  },
+  "elements": [
+    {
+      "from": [3, 3, 15.5],
+      "to": [13, 13, 16],
+      "faces": {
+        "north": { "uv": [0, 0, 16, 16], "texture": "#sign" },
+        "south": { "uv": [16, 0, 0, 16], "texture": "#sign" }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [0, 180, 0],
+      "translation": [0, 0, 0],
+      "scale": [1.35, 1.35, 1.35]
+    },
+    "ground": {
+      "translation": [0, 3, 0],
+      "scale": [0.5, 0.5, 0.5]
+    },
+    "fixed": {
+      "rotation": [0, 180, 0],
+      "translation": [0, 0, 0],
+      "scale": [1, 1, 1]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 180, 0],
+      "translation": [1.13, 3.2, 1.13],
+      "scale": [0.68, 0.68, 0.68]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, 180, 0],
+      "translation": [1.13, 3.2, 1.13],
+      "scale": [0.68, 0.68, 0.68]
+    }
+  }
+}

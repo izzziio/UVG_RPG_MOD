@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,glass_mounted=false": {
+      "model": "posted_signage:block/mens_restroom_sign_orange"
+    },
+    "facing=north,glass_mounted=true": {
+      "model": "posted_signage:block/mens_restroom_sign_orange_glass"
+    },
+    "facing=east,glass_mounted=false": {
+      "model": "posted_signage:block/mens_restroom_sign_orange",
+      "y": 90
+    },
+    "facing=east,glass_mounted=true": {
+      "model": "posted_signage:block/mens_restroom_sign_orange_glass",
+      "y": 90
+    },
+    "facing=south,glass_mounted=false": {
+      "model": "posted_signage:block/mens_restroom_sign_orange",
+      "y": 180
+    },
+    "facing=south,glass_mounted=true": {
+      "model": "posted_signage:block/mens_restroom_sign_orange_glass",
+      "y": 180
+    },
+    "facing=west,glass_mounted=false": {
+      "model": "posted_signage:block/mens_restroom_sign_orange",
+      "y": 270
+    },
+    "facing=west,glass_mounted=true": {
+      "model": "posted_signage:block/mens_restroom_sign_orange_glass",
+      "y": 270
+    }
+  }
+}

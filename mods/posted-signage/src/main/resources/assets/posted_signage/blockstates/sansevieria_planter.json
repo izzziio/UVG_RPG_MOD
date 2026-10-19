@@ -1,0 +1,22 @@
+{
+    "variants":  {
+                     "connection=single":  {
+                                               "model":  "posted_signage:block/sansevieria_planter"
+                                           },
+                     "connection=north":  {
+                                              "model":  "posted_signage:block/sansevieria_planter_connected"
+                                          },
+                     "connection=east":  {
+                                             "model":  "posted_signage:block/sansevieria_planter_connected",
+                                             "y":  90
+                                         },
+                     "connection=south":  {
+                                              "model":  "posted_signage:block/sansevieria_planter_connected",
+                                              "y":  180
+                                          },
+                     "connection=west":  {
+                                             "model":  "posted_signage:block/sansevieria_planter_connected",
+                                             "y":  270
+                                         }
+                 }
+}
