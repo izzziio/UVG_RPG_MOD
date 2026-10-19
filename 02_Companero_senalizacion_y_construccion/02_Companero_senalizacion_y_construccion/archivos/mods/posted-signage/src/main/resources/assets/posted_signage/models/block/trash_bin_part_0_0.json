@@ -1,0 +1,12 @@
+{
+  "loader": "neoforge:obj",
+  "model": "posted_signage:models/block/trash_bin.obj",
+  "automatic_culling": false,
+  "flip_v": true,
+  "emissive_ambient": false,
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "posted_signage:block/facility_white_tile"
+  }
+}

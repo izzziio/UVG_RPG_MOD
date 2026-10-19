@@ -1,0 +1,33 @@
+{
+    "ambientocclusion":  false,
+    "textures":  {
+                     "relief":  "posted_signage:block/statue_relief",
+                     "edge":  "minecraft:block/black_concrete",
+                     "particle":  "minecraft:block/tuff"
+                 },
+    "elements":  [
+                     {
+                         "from":  [
+                                      0,
+                                      0,
+                                      15.5
+                                  ],
+                         "to":  [
+                                    16,
+                                    16,
+                                    16
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                1.6,
+                                                                4,
+                                                                3.2,
+                                                                8
+                                                            ],
+                                                     "texture":  "#relief"
+                                                 }
+                                   }
+                     }
+                 ]
+}

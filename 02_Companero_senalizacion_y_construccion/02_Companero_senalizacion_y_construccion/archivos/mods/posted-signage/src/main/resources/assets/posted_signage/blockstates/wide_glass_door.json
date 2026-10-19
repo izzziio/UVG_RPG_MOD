@@ -1,0 +1,196 @@
+{
+  "variants": {
+    "facing=north,open=false,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_0_0",
+      "y": 0
+    },
+    "facing=north,open=true,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_0_0_open",
+      "y": 270
+    },
+    "facing=north,open=false,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_0_1",
+      "y": 0
+    },
+    "facing=north,open=true,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_0_1_open",
+      "y": 270
+    },
+    "facing=north,open=false,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_0_2",
+      "y": 0
+    },
+    "facing=north,open=true,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_0_2_open",
+      "y": 270
+    },
+    "facing=north,open=false,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_1_0",
+      "y": 0
+    },
+    "facing=north,open=true,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_1_0_open",
+      "y": 270
+    },
+    "facing=north,open=false,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_1_1",
+      "y": 0
+    },
+    "facing=north,open=true,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_1_1_open",
+      "y": 270
+    },
+    "facing=north,open=false,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_1_2",
+      "y": 0
+    },
+    "facing=north,open=true,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_1_2_open",
+      "y": 270
+    },
+    "facing=east,open=false,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_0_0",
+      "y": 90
+    },
+    "facing=east,open=true,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_0_0_open",
+      "y": 0
+    },
+    "facing=east,open=false,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_0_1",
+      "y": 90
+    },
+    "facing=east,open=true,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_0_1_open",
+      "y": 0
+    },
+    "facing=east,open=false,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_0_2",
+      "y": 90
+    },
+    "facing=east,open=true,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_0_2_open",
+      "y": 0
+    },
+    "facing=east,open=false,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_1_0",
+      "y": 90
+    },
+    "facing=east,open=true,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_1_0_open",
+      "y": 0
+    },
+    "facing=east,open=false,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_1_1",
+      "y": 90
+    },
+    "facing=east,open=true,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_1_1_open",
+      "y": 0
+    },
+    "facing=east,open=false,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_1_2",
+      "y": 90
+    },
+    "facing=east,open=true,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_1_2_open",
+      "y": 0
+    },
+    "facing=south,open=false,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_0_0",
+      "y": 180
+    },
+    "facing=south,open=true,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_0_0_open",
+      "y": 90
+    },
+    "facing=south,open=false,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_0_1",
+      "y": 180
+    },
+    "facing=south,open=true,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_0_1_open",
+      "y": 90
+    },
+    "facing=south,open=false,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_0_2",
+      "y": 180
+    },
+    "facing=south,open=true,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_0_2_open",
+      "y": 90
+    },
+    "facing=south,open=false,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_1_0",
+      "y": 180
+    },
+    "facing=south,open=true,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_1_0_open",
+      "y": 90
+    },
+    "facing=south,open=false,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_1_1",
+      "y": 180
+    },
+    "facing=south,open=true,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_1_1_open",
+      "y": 90
+    },
+    "facing=south,open=false,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_1_2",
+      "y": 180
+    },
+    "facing=south,open=true,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_1_2_open",
+      "y": 90
+    },
+    "facing=west,open=false,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_0_0",
+      "y": 270
+    },
+    "facing=west,open=true,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_0_0_open",
+      "y": 180
+    },
+    "facing=west,open=false,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_0_1",
+      "y": 270
+    },
+    "facing=west,open=true,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_0_1_open",
+      "y": 180
+    },
+    "facing=west,open=false,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_0_2",
+      "y": 270
+    },
+    "facing=west,open=true,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_0_2_open",
+      "y": 180
+    },
+    "facing=west,open=false,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_1_0",
+      "y": 270
+    },
+    "facing=west,open=true,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wide_glass_door_part_1_0_open",
+      "y": 180
+    },
+    "facing=west,open=false,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_1_1",
+      "y": 270
+    },
+    "facing=west,open=true,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wide_glass_door_part_1_1_open",
+      "y": 180
+    },
+    "facing=west,open=false,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_1_2",
+      "y": 270
+    },
+    "facing=west,open=true,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wide_glass_door_part_1_2_open",
+      "y": 180
+    }
+  }
+}

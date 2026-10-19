@@ -1,0 +1,62 @@
+PARTE 2: Actualizar señalización, construcción e instalaciones
+
+Actualiza el código y los recursos de Posted Signage una vez migrada su carpeta.
+Incluye fuentes, hidratación y su indicador; papeleras con inventario e interfaz;
+puertas y paneles CIT; herramientas de aplicación de texturas y losas verticales;
+actualizaciones de señalización, maceteras y mural; modelos, texturas, recetas y pruebas.
+El conjunto pasa de 11 a 46 clases Java. Los recursos deben acompañar al código.
+Para comprobar las novedades, revisar PostedSignage.java, DrinkingFountainBlock.java,
+Hydration.java, TrashBinBlockEntity.java y las clases Cit*, Texture* y *GameTests.
+Este paquete no contiene todas las piezas de cada función de forma aislada: la configuración llegó en la parte 1.
+
+Rama sugerida: migracion/parte-2
+Mensaje sugerido: Integrar parte 2: Actualizar señalización, construcción e instalaciones
+
+INSTRUCCIONES PARA ACTUALIZAR EL REPOSITORIO COMPARTIDO
+Necesitan Git y Python 3. Descomprimir cada paquete FUERA del repositorio.
+No subir el ZIP ni copiar manifiesto.json o aplicar.py dentro del código del mod.
+Los archivos actualizados están en archivos/, con rutas relativas a la raíz del repositorio.
+Usar el programa es preferible a copiar a mano, especialmente en la parte 1, que traslada y retira rutas.
+
+Este paquete está preparado para una copia completa de la versión anterior y requiere las partes
+previas integradas. Si ya tienen cambios adicionales o la versión nueva completa, no lo apliquen a ciegas:
+la comprobación se detendrá ante diferencias en archivos esperados o rutas de destino ocupadas.
+La comprobación permite diferencias de saltos de línea LF/CRLF en archivos UTF-8.
+
+Cada integrante, en su turno:
+1. Actualizar main con los cambios del compañero anterior y crear una rama personal.
+   git switch main
+   git pull --ff-only
+   git switch -c NOMBRE_DE_RAMA
+   No crear los tres trabajos desde la versión antigua: la parte 2 requiere la 1 y la 3 requiere la 2.
+2. Desde la carpeta de este paquete, ejecutar en Windows:
+   py -3 aplicar.py --repo "C:\ruta\a\su-repositorio"
+   En Linux/macOS sustituir py -3 por python3 y usar la ruta correspondiente.
+   Esta primera ejecución SOLO comprueba y no escribe nada.
+3. Si la comprobación pasa, aplicar:
+   py -3 aplicar.py --repo "C:\ruta\a\su-repositorio" --aplicar
+   El programa verifica todos los archivos esperados, escribe los cambios y verifica el resultado.
+   Si falla durante la escritura, intenta restaurar los archivos afectados desde una copia en memoria.
+   No crea commits ni sube cambios automáticamente. Conserva archivos ajenos a esta migración.
+4. Dentro del repositorio, revisar:
+   git status
+   git diff --stat
+   git diff --find-renames
+5. Confirmar los cambios reales de integración:
+   git add -A
+   git commit -m "MENSAJE_DE_COMMIT"
+   git push -u origin NOMBRE_DE_RAMA
+   Abrir y revisar el pull request hacia main; integrarlo antes del turno siguiente.
+   Cada integrante usa su propia cuenta. Describir el trabajo como migración/importación de una
+   versión existente: repartir archivos no demuestra quién programó originalmente cada función.
+   Estos paquetes no recuperan el historial perdido de commits.
+
+COMPROBACIÓN FINAL TRAS INTEGRAR LAS TRES PARTES
+Con Java 21 y PowerShell, desde la raíz:
+   powershell -NoProfile -ExecutionPolicy Bypass -File herramientas/compilar.ps1
+Desde cada carpeta mods/posted-signage y mods/university-guide:
+   .\gradlew.bat runGameTestServer
+   .\gradlew.bat runClient
+Comprobar manualmente fuentes, hidratación, papeleras, puertas, señalización y recorridos.
+No se ejecutaron Gradle ni Minecraft durante la creación de los paquetes.
+La validación realizada aquí comprueba migración de archivos, integridad y rechazo de bases incompatibles.
