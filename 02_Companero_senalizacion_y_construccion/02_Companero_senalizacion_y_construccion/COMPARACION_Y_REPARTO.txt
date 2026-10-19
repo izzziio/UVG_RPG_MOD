@@ -1,0 +1,27 @@
+COMPARACIÓN DE LOS ZIP Y REPARTO DE ACTUALIZACIÓN
+
+UVG_RPG_MOD-main.zip: versión anterior de Posted Signage, 211 archivos; versión declarada 1.3.1.
+Commit indicado en el ZIP: aa24f848f5e5e425c44b458a3c1579991da9c8d7
+Fecha de los archivos del ZIP: 13 de septiembre de 2026 (no prueba de fecha de cada cambio).
+
+uvg-minecraft-mods-main(1).zip: conjunto posterior, 425 archivos, organizado en dos mods.
+Posted Signage declara versión 1.6.2 y University Guide declara 1.0.0.
+Commit indicado en el ZIP: 53034dd1633e2c43244367404955f9214769a713
+Fecha de los archivos del ZIP: 15 de octubre de 2026 (no prueba de fecha de cada cambio).
+Coincide byte por byte por ruta con el ZIP uvg-minecraft-mods-main.zip adjuntado antes.
+No se consultó ni verificó el estado actual del repositorio remoto.
+
+Comparando Posted Signage con rutas equivalentes, antes de la migración:
+- 48 archivos idénticos.
+- 162 archivos con bytes diferentes: 114 solo por saltos de línea y 48 con otras diferencias.
+- 166 archivos nuevos.
+- 1 ruta anterior retirada: .github/workflows/build.yml. El conjunto nuevo tiene otro flujo en la raíz.
+Esta clasificación es de archivos; no equivale a un número de funciones nuevas o a pruebas de funcionamiento.
+
+REPARTO Y ORDEN OBLIGATORIO
+1. Axel: estructura, configuración, herramientas y documentación; menor complejidad de lógica Java.
+2. Compañero: código y recursos de Posted Signage.
+3. Compañero: University Guide completo.
+Las partes intermedias sirven para revisar e integrar; NO son entregas compilables independientes.
+El resultado de las tres partes debe coincidir con los 425 archivos del ZIP posterior.
+No se agregaron comentarios de estudio al código que se va a migrar: son los bytes de los ZIP originales.

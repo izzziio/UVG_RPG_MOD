@@ -1,0 +1,44 @@
+newmtl white_tile
+Kd 1 1 1
+map_Kd posted_signage:block/facility_white_tile
+
+newmtl rim
+Kd 1 1 1
+map_Kd posted_signage:block/facility_rim
+
+newmtl top
+Kd 1 1 1
+map_Kd posted_signage:block/facility_top
+
+newmtl inside
+Kd 1 1 1
+map_Kd posted_signage:block/facility_inside
+
+newmtl cavity
+Kd 1 1 1
+map_Kd posted_signage:block/facility_cavity
+
+newmtl frame
+Kd 1 1 1
+map_Kd posted_signage:block/facility_frame
+
+newmtl glass
+Kd 1 1 1
+map_Kd posted_signage:block/facility_glass
+
+newmtl metal
+Kd 1 1 1
+map_Kd posted_signage:block/facility_metal
+
+newmtl closer
+Kd 1 1 1
+map_Kd posted_signage:block/facility_closer
+
+newmtl label
+Kd 1 1 1
+map_Kd posted_signage:block/facility_label
+
+newmtl highlight
+Kd 1 1 1
+map_Kd posted_signage:block/facility_highlight
+
