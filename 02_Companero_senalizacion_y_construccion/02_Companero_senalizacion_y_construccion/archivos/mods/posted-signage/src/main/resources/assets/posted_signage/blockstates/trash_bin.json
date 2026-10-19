@@ -1,0 +1,100 @@
+{
+  "variants": {
+    "facing=north,part_x=0,part_y=0": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 0
+    },
+    "facing=north,part_x=0,part_y=1": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 0
+    },
+    "facing=north,part_x=0,part_y=2": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 0
+    },
+    "facing=north,part_x=1,part_y=0": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 0
+    },
+    "facing=north,part_x=1,part_y=1": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 0
+    },
+    "facing=north,part_x=1,part_y=2": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 0
+    },
+    "facing=east,part_x=0,part_y=0": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 90
+    },
+    "facing=east,part_x=0,part_y=1": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 90
+    },
+    "facing=east,part_x=0,part_y=2": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 90
+    },
+    "facing=east,part_x=1,part_y=0": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 90
+    },
+    "facing=east,part_x=1,part_y=1": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 90
+    },
+    "facing=east,part_x=1,part_y=2": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 90
+    },
+    "facing=south,part_x=0,part_y=0": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 180
+    },
+    "facing=south,part_x=0,part_y=1": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 180
+    },
+    "facing=south,part_x=0,part_y=2": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 180
+    },
+    "facing=south,part_x=1,part_y=0": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 180
+    },
+    "facing=south,part_x=1,part_y=1": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 180
+    },
+    "facing=south,part_x=1,part_y=2": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 180
+    },
+    "facing=west,part_x=0,part_y=0": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 270
+    },
+    "facing=west,part_x=0,part_y=1": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 270
+    },
+    "facing=west,part_x=0,part_y=2": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 270
+    },
+    "facing=west,part_x=1,part_y=0": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 270
+    },
+    "facing=west,part_x=1,part_y=1": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 270
+    },
+    "facing=west,part_x=1,part_y=2": {
+      "model": "posted_signage:block/trash_bin_part_0_0",
+      "y": 270
+    }
+  }
+}
