@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "universityguide:block/tour_stop" }
+  }
+}

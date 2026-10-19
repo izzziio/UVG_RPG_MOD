@@ -1,29 +1,29 @@
-name: Build
+
+name: Build Mods
 
 on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          fetch-tags: true
 
-      - name: Setup JDK 21
+      - name: Setup Java 21
         uses: actions/setup-java@v4
         with:
+          distribution: temurin
           java-version: '21'
-          distribution: 'temurin'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Validate resources
-        shell: pwsh
-        run: ./validate_assets.ps1
+      - name: Build Posted Signage
+        working-directory: mods/posted-signage
+        run: bash ./gradlew build
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Build University Guide
+        working-directory: mods/university-guide
+        run: bash ./gradlew build

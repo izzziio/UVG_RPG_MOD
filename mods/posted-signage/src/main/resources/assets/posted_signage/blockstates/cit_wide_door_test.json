@@ -1,0 +1,9 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "posted_signage:block/cit_wide_door_test"
+      }
+    }
+  ]
+}
