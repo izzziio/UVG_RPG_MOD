@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,glass_mounted=false": {
+      "model": "posted_signage:block/customizable_hanging_sign_purple"
+    },
+    "facing=north,glass_mounted=true": {
+      "model": "posted_signage:block/customizable_hanging_sign_purple_glass"
+    },
+    "facing=east,glass_mounted=false": {
+      "model": "posted_signage:block/customizable_hanging_sign_purple",
+      "y": 90
+    },
+    "facing=east,glass_mounted=true": {
+      "model": "posted_signage:block/customizable_hanging_sign_purple_glass",
+      "y": 90
+    },
+    "facing=south,glass_mounted=false": {
+      "model": "posted_signage:block/customizable_hanging_sign_purple",
+      "y": 180
+    },
+    "facing=south,glass_mounted=true": {
+      "model": "posted_signage:block/customizable_hanging_sign_purple_glass",
+      "y": 180
+    },
+    "facing=west,glass_mounted=false": {
+      "model": "posted_signage:block/customizable_hanging_sign_purple",
+      "y": 270
+    },
+    "facing=west,glass_mounted=true": {
+      "model": "posted_signage:block/customizable_hanging_sign_purple_glass",
+      "y": 270
+    }
+  }
+}

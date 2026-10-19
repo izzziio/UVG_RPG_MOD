@@ -1,0 +1,424 @@
+{
+    "variants":  {
+                     "facing=north,part=stem_bottom_0":  {
+                                                             "model":  "posted_signage:block/statue_relief_stem_bottom_0"
+                                                         },
+                     "facing=east,part=stem_bottom_0":  {
+                                                            "model":  "posted_signage:block/statue_relief_stem_bottom_0",
+                                                            "y":  90
+                                                        },
+                     "facing=south,part=stem_bottom_0":  {
+                                                             "model":  "posted_signage:block/statue_relief_stem_bottom_0",
+                                                             "y":  180
+                                                         },
+                     "facing=west,part=stem_bottom_0":  {
+                                                            "model":  "posted_signage:block/statue_relief_stem_bottom_0",
+                                                            "y":  270
+                                                        },
+                     "facing=north,part=stem_bottom_1":  {
+                                                             "model":  "posted_signage:block/statue_relief_stem_bottom_1"
+                                                         },
+                     "facing=east,part=stem_bottom_1":  {
+                                                            "model":  "posted_signage:block/statue_relief_stem_bottom_1",
+                                                            "y":  90
+                                                        },
+                     "facing=south,part=stem_bottom_1":  {
+                                                             "model":  "posted_signage:block/statue_relief_stem_bottom_1",
+                                                             "y":  180
+                                                         },
+                     "facing=west,part=stem_bottom_1":  {
+                                                            "model":  "posted_signage:block/statue_relief_stem_bottom_1",
+                                                            "y":  270
+                                                        },
+                     "facing=north,part=stem_bottom_2":  {
+                                                             "model":  "posted_signage:block/statue_relief_stem_bottom_2"
+                                                         },
+                     "facing=east,part=stem_bottom_2":  {
+                                                            "model":  "posted_signage:block/statue_relief_stem_bottom_2",
+                                                            "y":  90
+                                                        },
+                     "facing=south,part=stem_bottom_2":  {
+                                                             "model":  "posted_signage:block/statue_relief_stem_bottom_2",
+                                                             "y":  180
+                                                         },
+                     "facing=west,part=stem_bottom_2":  {
+                                                            "model":  "posted_signage:block/statue_relief_stem_bottom_2",
+                                                            "y":  270
+                                                        },
+                     "facing=north,part=stem_bottom_3":  {
+                                                             "model":  "posted_signage:block/statue_relief_stem_bottom_3"
+                                                         },
+                     "facing=east,part=stem_bottom_3":  {
+                                                            "model":  "posted_signage:block/statue_relief_stem_bottom_3",
+                                                            "y":  90
+                                                        },
+                     "facing=south,part=stem_bottom_3":  {
+                                                             "model":  "posted_signage:block/statue_relief_stem_bottom_3",
+                                                             "y":  180
+                                                         },
+                     "facing=west,part=stem_bottom_3":  {
+                                                            "model":  "posted_signage:block/statue_relief_stem_bottom_3",
+                                                            "y":  270
+                                                        },
+                     "facing=north,part=stem_top_0":  {
+                                                          "model":  "posted_signage:block/statue_relief_stem_top_0"
+                                                      },
+                     "facing=east,part=stem_top_0":  {
+                                                         "model":  "posted_signage:block/statue_relief_stem_top_0",
+                                                         "y":  90
+                                                     },
+                     "facing=south,part=stem_top_0":  {
+                                                          "model":  "posted_signage:block/statue_relief_stem_top_0",
+                                                          "y":  180
+                                                      },
+                     "facing=west,part=stem_top_0":  {
+                                                         "model":  "posted_signage:block/statue_relief_stem_top_0",
+                                                         "y":  270
+                                                     },
+                     "facing=north,part=stem_top_1":  {
+                                                          "model":  "posted_signage:block/statue_relief_stem_top_1"
+                                                      },
+                     "facing=east,part=stem_top_1":  {
+                                                         "model":  "posted_signage:block/statue_relief_stem_top_1",
+                                                         "y":  90
+                                                     },
+                     "facing=south,part=stem_top_1":  {
+                                                          "model":  "posted_signage:block/statue_relief_stem_top_1",
+                                                          "y":  180
+                                                      },
+                     "facing=west,part=stem_top_1":  {
+                                                         "model":  "posted_signage:block/statue_relief_stem_top_1",
+                                                         "y":  270
+                                                     },
+                     "facing=north,part=stem_top_2":  {
+                                                          "model":  "posted_signage:block/statue_relief_stem_top_2"
+                                                      },
+                     "facing=east,part=stem_top_2":  {
+                                                         "model":  "posted_signage:block/statue_relief_stem_top_2",
+                                                         "y":  90
+                                                     },
+                     "facing=south,part=stem_top_2":  {
+                                                          "model":  "posted_signage:block/statue_relief_stem_top_2",
+                                                          "y":  180
+                                                      },
+                     "facing=west,part=stem_top_2":  {
+                                                         "model":  "posted_signage:block/statue_relief_stem_top_2",
+                                                         "y":  270
+                                                     },
+                     "facing=north,part=stem_top_3":  {
+                                                          "model":  "posted_signage:block/statue_relief_stem_top_3"
+                                                      },
+                     "facing=east,part=stem_top_3":  {
+                                                         "model":  "posted_signage:block/statue_relief_stem_top_3",
+                                                         "y":  90
+                                                     },
+                     "facing=south,part=stem_top_3":  {
+                                                          "model":  "posted_signage:block/statue_relief_stem_top_3",
+                                                          "y":  180
+                                                      },
+                     "facing=west,part=stem_top_3":  {
+                                                         "model":  "posted_signage:block/statue_relief_stem_top_3",
+                                                         "y":  270
+                                                     },
+                     "facing=north,part=bar_bottom_0":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_0"
+                                                        },
+                     "facing=east,part=bar_bottom_0":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_0",
+                                                           "y":  90
+                                                       },
+                     "facing=south,part=bar_bottom_0":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_0",
+                                                            "y":  180
+                                                        },
+                     "facing=west,part=bar_bottom_0":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_0",
+                                                           "y":  270
+                                                       },
+                     "facing=north,part=bar_bottom_1":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_1"
+                                                        },
+                     "facing=east,part=bar_bottom_1":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_1",
+                                                           "y":  90
+                                                       },
+                     "facing=south,part=bar_bottom_1":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_1",
+                                                            "y":  180
+                                                        },
+                     "facing=west,part=bar_bottom_1":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_1",
+                                                           "y":  270
+                                                       },
+                     "facing=north,part=bar_bottom_2":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_2"
+                                                        },
+                     "facing=east,part=bar_bottom_2":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_2",
+                                                           "y":  90
+                                                       },
+                     "facing=south,part=bar_bottom_2":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_2",
+                                                            "y":  180
+                                                        },
+                     "facing=west,part=bar_bottom_2":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_2",
+                                                           "y":  270
+                                                       },
+                     "facing=north,part=bar_bottom_3":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_3"
+                                                        },
+                     "facing=east,part=bar_bottom_3":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_3",
+                                                           "y":  90
+                                                       },
+                     "facing=south,part=bar_bottom_3":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_3",
+                                                            "y":  180
+                                                        },
+                     "facing=west,part=bar_bottom_3":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_3",
+                                                           "y":  270
+                                                       },
+                     "facing=north,part=bar_bottom_4":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_4"
+                                                        },
+                     "facing=east,part=bar_bottom_4":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_4",
+                                                           "y":  90
+                                                       },
+                     "facing=south,part=bar_bottom_4":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_4",
+                                                            "y":  180
+                                                        },
+                     "facing=west,part=bar_bottom_4":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_4",
+                                                           "y":  270
+                                                       },
+                     "facing=north,part=bar_bottom_5":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_5"
+                                                        },
+                     "facing=east,part=bar_bottom_5":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_5",
+                                                           "y":  90
+                                                       },
+                     "facing=south,part=bar_bottom_5":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_5",
+                                                            "y":  180
+                                                        },
+                     "facing=west,part=bar_bottom_5":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_5",
+                                                           "y":  270
+                                                       },
+                     "facing=north,part=bar_bottom_6":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_6"
+                                                        },
+                     "facing=east,part=bar_bottom_6":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_6",
+                                                           "y":  90
+                                                       },
+                     "facing=south,part=bar_bottom_6":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_6",
+                                                            "y":  180
+                                                        },
+                     "facing=west,part=bar_bottom_6":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_6",
+                                                           "y":  270
+                                                       },
+                     "facing=north,part=bar_bottom_7":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_7"
+                                                        },
+                     "facing=east,part=bar_bottom_7":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_7",
+                                                           "y":  90
+                                                       },
+                     "facing=south,part=bar_bottom_7":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_7",
+                                                            "y":  180
+                                                        },
+                     "facing=west,part=bar_bottom_7":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_7",
+                                                           "y":  270
+                                                       },
+                     "facing=north,part=bar_bottom_8":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_8"
+                                                        },
+                     "facing=east,part=bar_bottom_8":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_8",
+                                                           "y":  90
+                                                       },
+                     "facing=south,part=bar_bottom_8":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_8",
+                                                            "y":  180
+                                                        },
+                     "facing=west,part=bar_bottom_8":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_8",
+                                                           "y":  270
+                                                       },
+                     "facing=north,part=bar_bottom_9":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_9"
+                                                        },
+                     "facing=east,part=bar_bottom_9":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_9",
+                                                           "y":  90
+                                                       },
+                     "facing=south,part=bar_bottom_9":  {
+                                                            "model":  "posted_signage:block/statue_relief_bar_bottom_9",
+                                                            "y":  180
+                                                        },
+                     "facing=west,part=bar_bottom_9":  {
+                                                           "model":  "posted_signage:block/statue_relief_bar_bottom_9",
+                                                           "y":  270
+                                                       },
+                     "facing=north,part=bar_top_0":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_0"
+                                                     },
+                     "facing=east,part=bar_top_0":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_0",
+                                                        "y":  90
+                                                    },
+                     "facing=south,part=bar_top_0":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_0",
+                                                         "y":  180
+                                                     },
+                     "facing=west,part=bar_top_0":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_0",
+                                                        "y":  270
+                                                    },
+                     "facing=north,part=bar_top_1":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_1"
+                                                     },
+                     "facing=east,part=bar_top_1":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_1",
+                                                        "y":  90
+                                                    },
+                     "facing=south,part=bar_top_1":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_1",
+                                                         "y":  180
+                                                     },
+                     "facing=west,part=bar_top_1":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_1",
+                                                        "y":  270
+                                                    },
+                     "facing=north,part=bar_top_2":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_2"
+                                                     },
+                     "facing=east,part=bar_top_2":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_2",
+                                                        "y":  90
+                                                    },
+                     "facing=south,part=bar_top_2":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_2",
+                                                         "y":  180
+                                                     },
+                     "facing=west,part=bar_top_2":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_2",
+                                                        "y":  270
+                                                    },
+                     "facing=north,part=bar_top_3":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_3"
+                                                     },
+                     "facing=east,part=bar_top_3":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_3",
+                                                        "y":  90
+                                                    },
+                     "facing=south,part=bar_top_3":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_3",
+                                                         "y":  180
+                                                     },
+                     "facing=west,part=bar_top_3":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_3",
+                                                        "y":  270
+                                                    },
+                     "facing=north,part=bar_top_4":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_4"
+                                                     },
+                     "facing=east,part=bar_top_4":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_4",
+                                                        "y":  90
+                                                    },
+                     "facing=south,part=bar_top_4":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_4",
+                                                         "y":  180
+                                                     },
+                     "facing=west,part=bar_top_4":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_4",
+                                                        "y":  270
+                                                    },
+                     "facing=north,part=bar_top_5":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_5"
+                                                     },
+                     "facing=east,part=bar_top_5":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_5",
+                                                        "y":  90
+                                                    },
+                     "facing=south,part=bar_top_5":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_5",
+                                                         "y":  180
+                                                     },
+                     "facing=west,part=bar_top_5":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_5",
+                                                        "y":  270
+                                                    },
+                     "facing=north,part=bar_top_6":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_6"
+                                                     },
+                     "facing=east,part=bar_top_6":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_6",
+                                                        "y":  90
+                                                    },
+                     "facing=south,part=bar_top_6":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_6",
+                                                         "y":  180
+                                                     },
+                     "facing=west,part=bar_top_6":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_6",
+                                                        "y":  270
+                                                    },
+                     "facing=north,part=bar_top_7":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_7"
+                                                     },
+                     "facing=east,part=bar_top_7":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_7",
+                                                        "y":  90
+                                                    },
+                     "facing=south,part=bar_top_7":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_7",
+                                                         "y":  180
+                                                     },
+                     "facing=west,part=bar_top_7":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_7",
+                                                        "y":  270
+                                                    },
+                     "facing=north,part=bar_top_8":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_8"
+                                                     },
+                     "facing=east,part=bar_top_8":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_8",
+                                                        "y":  90
+                                                    },
+                     "facing=south,part=bar_top_8":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_8",
+                                                         "y":  180
+                                                     },
+                     "facing=west,part=bar_top_8":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_8",
+                                                        "y":  270
+                                                    },
+                     "facing=north,part=bar_top_9":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_9"
+                                                     },
+                     "facing=east,part=bar_top_9":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_9",
+                                                        "y":  90
+                                                    },
+                     "facing=south,part=bar_top_9":  {
+                                                         "model":  "posted_signage:block/statue_relief_bar_top_9",
+                                                         "y":  180
+                                                     },
+                     "facing=west,part=bar_top_9":  {
+                                                        "model":  "posted_signage:block/statue_relief_bar_top_9",
+                                                        "y":  270
+                                                    }
+                 }
+}

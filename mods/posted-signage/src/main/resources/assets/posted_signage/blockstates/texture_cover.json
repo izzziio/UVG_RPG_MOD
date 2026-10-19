@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "posted_signage:block/texture_cover"
+    },
+    "facing=east": {
+      "model": "posted_signage:block/texture_cover"
+    },
+    "facing=south": {
+      "model": "posted_signage:block/texture_cover"
+    },
+    "facing=west": {
+      "model": "posted_signage:block/texture_cover"
+    },
+    "facing=up": {
+      "model": "posted_signage:block/texture_cover"
+    },
+    "facing=down": {
+      "model": "posted_signage:block/texture_cover"
+    }
+  }
+}

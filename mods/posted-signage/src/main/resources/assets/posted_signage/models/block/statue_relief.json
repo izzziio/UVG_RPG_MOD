@@ -1,0 +1,208 @@
+{
+    "ambientocclusion":  false,
+    "textures":  {
+                     "relief":  "posted_signage:block/statue_relief",
+                     "frame":  "minecraft:block/polished_blackstone_bricks",
+                     "particle":  "minecraft:block/tuff"
+                 },
+    "elements":  [
+                     {
+                         "from":  [
+                                      0,
+                                      8,
+                                      6
+                                  ],
+                         "to":  [
+                                    16,
+                                    12,
+                                    10
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                8
+                                                            ],
+                                                     "texture":  "#relief"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#frame"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#frame"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#frame"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  "#frame"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#frame"
+                                                }
+                                   }
+                     },
+                     {
+                         "from":  [
+                                      4.8,
+                                      0,
+                                      6
+                                  ],
+                         "to":  [
+                                    11.2,
+                                    8,
+                                    10
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                4.8,
+                                                                8,
+                                                                11.2,
+                                                                16
+                                                            ],
+                                                     "texture":  "#relief"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#frame"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#frame"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#frame"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  "#frame"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#frame"
+                                                }
+                                   }
+                     }
+                 ],
+    "display":  {
+                    "gui":  {
+                                "rotation":  [
+                                                 20,
+                                                 145,
+                                                 0
+                                             ],
+                                "translation":  [
+                                                    0,
+                                                    0,
+                                                    0
+                                                ],
+                                "scale":  [
+                                              0.42,
+                                              0.42,
+                                              0.42
+                                          ]
+                            },
+                    "ground":  {
+                                   "translation":  [
+                                                       0,
+                                                       3,
+                                                       0
+                                                   ],
+                                   "scale":  [
+                                                 0.22,
+                                                 0.22,
+                                                 0.22
+                                             ]
+                               },
+                    "fixed":  {
+                                  "scale":  [
+                                                0.32,
+                                                0.32,
+                                                0.32
+                                            ]
+                              },
+                    "firstperson_righthand":  {
+                                                  "rotation":  [
+                                                                   0,
+                                                                   145,
+                                                                   0
+                                                               ],
+                                                  "scale":  [
+                                                                0.25,
+                                                                0.25,
+                                                                0.25
+                                                            ]
+                                              },
+                    "firstperson_lefthand":  {
+                                                 "rotation":  [
+                                                                  0,
+                                                                  215,
+                                                                  0
+                                                              ],
+                                                 "scale":  [
+                                                               0.25,
+                                                               0.25,
+                                                               0.25
+                                                           ]
+                                             }
+                }
+}

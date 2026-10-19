@@ -1,0 +1,22 @@
+# Keep source and data files identical on Windows and Linux CI.
+* text=auto
+*.java text eol=lf
+*.json text eol=lf
+*.gradle text eol=lf
+*.properties text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.ps1 text eol=lf
+gradlew text eol=lf
+*.bat text eol=crlf
+
+*.bbmodel text eol=lf
+*.jpg binary
+*.png binary
+*.jar binary
+
+# Generated resource caches always use LF.
+src/generated/**/.cache/* text eol=lf
+src/generated/**/*.json text eol=lf
