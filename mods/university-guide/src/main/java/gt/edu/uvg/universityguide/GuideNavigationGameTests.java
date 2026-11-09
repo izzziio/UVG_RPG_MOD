@@ -52,8 +52,8 @@ public final class GuideNavigationGameTests {
             if(x>=3)h.setBlock(new BlockPos(x,y,3),Blocks.IRON_BARS);
         }
         var g=guide(h,6,5,4);var end=feet(h,1,1,1);var path=g.getNavigation().createPath(BlockPos.containing(end),0);
-        h.assertTrue(path!=null&&path.canReach(),"Finds descending L stair route");g.getNavigation().moveTo(path,1.1);
-        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(end)<.45,"Descends corner: "+g.position().subtract(Vec3.atLowerCornerOf(h.absolutePos(BlockPos.ZERO)))
+        h.assertTrue(path!=null&&path.canReach(),"Encuentra la ruta de bajada por la escalera en L");g.getNavigation().moveTo(path,1.1);
+        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(end)<.45,"Baja la esquina:"+g.position().subtract(Vec3.atLowerCornerOf(h.absolutePos(BlockPos.ZERO)))
                 +" done="+g.getNavigation().isDone()+" next="+(path.isDone()?"end":path.getNextEntityPos(g).subtract(Vec3.atLowerCornerOf(h.absolutePos(BlockPos.ZERO))))))
                 .thenExecute(g::discard).thenSucceed();
     }
@@ -61,13 +61,13 @@ public final class GuideNavigationGameTests {
     @GameTest(template="empty") public static void repeatedSearchesRespectChangedObstacles(GameTestHelper h){
         floor(h);var g=guide(h,1,1,3);var end=h.absolutePos(new BlockPos(6,1,3));
         var first=g.getNavigation().createPath(end,0);
-        h.assertTrue(first!=null&&first.canReach(),"Initial route exists");
+        h.assertTrue(first!=null&&first.canReach(),"Existe la ruta inicial");
         for(int z=0;z<8;z++)for(int y=1;y<4;y++)h.setBlock(new BlockPos(3,y,z),ModContent.GUIDE_BARRIER.get());
         var blocked=g.getNavigation().createPath(end,0);
-        h.assertTrue(blocked==null||!blocked.canReach(),"New barrier invalidates cached search");
+        h.assertTrue(blocked==null||!blocked.canReach(),"Una barrera nueva invalida la búsqueda en caché");
         for(int z=0;z<8;z++)for(int y=1;y<4;y++)h.setBlock(new BlockPos(3,y,z),Blocks.AIR);
         var restored=g.getNavigation().createPath(end,0);
-        h.assertTrue(restored!=null&&restored.canReach(),"Removing barrier restores search");g.discard();h.succeed();
+        h.assertTrue(restored!=null&&restored.canReach(),"Retirar la barrera restaura la búsqueda");g.discard();h.succeed();
     }
     // Integración opcional: prueba todos los tamaños, etiquetas, bisagras y orientaciones.
     @GameTest(template="empty",timeoutTicks=200) public static void citDoorsArePlannedAsOpenablePassages(GameTestHelper h){
@@ -85,10 +85,10 @@ public final class GuideNavigationGameTests {
                 var start=root.relative(facing,2);var end=h.absolutePos(root.relative(facing.getOpposite(),2));
                 var g=guide(h,start.getX(),start.getY(),start.getZ());
                 var path=g.getNavigation().createPath(end,0);
-                h.assertTrue(path!=null&&path.canReach(),"Closed CIT doorway is reachable: "+name+" "+facing+" right="+right);
+                h.assertTrue(path!=null&&path.canReach(),"El vano CIT cerrado es alcanzable:"+name+" "+facing+" right="+right);
                 boolean through=false;for(int i=0;i<path.getNodeCount();i++)if(path.getNode(i).asBlockPos().equals(abs))through=true;
-                h.assertTrue(through,"Uses doorway cell: "+name+" "+facing+" right="+right);
-                h.assertTrue(!h.getLevel().getBlockState(abs).getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.OPEN),"Planning does not open doors");
+                h.assertTrue(through,"Usa la celda del vano:"+name+" "+facing+" right="+right);
+                h.assertTrue(!h.getLevel().getBlockState(abs).getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.OPEN),"Planear no abre puertas");
                 g.discard();h.getLevel().removeBlock(abs,false);
             }
         }h.succeed();
@@ -113,11 +113,11 @@ public final class GuideNavigationGameTests {
         block.setPlacedBy(h.getLevel(),abs,state,null,net.minecraft.world.item.ItemStack.EMPTY);
         var start=root.relative(facing,2);var finish=root.relative(facing.getOpposite(),2);
         var g=guide(h,start.getX(),1,start.getZ());var end=feet(h,finish.getX(),1,finish.getZ());var path=g.getNavigation().createPath(BlockPos.containing(end),0);
-        h.assertTrue(path!=null&&path.canReach(),"Complete route through door");g.getNavigation().moveTo(path,1.1);
-        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(end)<.4,"Crosses doorway: "+g.position().subtract(Vec3.atLowerCornerOf(h.absolutePos(BlockPos.ZERO)))
+        h.assertTrue(path!=null&&path.canReach(),"Ruta completa a través de la puerta");g.getNavigation().moveTo(path,1.1);
+        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(end)<.4,"Cruza el vano:"+g.position().subtract(Vec3.atLowerCornerOf(h.absolutePos(BlockPos.ZERO)))
                 +" open="+h.getLevel().getBlockState(abs).getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.OPEN)
                 +" done="+g.getNavigation().isDone()+" next="+(path.isDone()?"end":path.getNextEntityPos(g).subtract(Vec3.atLowerCornerOf(h.absolutePos(BlockPos.ZERO))))))
-                .thenExecute(()->{h.assertTrue(h.getLevel().getBlockState(abs).getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.OPEN),"Door really opened");g.discard();})
+                .thenExecute(()->{h.assertTrue(h.getLevel().getBlockState(abs).getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.OPEN),"La puerta se abrió de verdad");g.discard();})
                 .thenSucceed();
     }
     // Un bloque en el giro mantiene la puerta cerrada y la ruta deja de atravesarla.
@@ -128,11 +128,11 @@ public final class GuideNavigationGameTests {
         var root=new BlockPos(3,1,3);var abs=h.absolutePos(root);var state=block.defaultBlockState();
         h.getLevel().setBlockAndUpdate(abs,state);block.setPlacedBy(h.getLevel(),abs,state,null,net.minecraft.world.item.ItemStack.EMPTY);
         h.setBlock(new BlockPos(3,1,2),Blocks.STONE);
-        h.assertTrue(gt.edu.uvg.universityguide.entity.navigation.GuideDoors.shape(h.getLevel(),abs)==null,"Blocked swing cannot be planned open");
+        h.assertTrue(gt.edu.uvg.universityguide.entity.navigation.GuideDoors.shape(h.getLevel(),abs)==null,"No se puede planear la apertura con el giro bloqueado");
         var g=guide(h,3,1,4);
-        h.assertTrue(!gt.edu.uvg.universityguide.entity.navigation.GuideDoors.openAhead(g,feet(h,3,1,3)),"Opening fails safely");
-        h.assertTrue(h.getBlockState(new BlockPos(3,1,2)).is(Blocks.STONE),"Obstacle is preserved");
-        h.assertTrue(!h.getLevel().getBlockState(abs).getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.OPEN),"Door remains closed");
+        h.assertTrue(!gt.edu.uvg.universityguide.entity.navigation.GuideDoors.openAhead(g,feet(h,3,1,3)),"La apertura falla de forma segura");
+        h.assertTrue(h.getBlockState(new BlockPos(3,1,2)).is(Blocks.STONE),"Se conserva el obstáculo");
+        h.assertTrue(!h.getLevel().getBlockState(abs).getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.OPEN),"La puerta sigue cerrada");
         g.discard();h.succeed();
     }
     // Centrado transversal en los cuatro sentidos sin cambiar el punto de subida.
@@ -146,11 +146,11 @@ public final class GuideNavigationGameTests {
             }
             var node=h.absolutePos(center.above());var base=Vec3.atBottomCenterOf(node);
             var point=GuideRouteRules.comfortableWaypoint(h.getLevel(),node,base.y,.6,1.8);
-            h.assertTrue(point!=null,"Stair waypoint exists");
+            h.assertTrue(point!=null,"Existe el punto de paso de la escalera");
             var delta=point.subtract(base);
-            h.assertTrue(delta.x*right.getStepX()+delta.z*right.getStepZ()>.15,"Moves away from stair side wall: "+facing);
-            h.assertTrue(Math.abs(delta.x*facing.getStepX()+delta.z*facing.getStepZ())<1e-6,"Never shifts forward across a riser");
-            h.assertTrue(route(h,base,point),"Lateral point remains supported");
+            h.assertTrue(delta.x*right.getStepX()+delta.z*right.getStepZ()>.15,"Se aleja de la pared lateral de la escalera:"+facing);
+            h.assertTrue(Math.abs(delta.x*facing.getStepX()+delta.z*facing.getStepZ())<1e-6,"Nunca se desplaza hacia adelante cruzando una contrahuella");
+            h.assertTrue(route(h,base,point),"El punto lateral sigue apoyado");
         }
         h.succeed();
     }
@@ -168,16 +168,16 @@ public final class GuideNavigationGameTests {
         }
         var g=guide(h,1,1,1);var top=feet(h,1,4,6);var bottom=feet(h,1,1,1);
         var path=g.getNavigation().createPath(BlockPos.containing(top),0);
-        h.assertTrue(path!=null&&path.canReach(),"Finds full route to upper floor");
+        h.assertTrue(path!=null&&path.canReach(),"Encuentra la ruta completa al piso superior");
         boolean central=false;for(int i=0;i<path.getNodeCount();i++){
             var n=path.getNode(i);if(n.x==h.absolutePos(new BlockPos(2,0,0)).getX()&&n.y>bottom.y)central=true;
         }
-        h.assertTrue(central,"Prefers center lane of wide stair");g.getNavigation().moveTo(path,1.1);
-        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(top)<.45,"Arrives upstairs"))
+        h.assertTrue(central,"Prefiere el carril central de la escalera ancha");g.getNavigation().moveTo(path,1.1);
+        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(top)<.45,"Llega al piso de arriba"))
                 .thenExecute(()->{
                     var down=g.getNavigation().createPath(BlockPos.containing(bottom),0);
-                    h.assertTrue(down!=null&&down.canReach(),"Finds descending route");g.getNavigation().moveTo(down,1.1);
-                }).thenWaitUntil(()->h.assertTrue(g.position().distanceTo(bottom)<.45,"Returns downstairs: "+g.position()+" done="+g.getNavigation().isDone()))
+                    h.assertTrue(down!=null&&down.canReach(),"Encuentra la ruta de bajada");g.getNavigation().moveTo(down,1.1);
+                }).thenWaitUntil(()->h.assertTrue(g.position().distanceTo(bottom)<.45,"Regresa al piso de abajo:"+g.position()+" done="+g.getNavigation().isDone()))
                 .thenExecute(g::discard).thenSucceed();
     }
     // La ruta abandona el borde cuando hay una alternativa ancha y próxima.
@@ -185,26 +185,26 @@ public final class GuideNavigationGameTests {
         floor(h);
         for(int x=0;x<8;x++)for(int y=1;y<4;y++)for(int z:new int[]{0,6})h.setBlock(new BlockPos(x,y,z),Blocks.STONE);
         var near=feet(h,3,1,1);var center=feet(h,3,1,3);
-        h.assertTrue(GuideRouteRules.clearance(h.getLevel(),center,.6,1.8)>GuideRouteRules.clearance(h.getLevel(),near,.6,1.8),"Actual wall clearance increases toward center");
+        h.assertTrue(GuideRouteRules.clearance(h.getLevel(),center,.6,1.8)>GuideRouteRules.clearance(h.getLevel(),near,.6,1.8),"La separación real de la pared aumenta hacia el centro");
         var g=guide(h,1,1,1);var p=g.getNavigation().createPath(h.absolutePos(new BlockPos(6,1,1)),0);
-        h.assertTrue(p!=null&&p.canReach(),"Wide route remains reachable");boolean leftEdge=false;
+        h.assertTrue(p!=null&&p.canReach(),"La ruta ancha sigue siendo alcanzable");boolean leftEdge=false;
         for(int i=0;i<p.getNodeCount();i++)if(p.getNode(i).z>=h.absolutePos(new BlockPos(0,0,2)).getZ())leftEdge=true;
-        h.assertTrue(leftEdge,"Prefers open lane rather than following wall for whole route");g.discard();h.succeed();
+        h.assertTrue(leftEdge,"Prefiere el carril libre en lugar de seguir la pared toda la ruta");g.discard();h.succeed();
     }
     // Dentro de un pasillo de dos bloques desplaza el punto hacia el espacio central.
     @GameTest(template="empty") public static void comfortableWaypointsStayInsideSafeCorridors(GameTestHelper h){
         floor(h);for(int x=0;x<8;x++)for(int y=1;y<4;y++)for(int z:new int[]{0,3})h.setBlock(new BlockPos(x,y,z),Blocks.STONE);
         var base=feet(h,3,1,1);var node=h.absolutePos(new BlockPos(3,1,1));
         var point=GuideRouteRules.comfortableWaypoint(h.getLevel(),node,base.y,.6,1.8);
-        h.assertTrue(point!=null&&point.z>base.z+.15,"Moves away from nearby wall");
-        h.assertTrue(route(h,base,point),"Adjustment remains physically traversable");h.succeed();
+        h.assertTrue(point!=null&&point.z>base.z+.15,"Se aleja de la pared cercana");
+        h.assertTrue(route(h,base,point),"El ajuste sigue siendo físicamente transitable");h.succeed();
     }
     // Comprueba progreso real continuo en una ruta recta, sin pedir saltos.
     @GameTest(template="empty",timeoutTicks=160) public static void guideKeepsMovingAcrossFlatWaypoints(GameTestHelper h){
         floor(h);var g=guide(h,1,1,3);var end=feet(h,6,1,3);
-        var path=g.getNavigation().createPath(BlockPos.containing(end),0);h.assertTrue(path!=null&&path.canReach(),"Has complete route");
+        var path=g.getNavigation().createPath(BlockPos.containing(end),0);h.assertTrue(path!=null&&path.canReach(),"Tiene una ruta completa");
         g.getNavigation().moveTo(path,1.1);
-        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(end)<.4,"Reaches destination without stalled navigation"))
+        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(end)<.4,"Llega al destino sin atascar la navegación"))
                 .thenExecute(g::discard).thenSucceed();
     }
     private static void floor(GameTestHelper h) {
@@ -219,8 +219,8 @@ public final class GuideNavigationGameTests {
         for(int x=0;x<8;x++)for(int z=0;z<8;z++)if(!(z==1&&x>=1&&x<=6)&&!(x==6&&z>=1&&z<=6))
             for(int y=1;y<4;y++)h.setBlock(new BlockPos(x,y,z),Blocks.STONE);
         var g=guide(h,1,1,1);var end=feet(h,6,1,6);var p=g.getNavigation().createPath(BlockPos.containing(end),0);
-        h.assertTrue(p!=null&&p.canReach(),"Corner has a complete route");g.getNavigation().moveTo(p,1.1);
-        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(end)<.4,"Rounds corner and reaches target: "+g.position()))
+        h.assertTrue(p!=null&&p.canReach(),"La esquina tiene una ruta completa");g.getNavigation().moveTo(p,1.1);
+        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(end)<.4,"Dobla la esquina y llega al objetivo:"+g.position()))
                 .thenExecute(g::discard).thenSucceed();
     }
     private static Vec3 feet(GameTestHelper h,int x,double y,int z) {
@@ -239,12 +239,12 @@ public final class GuideNavigationGameTests {
     @GameTest(template="empty")
     public static void fullBlocksAndFurnitureAreNotSteps(GameTestHelper h) {
         floor(h);h.setBlock(new BlockPos(3,1,3),Blocks.STONE);
-        h.assertTrue(!route(h,feet(h,2,1,3),feet(h,3,2,3)),"Cannot climb a full block");
-        h.assertTrue(!route(h,feet(h,3,2,3),feet(h,4,1,3)),"Cannot drop a full block");
+        h.assertTrue(!route(h,feet(h,2,1,3),feet(h,3,2,3)),"No puede trepar un bloque completo");
+        h.assertTrue(!route(h,feet(h,3,2,3),feet(h,4,1,3)),"No puede dejarse caer un bloque completo");
         h.setBlock(new BlockPos(3,1,3),Blocks.CHEST);
-        h.assertTrue(!route(h,feet(h,2,1,3),feet(h,3,1.875,3)),"Cannot climb furniture");
+        h.assertTrue(!route(h,feet(h,2,1,3),feet(h,3,1.875,3)),"No puede trepar muebles");
         GuideEntity g=guide(h,1,1,3);var path=g.getNavigation().createPath(h.absolutePos(new BlockPos(6,1,3)),0);
-        h.assertTrue(path!=null&&path.canReach(),"Finds a route around furniture");g.discard();h.succeed();
+        h.assertTrue(path!=null&&path.canReach(),"Encuentra una ruta alrededor de los muebles");g.discard();h.succeed();
     }
 
     // La forma de los peldaños determina qué lado permite ascender.
@@ -254,14 +254,14 @@ public final class GuideNavigationGameTests {
             floor(h);BlockPos center=new BlockPos(3,1,3);
             h.setBlock(center,Blocks.STONE_STAIRS.defaultBlockState().setValue(StairBlock.FACING,d));
             Vec3 low=feet(h,3-d.getStepX(),1,3-d.getStepZ()), top=feet(h,3,2,3);
-            h.assertTrue(route(h,low,top),"Ascends stair from low face: "+d);
-            h.assertTrue(route(h,top,low),"Descends stair to low face: "+d);
+            h.assertTrue(route(h,low,top),"Sube la escalera desde la cara baja:"+d);
+            h.assertTrue(route(h,top,low),"Baja la escalera hasta la cara baja:"+d);
             Vec3 high=feet(h,3+d.getStepX(),1,3+d.getStepZ());
-            h.assertTrue(!route(h,high,top),"Rejects high face: "+d);
+            h.assertTrue(!route(h,high,top),"Rechaza la cara alta:"+d);
         }
         floor(h);h.setBlock(new BlockPos(3,1,3),Blocks.STONE_SLAB);h.setBlock(new BlockPos(4,1,3),Blocks.STONE);
-        h.assertTrue(route(h,feet(h,2,1,3),feet(h,4,2,3)),"Ascends slab to landing");
-        h.assertTrue(route(h,feet(h,4,2,3),feet(h,2,1,3)),"Descends slab from landing");h.succeed();
+        h.assertTrue(route(h,feet(h,2,1,3),feet(h,4,2,3)),"Sube la losa hasta el descanso");
+        h.assertTrue(route(h,feet(h,4,2,3),feet(h,2,1,3)),"Baja la losa desde el descanso");h.succeed();
     }
 
     // La barrera afecta pies, cabeza y diagonales, pero no otros pisos.
@@ -269,15 +269,15 @@ public final class GuideNavigationGameTests {
     public static void barrierOccupiesOnlyItsCell(GameTestHelper h) {
         floor(h);var barrier=ModContent.GUIDE_BARRIER.get();
         BlockPos p=new BlockPos(3,1,3);h.setBlock(p,barrier);
-        h.assertTrue(!route(h,feet(h,2,1,3),feet(h,4,1,3)),"Feet barrier blocks");
+        h.assertTrue(!route(h,feet(h,2,1,3),feet(h,4,1,3)),"La barrera a la altura de los pies bloquea");
         h.setBlock(p,Blocks.AIR);h.setBlock(p.above(),barrier);
-        h.assertTrue(!route(h,feet(h,2,1,3),feet(h,4,1,3)),"Head barrier blocks");
-        h.assertTrue(!route(h,feet(h,2,1,2),feet(h,4,1,4)),"Diagonal cannot cross barrier");
-        h.assertTrue(barrier.defaultBlockState().getCollisionShape(h.getLevel(),h.absolutePos(p)).isEmpty(),"No physical collision");
+        h.assertTrue(!route(h,feet(h,2,1,3),feet(h,4,1,3)),"La barrera a la altura de la cabeza bloquea");
+        h.assertTrue(!route(h,feet(h,2,1,2),feet(h,4,1,4)),"La diagonal no puede cruzar la barrera");
+        h.assertTrue(barrier.defaultBlockState().getCollisionShape(h.getLevel(),h.absolutePos(p)).isEmpty(),"Sin colisión física");
         for(int x=1;x<7;x++)h.setBlock(new BlockPos(x,3,3),Blocks.STONE);
-        h.assertTrue(route(h,feet(h,2,4,3),feet(h,4,4,3)),"Upper floor remains accessible");
+        h.assertTrue(route(h,feet(h,2,4,3),feet(h,4,4,3)),"El piso superior sigue accesible");
         h.setBlock(p.above(),Blocks.AIR);
-        h.assertTrue(route(h,feet(h,2,1,3),feet(h,4,1,3)),"Removing barrier restores route");h.succeed();
+        h.assertTrue(route(h,feet(h,2,1,3),feet(h,4,1,3)),"Retirar la barrera restaura la ruta");h.succeed();
     }
 
     // La selección y la edición exigen Creativo y operador a la vez.
@@ -291,13 +291,13 @@ public final class GuideNavigationGameTests {
                 @Override public boolean isSpectator(){return false;}
                 @Override public boolean hasPermissions(int permission){return op&&permission<=2;}
             };
-            h.assertTrue(GuideBarrierBlock.canEdit(player)==(creative&&op),"Access matches permissions");
-            h.assertTrue(!block.defaultBlockState().getShape(h.getLevel(),pos,CollisionContext.of(player)).isEmpty()==(creative&&op),"Selection matches permissions");
-            if(!creative||!op)h.assertTrue(!block.onDestroyedByPlayer(block.defaultBlockState(),h.getLevel(),pos,player,false,block.defaultBlockState().getFluidState()),"Rejects unauthorized break");
+            h.assertTrue(GuideBarrierBlock.canEdit(player)==(creative&&op),"El acceso coincide con los permisos");
+            h.assertTrue(!block.defaultBlockState().getShape(h.getLevel(),pos,CollisionContext.of(player)).isEmpty()==(creative&&op),"La selección coincide con los permisos");
+            if(!creative||!op)h.assertTrue(!block.onDestroyedByPlayer(block.defaultBlockState(),h.getLevel(),pos,player,false,block.defaultBlockState().getFluidState()),"Rechaza la ruptura no autorizada");
         }
         var entity=h.getLevel().getBlockEntity(pos);var tag=entity.saveWithFullMetadata(h.getLevel().registryAccess());
         var restored=net.minecraft.world.level.block.entity.BlockEntity.loadStatic(pos,block.defaultBlockState(),tag,h.getLevel().registryAccess());
-        h.assertTrue(restored!=null&&restored.getType()==ModContent.GUIDE_BARRIER_ENTITY.get(),"Barrier survives serialization");h.succeed();
+        h.assertTrue(restored!=null&&restored.getType()==ModContent.GUIDE_BARRIER_ENTITY.get(),"La barrera sobrevive a la serialización");h.succeed();
     }
 
     // El guía recorre una escalera completa caminando y vuelve por ella.
@@ -308,11 +308,11 @@ public final class GuideNavigationGameTests {
         h.setBlock(new BlockPos(6,3,3),Blocks.STONE);
         GuideEntity g=guide(h,2,1,3);Vec3 top=feet(h,6,4,3), bottom=feet(h,2,1,3);
         var path=g.getNavigation().createPath(BlockPos.containing(top),0);
-        h.assertTrue(path!=null&&path.canReach(),"Exact path to upper floor exists");
+        h.assertTrue(path!=null&&path.canReach(),"Existe una ruta exacta al piso superior");
         g.getNavigation().moveTo(path,1);
-        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(top)<.5,"Arrives upstairs: "+g.position()+" target="+top+" done="+g.getNavigation().isDone()+" grounded="+g.onGround()+" step="+g.maxUpStep()))
-                .thenExecute(()->h.assertTrue(g.getNavigation().moveTo(g.getNavigation().createPath(BlockPos.containing(bottom),0),1),"Path downstairs exists"))
-                .thenWaitUntil(()->h.assertTrue(g.position().distanceTo(bottom)<.5,"Arrives downstairs"))
+        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(top)<.5,"Llega al piso de arriba:"+g.position()+" target="+top+" done="+g.getNavigation().isDone()+" grounded="+g.onGround()+" step="+g.maxUpStep()))
+                .thenExecute(()->h.assertTrue(g.getNavigation().moveTo(g.getNavigation().createPath(BlockPos.containing(bottom),0),1),"Existe una ruta al piso de abajo"))
+                .thenWaitUntil(()->h.assertTrue(g.position().distanceTo(bottom)<.5,"Llega al piso de abajo"))
                 .thenExecute(g::discard).thenSucceed();
     }
 
@@ -325,10 +325,10 @@ public final class GuideNavigationGameTests {
             BlockPos p=g.blockPosition();h.getLevel().setBlockAndUpdate(p,ModContent.GUIDE_BARRIER.get().defaultBlockState());
             Vec3 stopped=g.position();
             h.runAfterDelay(15,()->{
-                h.assertTrue(g.position().distanceTo(stopped)<.05,"Remains inside newly placed barrier");
+                h.assertTrue(g.position().distanceTo(stopped)<.05,"Permanece dentro de la barrera recién colocada");
                 h.getLevel().removeBlock(p,false);g.getNavigation().moveTo(end.x,end.y,end.z,1);
                 h.runAfterDelay(20,()->{
-                    h.assertTrue(g.position().distanceTo(stopped)>.4,"Moves again after removal");g.discard();h.succeed();
+                    h.assertTrue(g.position().distanceTo(stopped)>.4,"Se mueve de nuevo tras retirarla");g.discard();h.succeed();
                 });
             });
         });
@@ -346,8 +346,8 @@ public final class GuideNavigationGameTests {
         h.setBlock(new BlockPos(4,4,6),Blocks.STONE);
         GuideEntity g=guide(h,1,1,3);Vec3 top=feet(h,4,5,6);
         var path=g.getNavigation().createPath(BlockPos.containing(top),0);
-        h.assertTrue(path!=null&&path.canReach(),"Finds staircase with landing");g.getNavigation().moveTo(path,1);
-        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(top)<.5,"Reaches floor after turn: "+g.position()))
+        h.assertTrue(path!=null&&path.canReach(),"Encuentra la escalera con descanso");g.getNavigation().moveTo(path,1);
+        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(top)<.5,"Llega al suelo después del giro:"+g.position()))
                 .thenExecute(g::discard).thenSucceed();
     }
 
@@ -357,16 +357,16 @@ public final class GuideNavigationGameTests {
         floor(h);GuideEntity g=guide(h,1,1,3);BlockPos target=h.absolutePos(new BlockPos(6,1,3));
         h.setBlock(new BlockPos(3,1,3),ModContent.GUIDE_BARRIER.get());
         var path=g.getNavigation().createPath(target,0);
-        h.assertTrue(path!=null&&path.canReach(),"Can route around one forbidden cell");
+        h.assertTrue(path!=null&&path.canReach(),"Puede rodear una celda prohibida");
         for(int z=0;z<8;z++)for(int y=1;y<4;y++)h.setBlock(new BlockPos(3,y,z),ModContent.GUIDE_BARRIER.get());
         g.getNavigation().stop();path=g.getNavigation().createPath(target,0);
-        h.assertTrue(path==null||!path.canReach(),"Cannot pass barrier wall");
+        h.assertTrue(path==null||!path.canReach(),"No puede pasar la pared de barreras");
         for(int y=1;y<4;y++)h.setBlock(new BlockPos(3,y,3),Blocks.AIR);
         h.setBlock(new BlockPos(3,1,3),Blocks.OAK_DOOR.defaultBlockState());
         h.setBlock(new BlockPos(3,2,3),Blocks.OAK_DOOR.defaultBlockState()
                 .setValue(net.minecraft.world.level.block.DoorBlock.HALF,net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER));
         g.getNavigation().stop();path=g.getNavigation().createPath(target,0);
-        h.assertTrue(path!=null&&path.canReach(),"Wooden doors remain routeable");g.discard();h.succeed();
+        h.assertTrue(path!=null&&path.canReach(),"Las puertas de madera siguen siendo transitables");g.discard();h.succeed();
     }
     // El guía aprovecha el hueco real, separado de la hoja vertical.
     @GameTest(template="empty")
@@ -386,15 +386,15 @@ public final class GuideNavigationGameTests {
                     GuideEntity g=guide(h,alongX?1:3,1,alongX?3:1);
                     var target=h.absolutePos(new BlockPos(alongX?6:3,1,alongX?3:6));
                     var path=g.getNavigation().createPath(target,0);
-                    h.assertTrue(path!=null&&path.canReach(),"Path exists through free space");
+                    h.assertTrue(path!=null&&path.canReach(),"Existe una ruta por el espacio libre");
                     var passage=h.absolutePos(new BlockPos(3,1,3));boolean passes=false;
                     for(int n=0;n<path.getNodeCount();n++)if(path.getNode(n).asBlockPos().equals(passage)) {
                         passes=true;var point=path.getEntityPosAtNode(g,n);
-                        h.assertTrue(route(h,point,point),"Shifted waypoint fits the real collision shape");
+                        h.assertTrue(route(h,point,point),"El punto de paso desplazado cabe en la forma de colisión real");
                         double offset=alongX?Math.abs(point.z-(passage.getZ()+.5)):Math.abs(point.x-(passage.getX()+.5));
-                        h.assertTrue(offset>.08,"Walks inside the free space instead of brushing the trapdoor");
+                        h.assertTrue(offset>.08,"Camina por el espacio libre en lugar de rozar la trampilla");
                     }
-                    h.assertTrue(passes,"Uses the trapdoor cell instead of excluding the whole block: "+facing+" height="+height);
+                    h.assertTrue(passes,"Usa la celda de la trampilla en lugar de excluir todo el bloque:"+facing+" height="+height);
                     g.discard();
                 }
         h.succeed();
@@ -411,10 +411,10 @@ public final class GuideNavigationGameTests {
                 .setValue(net.minecraft.world.level.block.TrapDoorBlock.FACING,Direction.NORTH);
         h.setBlock(local,closed);GuideEntity g=guide(h,1,1,3);Vec3 end=feet(h,6,1,3);
         var path=g.getNavigation().createPath(BlockPos.containing(end),0);
-        h.assertTrue(path!=null&&path.canReach(),"Closed ceiling trapdoor leaves passage clear");
+        h.assertTrue(path!=null&&path.canReach(),"La trampilla de techo cerrada deja libre el paso");
         g.getNavigation().moveTo(path,1);
         h.runAfterDelay(3,()->h.setBlock(local,closed.setValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN,true)));
-        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(end)<.5,"Continues to destination after trapdoor opens: "+g.position()))
+        h.startSequence().thenWaitUntil(()->h.assertTrue(g.position().distanceTo(end)<.5,"Continúa al destino después de abrir la trampilla:"+g.position()))
                 .thenExecute(g::discard).thenSucceed();
     }
 
@@ -428,17 +428,17 @@ public final class GuideNavigationGameTests {
         h.setBlock(new BlockPos(3,0,3),floorTrapdoor);
         GuideEntity g=guide(h,1,1,3);var target=h.absolutePos(new BlockPos(6,1,3));
         var path=g.getNavigation().createPath(target,0);
-        h.assertTrue(path!=null&&path.canReach(),"Closed flush floor trapdoor remains walkable");
+        h.assertTrue(path!=null&&path.canReach(),"La trampilla cerrada a ras del suelo sigue siendo transitable");
         h.setBlock(new BlockPos(3,0,3),Blocks.STONE);
         h.setBlock(new BlockPos(3,1,3),Blocks.IRON_TRAPDOOR.defaultBlockState()
                 .setValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN,true));
         path=g.getNavigation().createPath(target,0);
-        h.assertTrue(path!=null&&path.canReach(),"Fits beside the open leaf in a one-block passage");
+        h.assertTrue(path!=null&&path.canReach(),"Cabe junto a la hoja abierta en un paso de un bloque");
         h.setBlock(new BlockPos(3,1,3),Blocks.IRON_TRAPDOOR.defaultBlockState()
                 .setValue(net.minecraft.world.level.block.TrapDoorBlock.FACING,Direction.EAST)
                 .setValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN,true));
         path=g.getNavigation().createPath(target,0);
-        h.assertTrue(path==null||!path.canReach(),"Cannot cross the vertical leaf itself");
+        h.assertTrue(path==null||!path.canReach(),"No puede atravesar la propia hoja vertical");
         g.discard();h.succeed();
     }
 
@@ -456,10 +456,10 @@ public final class GuideNavigationGameTests {
                         .setValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN,true));
                 moving[0]=guide(h,alongX?1:3,1,alongX?3:1);target[0]=feet(h,alongX?6:3,1,alongX?3:6);
                 var path=moving[0].getNavigation().createPath(BlockPos.containing(target[0]),0);
-                h.assertTrue(path!=null&&path.canReach(),"Narrow passage has a route: "+facing);
+                h.assertTrue(path!=null&&path.canReach(),"El pasillo angosto tiene ruta:"+facing);
                 moving[0].getNavigation().moveTo(path,1);
             }).thenWaitUntil(()->h.assertTrue(moving[0].position().distanceTo(target[0])<.4,
-                    "Passes open trapdoor: "+facing+" pos="+moving[0].position()+" done="+moving[0].getNavigation().isDone()))
+                    "Pasa la trampilla abierta:"+facing+" pos="+moving[0].position()+" done="+moving[0].getNavigation().isDone()))
                     .thenExecute(()->moving[0].discard());
         }
         sequence.thenSucceed();

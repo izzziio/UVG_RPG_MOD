@@ -413,7 +413,7 @@ public final class GuideEntity extends PathfinderMob {
         setTourState(TourState.IDLE);
     }
 
-    /** Resolve UUIDs at delivery time so disconnected players are skipped safely. */
+    /** Resuelve los UUID al entregar para omitir de forma segura a los jugadores desconectados. */
     private void forEachParticipant(java.util.function.Consumer<ServerPlayer> action) {
         if (level().getServer() == null) {
             return;
@@ -457,7 +457,7 @@ public final class GuideEntity extends PathfinderMob {
         }
     }
 
-    /** Resume saved tours in WAITING so participant proximity is checked before movement restarts. */
+    /** Reanuda los recorridos guardados en WAITING para comprobar la cercanía de los participantes antes de volver a moverse. */
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
