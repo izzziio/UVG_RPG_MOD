@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
-/** Shared dark-green Material 3 look for every guide window, so all three match. */
+/** Tema Material verde oscuro compartido por las ventanas del guía. */
 public final class MaterialGuideTheme {
     // Evita crear instancias de esta clase de utilidades.
     private MaterialGuideTheme() {
@@ -16,26 +16,26 @@ public final class MaterialGuideTheme {
     public static final int BACKGROUND = 0xFF101412;
     /** Card surface. */
     public static final int SURFACE = 0xFF1B211E;
-    /** Lighter surface for buttons and text boxes. */
+    /** Superficie clara para botones y campos. */
     public static final int SURFACE_HIGH = 0xFF262E2A;
     /** Thin card border. */
     public static final int OUTLINE = 0xFF3A4640;
-    /** Main UVG green for titles, chips and the save button. */
+    /** Verde principal para títulos y botón de guardar. */
     public static final int PRIMARY = 0xFF7BE3A8;
-    /** Text on top of the green button. */
+    /** Texto sobre el botón verde. */
     public static final int ON_PRIMARY = 0xFF003823;
     /** Grey text used on green buttons: almost black so it stands out on light green. */
     public static final int ON_GREEN_BUTTON = 0xFF1B211E;
-    /** Main text: soft white with a green tint so it blends with the theme. */
+    /** Texto blanco suave con tono verde. */
     public static final int ON_SURFACE = 0xFFE9F2EC;
-    /** Support text: sage grey-green that blends with the theme. */
+    /** Texto secundario gris verdoso. */
     public static final int MUTED = 0xFF8FA89A;
     /** Switched-off button fill. */
     public static final int DISABLED_BG = 0xFF2A322E;
     /** Switched-off button text. */
     public static final int DISABLED_FG = 0xFF6B7771;
 
-    /** Paint a flat card with a thin border. Corners stay square so it works on every setup. */
+    /** Dibuja una tarjeta plana con borde fino y esquinas cuadradas. */
     public static void card(GuiGraphics graphics, int x, int y, int width, int height) {
         graphics.fill(x, y, x + width, y + height, SURFACE);
         graphics.fill(x, y, x + width, y + 1, OUTLINE);
@@ -44,7 +44,7 @@ public final class MaterialGuideTheme {
         graphics.fill(x + width - 1, y, x + width, y + height, OUTLINE);
     }
 
-    /** Header card with a green accent line at the bottom. */
+    /** Cabecera con una línea verde inferior. */
     public static void header(GuiGraphics graphics, int x, int y, int width, int height) {
         card(graphics, x, y, width, height);
         graphics.fill(x + 12, y + height - 3, x + width - 12, y + height - 1, PRIMARY);
@@ -56,7 +56,7 @@ public final class MaterialGuideTheme {
         graphics.fill(x, y + height - 1, x + width, y + height, PRIMARY);
     }
 
-    /** Shorten a text with … so it never spills out of its box. */
+    /** Acorta el texto con puntos suspensivos para que quepa. */
     public static String fit(Font font, String text, int maxWidth) {
         if (font.width(text) <= maxWidth) {
             return text;
@@ -70,7 +70,7 @@ public final class MaterialGuideTheme {
         return text.substring(0, Math.max(0, length)) + dots;
     }
 
-    /** Rounded-feel button in Material style. Filled = strong green, otherwise soft dark. */
+    /** Botón de estilo Material, verde al destacar y oscuro en otro caso. */
     public static final class M3Button extends Button {
         private final boolean filled;
 
@@ -120,8 +120,8 @@ public final class MaterialGuideTheme {
             } else {
                 textColor = ON_SURFACE;
             }
-            // Shadowed text like vanilla buttons so the label stays readable on green.
-            // Filled green buttons use flat text: the shadow muddies small letters on light green.
+            // Usa sombra normal para mantener el texto legible sobre verde.
+            // Usa letras sin sombra en botones verdes para mejorar la legibilidad.
             Font font = Minecraft.getInstance().font;
             String label = getMessage().getString();
             graphics.drawString(font, label,

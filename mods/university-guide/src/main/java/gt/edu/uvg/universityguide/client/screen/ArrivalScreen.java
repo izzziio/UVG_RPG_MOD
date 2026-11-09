@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 
-/** Dark-green arrival card: green title header, soft reading card and a green progress bar. */
+/** Tarjeta de llegada verde con explicación y barra de progreso. */
 public final class ArrivalScreen extends Screen {
     private final String description;
     private List<FormattedCharSequence> lines = List.of();
@@ -30,17 +30,17 @@ public final class ArrivalScreen extends Screen {
         return (width - contentWidth()) / 2;
     }
 
-    /** Wrap the explanation to the current screen width and determine how many lines fit. */
+    /** Ajusta las líneas al ancho y calcula cuántas caben. */
     @Override
     protected void init() {
         lines = font.split(Component.literal(description), Math.min(480, width - 70));
         visibleLines = Math.max(3, (height - 170) / 11);
         addRenderableWidget(MaterialGuideTheme.M3Button.filled(
                 width / 2 - 80, height - 34, 160, 22,
-                Component.translatable("gui.done"), button -> onClose()));
+                Component.literal("Listo"), button -> onClose()));
     }
 
-    /** Dark background plus title header and reading card behind the text. */
+    /** Fondo oscuro con título y tarjeta de lectura. */
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         graphics.fill(0, 0, width, height, MaterialGuideTheme.BACKGROUND);
@@ -50,7 +50,7 @@ public final class ArrivalScreen extends Screen {
         MaterialGuideTheme.card(graphics, left, 58, contentWidth, height - 58 - 48);
     }
 
-    /** Draw the title, the visible slice of text, the progress bar and the scroll hint. */
+    /** Dibuja título, líneas visibles, progreso y ayuda de desplazamiento. */
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
@@ -85,7 +85,7 @@ public final class ArrivalScreen extends Screen {
         }
     }
 
-    /** Clamp scrolling to the wrapped text so the user cannot move beyond the explanation. */
+    /** Limita el desplazamiento a las líneas de la explicación. */
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         int maximum = Math.max(0, lines.size() - visibleLines);
@@ -93,7 +93,7 @@ public final class ArrivalScreen extends Screen {
         return true;
     }
 
-    /** Keep the world and multiplayer tour running while this screen is open. */
+    /** Mantiene el mundo y el recorrido activos con esta pantalla abierta. */
     @Override
     public boolean isPauseScreen() {
         return false;

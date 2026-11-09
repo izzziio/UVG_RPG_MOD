@@ -7,7 +7,7 @@ import gt.edu.uvg.universityguide.network.TourPayloads;
 import net.minecraft.client.Minecraft;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-/** Opens server-requested screens on the client thread using immutable packet snapshots. */
+/** Abre pantallas en el hilo del cliente con copias inmutables de paquetes. */
 public final class ClientPayloadHandler {
     // Evita crear instancias de esta clase de utilidades.
     private ClientPayloadHandler() {

@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
-/** Draws the green editor outline only for players allowed to manage tour stops. */
+/** Dibuja el contorno verde solo para editores autorizados. */
 public final class TourStopRenderer implements BlockEntityRenderer<TourStopBlockEntity> {
     // Crea el renderizador del cliente.
     public TourStopRenderer(BlockEntityRendererProvider.Context context) {

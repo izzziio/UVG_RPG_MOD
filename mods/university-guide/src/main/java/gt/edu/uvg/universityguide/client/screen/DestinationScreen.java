@@ -7,11 +7,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/** Dark-green destination picker: header card, one soft card per place and round-feel buttons. */
+/** Selector de destinos verde con una tarjeta por lugar. */
 public final class DestinationScreen extends Screen {
     private static final int MAX_PAGE_SIZE = 7;
     private int pageSize = MAX_PAGE_SIZE;
-    private static final int ROW_HEIGHT = 26;
+    private static final int ROW_HEIGHT = 40;
     private final int guideEntityId;
     private final String guideName;
     private final List<TourPayloads.StopSummary> stops;
@@ -40,7 +40,7 @@ public final class DestinationScreen extends Screen {
         return 92;
     }
 
-    /** Build only the current page's controls, with footer positions bounded by the available height. */
+    /** Crea los controles de la página actual dentro de la altura disponible. */
     @Override
     protected void init() {
         int contentWidth = contentWidth();
@@ -55,9 +55,10 @@ public final class DestinationScreen extends Screen {
             TourPayloads.StopSummary stop = stops.get(index);
             String label = MaterialGuideTheme.fit(font,
                     stop.name() + "  (" + stop.distance() + " m)", contentWidth - 32);
-            addRenderableWidget(MaterialGuideTheme.M3Button.tonal(
+            var button=addRenderableWidget(MaterialGuideTheme.M3Button.tonal(
                     left + 8, firstRowY() + (index - start) * ROW_HEIGHT + 3, contentWidth - 16, 20,
-                    Component.literal(label), button -> select(stop)));
+                    Component.literal(label), pressed -> select(stop)));
+            if(!stop.description().isBlank())button.setTooltip(net.minecraft.client.gui.components.Tooltip.create(Component.literal(stop.description())));
         }
 
         int footerY = Math.min(height - 32, firstRowY() + pageSize * ROW_HEIGHT + 12);
@@ -71,22 +72,22 @@ public final class DestinationScreen extends Screen {
         }
         addRenderableWidget(MaterialGuideTheme.M3Button.filled(
                 width / 2 - 70, footerY, 140, 22,
-                Component.translatable("gui.cancel"), button -> onClose()));
+                Component.literal("Cancelar"), button -> onClose()));
     }
 
-    /** Send intent only; the server rechecks guide distance, availability and destination validity. */
+    /** Envía la intención; el servidor revalida distancia, disponibilidad y destino. */
     private void select(TourPayloads.StopSummary stop) {
         PacketDistributor.sendToServer(new TourPayloads.SelectDestination(guideEntityId, stop.id()));
         onClose();
     }
 
-    /** Rebuild buttons from the existing snapshot instead of requesting another network response. */
+    /** Reconstruye botones desde la copia actual sin pedir otra respuesta. */
     private void changePage(int difference) {
         page += difference;
         rebuildWidgets();
     }
 
-    /** Dark background plus header and list cards behind the buttons. */
+    /** Fondo oscuro con cabecera y tarjetas detrás de los botones. */
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         graphics.fill(0, 0, width, height, MaterialGuideTheme.BACKGROUND);
@@ -103,7 +104,7 @@ public final class DestinationScreen extends Screen {
         }
     }
 
-    /** Draw the header texts, hint, empty-state message and page count around the buttons. */
+    /** Dibuja cabecera, ayuda, aviso vacío y número de página. */
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
@@ -124,13 +125,20 @@ public final class DestinationScreen extends Screen {
             graphics.drawCenteredString(font, Component.translatable("screen.universityguide.no_destinations"),
                     width / 2, height / 2 - 4, MaterialGuideTheme.MUTED);
         } else {
+            int start=page*pageSize,end=Math.min(start+pageSize,stops.size());
+            for(int index=start;index<end;index++){
+                var stop=stops.get(index);
+                String description=stop.description().isBlank()?Component.translatable("screen.universityguide.summary_missing").getString():stop.description();
+                graphics.drawString(font,MaterialGuideTheme.fit(font,description,contentWidth-28),left+14,
+                        firstRowY()+(index-start)*ROW_HEIGHT+26,MaterialGuideTheme.MUTED,false);
+            }
             int pages = (stops.size() + pageSize - 1) / pageSize;
             graphics.drawString(font, Component.translatable("screen.universityguide.page", page + 1, pages),
                     8, height - 12, MaterialGuideTheme.MUTED, false);
         }
     }
 
-    /** Keep the world and multiplayer tour running while this screen is open. */
+    /** Mantiene el mundo y el recorrido activos con esta pantalla abierta. */
     @Override
     public boolean isPauseScreen() {
         return false;

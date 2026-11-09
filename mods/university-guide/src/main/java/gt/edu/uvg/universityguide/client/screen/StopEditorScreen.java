@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/** Dark-green stop form: outlined boxes, live character counters and a strong green save button. */
+/** Formulario verde con contadores y botón de guardar. */
 public final class StopEditorScreen extends Screen {
     private static final int NAME_LABEL_Y = 62;
     private static final int NAME_BOX_Y = 76;
@@ -33,10 +33,7 @@ public final class StopEditorScreen extends Screen {
         this.payload = payload;
     }
 
-    /**
-     * Description box without the built-in counter below it. The counter lives
-     * at the top right next to the label instead, so it never shows twice.
-     */
+    /** Cuadro de descripción con el contador junto a la etiqueta, sin duplicarlo. */
     private static final class SingleCounterBox extends MultiLineEditBox {
         private static final ResourceLocation SCROLLER =
                 ResourceLocation.withDefaultNamespace("widget/scroller");
@@ -50,7 +47,7 @@ public final class StopEditorScreen extends Screen {
         // Dibuja el contador del campo de texto.
         @Override
         protected void renderDecorations(GuiGraphics graphics) {
-            // Same vanilla scrollbar, but no character counter under the box.
+            // Usa la barra normal sin contador debajo del cuadro.
             if (this.scrollbarVisible()) {
                 int contentHeight = this.getInnerHeight() + 4;
                 int barHeight = Mth.clamp(
@@ -88,7 +85,7 @@ public final class StopEditorScreen extends Screen {
         return DESCRIPTION_BOX_Y + descriptionHeight() + 10;
     }
 
-    /** Preserve unsaved field values when resizing causes Minecraft to recreate the widgets. */
+    /** Conserva campos sin guardar al recrear controles por cambio de tamaño. */
     @Override
     protected void init() {
         String currentName = nameBox == null ? payload.name() : nameBox.getValue();
@@ -115,29 +112,29 @@ public final class StopEditorScreen extends Screen {
         int buttonsY = Math.min(height - 32, descriptionCardBottom() + 8);
         saveButton = addRenderableWidget(MaterialGuideTheme.M3Button.filled(
                 width / 2 - 130, buttonsY, 125, 22,
-                Component.translatable("gui.done"), button -> save()));
+                Component.literal("Listo"), button -> save()));
         addRenderableWidget(MaterialGuideTheme.M3Button.tonal(
                 width / 2 + 5, buttonsY, 125, 22,
-                Component.translatable("gui.cancel"), button -> onClose()));
+                Component.literal("Cancelar"), button -> onClose()));
         setInitialFocus(nameBox);
         updateSaveState();
     }
 
-    /** Disable submission for blank names; server-side checks still protect the stored data. */
+    /** Impide enviar nombres vacíos; el servidor vuelve a validarlos. */
     private void updateSaveState() {
         if (saveButton != null && nameBox != null) {
             saveButton.active = !nameBox.getValue().trim().isBlank();
         }
     }
 
-    /** Send edited text and block position, then close; the server decides whether the edit is permitted. */
+    /** Envía texto y posición; el servidor decide si permite guardar. */
     private void save() {
         PacketDistributor.sendToServer(new TourPayloads.UpdateStop(
                 payload.pos(), nameBox.getValue(), descriptionBox.getValue()));
         onClose();
     }
 
-    /** Dark background plus header and two soft cards. Labels sit inside their cards. */
+    /** Fondo oscuro con cabecera y dos tarjetas que contienen sus etiquetas. */
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         graphics.fill(0, 0, width, height, MaterialGuideTheme.BACKGROUND);
@@ -149,7 +146,7 @@ public final class StopEditorScreen extends Screen {
                 descriptionCardBottom() - DESCRIPTION_CARD_Y);
     }
 
-    /** Labels and live counters stay aligned with the boxes when the window resizes. */
+    /** Mantiene etiquetas y contadores alineados al cambiar el tamaño. */
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
@@ -172,7 +169,7 @@ public final class StopEditorScreen extends Screen {
                 DESCRIPTION_LABEL_Y, MaterialGuideTheme.MUTED, false);
     }
 
-    /** Keep the world and multiplayer tour running while this screen is open. */
+    /** Mantiene el mundo y el recorrido activos con esta pantalla abierta. */
     @Override
     public boolean isPauseScreen() {
         return false;
