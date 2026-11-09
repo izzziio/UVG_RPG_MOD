@@ -17,12 +17,12 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/** Thin wall sign whose outward FACING determines both its supporting wall and selection bounds. */
+/** Letrero fino cuya orientación define pared de soporte y selección. */
 public final class WallSignBlock extends HorizontalDirectionalBlock {
     public static final MapCodec<WallSignBlock> CODEC = simpleCodec(WallSignBlock::new);
 
-    // FACING points away from the supporting wall. The panel therefore sits on
-    // the opposite edge of its block space, directly against that support.
+    // FACING apunta fuera del soporte; el panel queda
+    // en el borde opuesto de la celda, junto a ese soporte.
     private static final VoxelShape NORTH_SHAPE = Block.box(3.0, 3.0, 15.5, 13.0, 13.0, 16.0);
     private static final VoxelShape SOUTH_SHAPE = Block.box(3.0, 3.0, 0.0, 13.0, 13.0, 0.5);
     private static final VoxelShape WEST_SHAPE = Block.box(15.5, 3.0, 3.0, 16.0, 13.0, 13.0);
@@ -34,7 +34,7 @@ public final class WallSignBlock extends HorizontalDirectionalBlock {
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(GlassSignMount.GLASS_MOUNTED, false));
     }
 
-    /** Minecraft uses this codec when reconstructing the block from registry data. */
+    /** Minecraft reconstruye el bloque mediante este códec. */
     @Override
     protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
         return CODEC;
@@ -53,7 +53,7 @@ public final class WallSignBlock extends HorizontalDirectionalBlock {
                 ? GlassSignMount.state(state,context.getLevel(),context.getClickedPos(),clickedFace) : null;
     }
 
-    /** Check the sturdy wall face behind the outward-facing block. */
+    /** Comprueba el soporte sólido detrás del bloque. */
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         Direction facing = state.getValue(FACING);
@@ -61,7 +61,7 @@ public final class WallSignBlock extends HorizontalDirectionalBlock {
         return GlassSignMount.supported(level,pos,facing);
     }
 
-    /** Recheck support after neighbor changes and remove the block when its attachment is lost. */
+    /** Revalida el soporte al cambiar vecinos y retira el bloque si se pierde. */
     @Override
     protected BlockState updateShape(
             BlockState state,
@@ -76,7 +76,7 @@ public final class WallSignBlock extends HorizontalDirectionalBlock {
         return GlassSignMount.state(super.updateShape(state, direction, neighborState, level, pos, neighborPos),level,pos,state.getValue(FACING));
     }
 
-    /** Return bounds matching the placed orientation for outline selection and default collision handling. */
+    /** Devuelve límites de selección y colisión según la orientación. */
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         VoxelShape shape = switch (state.getValue(FACING)) {
@@ -88,19 +88,19 @@ public final class WallSignBlock extends HorizontalDirectionalBlock {
         return GlassSignMount.shape(shape,state,state.getValue(FACING));
     }
 
-    /** Rotate the stored facing so structure rotations preserve the attachment orientation. */
+    /** Gira la orientación guardada conservando el soporte. */
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
-    /** Convert mirroring into the appropriate facing rotation. */
+    /** Convierte el reflejo en un giro de orientación. */
     @Override
     protected BlockState mirror(BlockState state, Mirror mirror) {
         return rotate(state, mirror.getRotation(state.getValue(FACING)));
     }
 
-    /** Declare the properties Minecraft serializes and uses to select blockstate model variants. */
+    /** Declara propiedades guardadas y usadas para elegir modelos. */
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, GlassSignMount.GLASS_MOUNTED);

@@ -8,7 +8,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/** Standard container synchronization and server-validated empty button. */
+/** Sincroniza el inventario y valida vaciado en el servidor. */
 public final class TrashBinMenu extends AbstractContainerMenu {
     private final Container bin;
     // Prepara las ranuras del basurero y del jugador.

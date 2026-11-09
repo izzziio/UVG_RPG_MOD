@@ -1,0 +1,78 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "first": "minecraft:block/bricks",
+    "second": "minecraft:block/bricks",
+    "particle": "#first"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#first",
+          "cullface": "north"
+        },
+        "east": {
+          "texture": "#first",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#first",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#first",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#first",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        8
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "south": {
+          "texture": "#second",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#second",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#second",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#second",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#second",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

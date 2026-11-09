@@ -12,6 +12,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 // Representa las celdas ocupadas por la hoja móvil.
 public final class CitSwingBlock extends BaseEntityBlock {
+    // La hoja es transparente; calcular luz no accede a su controlador.
+    @Override protected boolean propagatesSkylightDown(BlockState s,BlockGetter level,BlockPos pos){return true;}
+    @Override protected int getLightBlock(BlockState s,BlockGetter level,BlockPos pos){return 0;}
     // Configura las propiedades iniciales del bloque.
     public CitSwingBlock(Properties p){super(p.dynamicShape());}
     // Permite reconstruir el bloque desde su registro.
@@ -20,6 +23,21 @@ public final class CitSwingBlock extends BaseEntityBlock {
     @Override public BlockEntity newBlockEntity(BlockPos p,BlockState s){return new CitSwingEntity(p,s);}
     // Elige cómo se dibuja el bloque.
     @Override protected RenderShape getRenderShape(BlockState s){return RenderShape.INVISIBLE;}
+    // Libera las celdas sobrantes de puertas abiertas con geometría antigua.
+    @Override public <T extends BlockEntity> net.minecraft.world.level.block.entity.BlockEntityTicker<T> getTicker(Level level,BlockState state,
+            net.minecraft.world.level.block.entity.BlockEntityType<T> type){
+        if(level.isClientSide)return null;
+        return (world,pos,current,entity)->{
+            if(!(entity instanceof CitSwingEntity swing)||swing.geometryChecked)return;
+            if(swing.owner()!=null&&!world.hasChunkAt(swing.owner()))return;
+            swing.geometryChecked=true;
+            CitDoorEntity owner=CitDoorEntity.find(world,pos);
+            if(owner==null){world.removeBlock(pos,false);return;}
+            if(owner.getBlockState().getValue(CitDoorBlock.OPEN)&&owner.leafCells(true).containsKey(pos))return;
+            boolean changing=owner.changing;owner.changing=true;
+            try{world.removeBlock(pos,false);}finally{owner.changing=changing;}
+        };
+    }
     // Devuelve los límites de selección y colisión.
     @Override protected VoxelShape getShape(BlockState s,BlockGetter l,BlockPos p,CollisionContext c){
         CitDoorEntity e=CitDoorEntity.find(l,p);return e==null?Shapes.empty():e.leafCells(true).getOrDefault(p,Shapes.empty());

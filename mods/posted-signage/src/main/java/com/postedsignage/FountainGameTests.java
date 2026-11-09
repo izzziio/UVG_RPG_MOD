@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Development-only integration checks executed in isolated Minecraft arenas; excluded from release JARs. */
+/** Pruebas de integración aisladas; no se incluyen en los JAR de distribución. */
 @GameTestHolder(PostedSignage.MOD_ID)
 @PrefixGameTestTemplate(false)
 public final class FountainGameTests {
@@ -36,7 +36,7 @@ public final class FountainGameTests {
         helper.assertItemEntityNotPresent(PostedSignage.DRINKING_FOUNTAIN.get());
         helper.succeed();
     }
-    /** Exercise separate player state/cooldowns and the hydration packet's encode/decode contract. */
+    /** Prueba datos separados por jugador y codificación del paquete de hidratación. */
     @GameTest(template="empty") public static void independentPlayersAndPacket(GameTestHelper helper) {
         Player first=helper.makeMockPlayer(GameType.SURVIVAL), second=helper.makeMockPlayer(GameType.SURVIVAL);
         Hydration.setLevel(first,2); Hydration.setLevel(second,7);
@@ -52,7 +52,7 @@ public final class FountainGameTests {
     private static final BlockPos BASE = new BlockPos(3,1,3);
     // Obtiene el bloque de la prueba desde el registro.
     private static DrinkingFountainBlock block() { return PostedSignage.DRINKING_FOUNTAIN_BLOCK.get(); }
-    /** Build a temporary wall and use the real placement rules before constructing the upper half. */
+    /** Prueba la colocación real con una pared temporal antes de crear la mitad superior. */
     private static BlockState place(GameTestHelper helper, Direction facing) {
         BlockPos pos = helper.absolutePos(BASE);
         BlockPos wall = pos.relative(facing.getOpposite());
@@ -67,7 +67,7 @@ public final class FountainGameTests {
         block().setPlacedBy(helper.getLevel(),pos,state,player,stack);
         return state;
     }
-    /** Each horizontal wall face must produce a matching upper half and clean paired removal. */
+    /** Prueba las mitades y su retirada conjunta en cada orientación. */
     @GameTest(template="empty") public static void allOrientations(GameTestHelper helper) {
         for (Direction facing : Direction.Plane.HORIZONTAL) {
             BlockState state=place(helper,facing);
@@ -80,7 +80,7 @@ public final class FountainGameTests {
         }
         helper.succeed();
     }
-    /** Reject missing upper support and occupied headroom before any structure is created. */
+    /** Rechaza falta de soporte superior o espacio ocupado antes de construir. */
     @GameTest(template="empty") public static void unsupportedAndBlockedPlacement(GameTestHelper helper) {
         Player player=helper.makeMockPlayer(GameType.SURVIVAL);
         ItemStack stack=new ItemStack(PostedSignage.DRINKING_FOUNTAIN.get());
@@ -94,7 +94,7 @@ public final class FountainGameTests {
         helper.assertTrue(block().getStateForPlacement(context)==null,"Occupied upper cell must reject placement");
         helper.succeed();
     }
-    /** Upper-half destruction must collapse the base and yield exactly one fountain item. */
+    /** Romper arriba desmonta abajo y entrega exactamente un bebedero. */
     @GameTest(template="empty") public static void upperBreakSingleDrop(GameTestHelper helper) {
         place(helper,Direction.NORTH);
         helper.getLevel().destroyBlock(helper.absolutePos(BASE.above()),true);
@@ -102,7 +102,7 @@ public final class FountainGameTests {
         helper.assertItemEntityCountIs(PostedSignage.DRINKING_FOUNTAIN.get(),BASE,3,1);
         helper.succeed();
     }
-    /** Lower-half destruction must remove the top without duplicating its loot. */
+    /** Romper la mitad inferior retira la superior sin duplicar objetos. */
     @GameTest(template="empty") public static void lowerBreakSingleDrop(GameTestHelper helper) {
         place(helper,Direction.NORTH);
         helper.getLevel().destroyBlock(helper.absolutePos(BASE),true);
@@ -110,7 +110,7 @@ public final class FountainGameTests {
         helper.assertItemEntityCountIs(PostedSignage.DRINKING_FOUNTAIN.get(),BASE,3,1);
         helper.succeed();
     }
-    /** Removing upper wall support must collapse the whole fountain with one item drop. */
+    /** Perder el soporte superior desmonta el bebedero con un solo objeto. */
     @GameTest(template="empty") public static void supportLossSingleDrop(GameTestHelper helper) {
         place(helper,Direction.NORTH);
         helper.getLevel().destroyBlock(helper.absolutePos(BASE.south().above()),false);
@@ -119,7 +119,7 @@ public final class FountainGameTests {
         helper.assertItemEntityCountIs(PostedSignage.DRINKING_FOUNTAIN.get(),BASE,3,1);
         helper.succeed();
     }
-    /** Check miss versus hit, immediate hydration, and scheduled button release. */
+    /** Comprueba impactos, hidratación inmediata y liberación del botón. */
     @GameTest(template="empty") public static void buttonActivationAndTimeout(GameTestHelper helper) {
         BlockState state=place(helper,Direction.NORTH);
         Player player=helper.makeMockPlayer(GameType.SURVIVAL);
@@ -134,7 +134,7 @@ public final class FountainGameTests {
         helper.assertBlockProperty(BASE,DrinkingFountainBlock.ACTIVE,true);
         helper.runAfterDelay(42,()->{helper.assertBlockProperty(BASE,DrinkingFountainBlock.ACTIVE,false);helper.succeed();});
     }
-    /** The hit region must follow FACING and reject activation through the back of the block. */
+    /** La zona de pulsación sigue FACING y no se activa por detrás. */
     @GameTest(template="empty") public static void rotatedButtons(GameTestHelper helper) {
         for(Direction facing:Direction.Plane.HORIZONTAL) {
             BlockState state=block().defaultBlockState().setValue(DrinkingFountainBlock.FACING,facing);
@@ -144,7 +144,7 @@ public final class FountainGameTests {
         }
         helper.succeed();
     }
-    /** Cover drain timing, dehydration effects, drinking, cooldown, cloning and saved NBT. */
+    /** Prueba consumo, deshidratación, bebida, espera, clonación y persistencia NBT. */
     @GameTest(template="empty") public static void hydrationLifecycle(GameTestHelper helper) {
         Player player=helper.makeMockPlayer(GameType.SURVIVAL);
         helper.assertTrue(Hydration.level(player)==20,"New player starts full");
@@ -173,7 +173,7 @@ public final class FountainGameTests {
         helper.assertTrue(Hydration.level(loaded)==Hydration.level(player),"Hydration persists through entity serialization");
         helper.succeed();
     }
-    /** Creative/Spectator stay exempt and drinking never exceeds the defined maximum values. */
+    /** Comprueba las exenciones y el límite máximo al beber. */
     @GameTest(template="empty") public static void excludedModesAndCaps(GameTestHelper helper) {
         for(GameType type:new GameType[]{GameType.CREATIVE,GameType.SPECTATOR}) {
             Player player=helper.makeMockPlayer(type);

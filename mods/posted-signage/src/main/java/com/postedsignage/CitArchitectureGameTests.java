@@ -22,6 +22,51 @@ import net.neoforged.neoforge.gametest.*;
 @GameTestHolder(PostedSignage.MOD_ID)
 @PrefixGameTestTemplate(false)
 public final class CitArchitectureGameTests {
+    // Simula varios compiladores de chunks consultando la misma puerta.
+    @GameTest(template="empty") public static void doorShapesSupportConcurrentReaders(GameTestHelper h){
+        var workers=java.util.concurrent.Executors.newFixedThreadPool(8);
+        try {
+            for(var block:new CitDoorBlock[]{PostedSignage.CIT_SHORT_DOOR.get(),PostedSignage.CIT_WIDE_DOOR.get()})
+                for(var facing:Direction.Plane.HORIZONTAL)for(boolean open:new boolean[]{false,true}){
+                    var state=block.defaultBlockState().setValue(CitDoorBlock.FACING,facing).setValue(CitDoorBlock.OPEN,open);
+                    var door=new CitDoorEntity(BlockPos.ZERO,state);
+                    var start=new java.util.concurrent.CountDownLatch(1);
+                    var tasks=new ArrayList<java.util.concurrent.Future<?>>();
+                    for(int i=0;i<8;i++)tasks.add(workers.submit(()->{
+                        try {start.await();}catch(InterruptedException e){Thread.currentThread().interrupt();throw new RuntimeException(e);}
+                        for(int j=0;j<500;j++){
+                            door.shapeAt(BlockPos.ZERO.relative(facing.getClockWise(),j%block.width).above(j%block.height));
+                            door.leafCells(j%2==0);door.renderBounds();
+                        }
+                    }));
+                    start.countDown();
+                    for(var task:tasks)task.get(10,java.util.concurrent.TimeUnit.SECONDS);
+                    h.assertTrue(!door.shapeAt(BlockPos.ZERO).isEmpty(),"El marco conserva su colisión");
+                }
+        }catch(Exception e){throw new RuntimeException("Fallo concurrente al consultar puertas",e);}
+        finally {workers.shutdownNow();}
+        h.succeed();
+    }
+    // Una consulta de iluminación nunca espera al controlador de otro chunk.
+    @GameTest(template="empty") public static void doorLightingNeverLoadsControllerChunks(GameTestHelper h){
+        BlockGetter unloaded=new BlockGetter(){
+            @Override public net.minecraft.world.level.block.entity.BlockEntity getBlockEntity(BlockPos pos){throw new AssertionError("Lighting queried block entity");}
+            @Override public net.minecraft.world.level.block.state.BlockState getBlockState(BlockPos pos){throw new AssertionError("Lighting queried world state");}
+            @Override public net.minecraft.world.level.material.FluidState getFluidState(BlockPos pos){throw new AssertionError("Lighting queried fluid");}
+            @Override public int getHeight(){return 384;}
+            @Override public int getMinBuildHeight(){return -64;}
+        };
+        var boundary=new BlockPos(15,64,15);
+        for(var block:new Block[]{PostedSignage.CIT_SHORT_DOOR.get(),PostedSignage.CIT_WIDE_DOOR.get(),PostedSignage.CLEAR_SHORT_DOOR.get(),PostedSignage.CLEAR_WIDE_DOOR.get(),PostedSignage.CIT_DOOR_SWING.get()}){
+            var state=block.defaultBlockState();
+            h.assertTrue(state.getLightBlock(unloaded,boundary)==0,"Glass door does not block light");
+            h.assertTrue(state.propagatesSkylightDown(unloaded,boundary),"Skylight is independent of controller");
+        }
+        var far=h.absolutePos(new BlockPos(8192,1,8192));var chunks=h.getLevel().getChunkSource();
+        h.assertTrue(chunks.getChunkNow(far.getX()>>4,far.getZ()>>4)==null,"Remote chunk starts unloaded");
+        h.assertTrue(CitDoorEntity.find(h.getLevel(),far)==null,"Absent controller is not loaded");
+        h.assertTrue(chunks.getChunkNow(far.getX()>>4,far.getZ()>>4)==null,"Lookup leaves chunk unloaded");h.succeed();
+    }
     // Obtiene la posición base del escenario de prueba.
     private static BlockPos site(GameTestHelper h){return h.absolutePos(new BlockPos(3,1,3));}
     // Coloca una puerta de prueba con orientación y bisagra.
@@ -169,6 +214,66 @@ public final class CitArchitectureGameTests {
             }
         h.succeed();
     }
+    // Puertas contiguas abren en cualquier orden sin reservar la celda vecina.
+    @GameTest(template="empty")
+    public static void adjacentDoorsOpenIndependently(GameTestHelper h){
+        var level=h.getLevel();var player=actor(h,false,false);
+        for(var block:new CitDoorBlock[]{PostedSignage.CIT_SHORT_DOOR.get(),PostedSignage.CIT_WIDE_DOOR.get(),PostedSignage.CLEAR_SHORT_DOOR.get(),PostedSignage.CLEAR_WIDE_DOOR.get()})
+            for(Direction facing:Direction.Plane.HORIZONTAL)for(boolean firstRight:new boolean[]{false,true})for(boolean secondRight:new boolean[]{false,true}){
+                var first=place(h,block,facing,firstRight);var right=facing.getClockWise();
+                var secondPos=site(h).relative(right,block.width);
+                var state=block.defaultBlockState().setValue(CitDoorBlock.FACING,facing).setValue(CitDoorBlock.RIGHT,secondRight);
+                level.setBlockAndUpdate(secondPos,state);block.setPlacedBy(level,secondPos,state,null,ItemStack.EMPTY);
+                var second=(CitDoorEntity)level.getBlockEntity(secondPos);
+                for(int order=0;order<2;order++){
+                    var a=order==0?first:second;var b=order==0?second:first;
+                    h.assertTrue(a.toggle(player),"First leaf opens: "+block+" "+facing+" "+firstRight+"/"+secondRight);
+                    h.assertTrue(b.toggle(player),"Neighbor opens independently: "+block+" "+facing+" "+firstRight+"/"+secondRight);
+                    h.assertTrue(a.toggle(player)&&b.getBlockState().getValue(CitDoorBlock.OPEN),"Closing one leaves neighbor open");
+                    h.assertTrue(b.toggle(player),"Neighbor can close independently");
+                }
+                first.dismantle(false);second.dismantle(false);
+            }
+        h.succeed();
+    }
+    // Las paredes laterales y traseras no bloquean el espacio libre de apertura.
+    @GameTest(template="empty")
+    public static void doorsOpenBesideWallsWithoutHandleOverhang(GameTestHelper h){
+        var level=h.getLevel();var player=actor(h,false,false);
+        for(var block:new CitDoorBlock[]{PostedSignage.CIT_SHORT_DOOR.get(),PostedSignage.CIT_WIDE_DOOR.get()})
+            for(Direction facing:Direction.Plane.HORIZONTAL)for(boolean rightHinge:new boolean[]{false,true}){
+                var door=place(h,block,facing,rightHinge);var right=facing.getClockWise();Set<BlockPos> walls=new HashSet<>();
+                for(int y=0;y<block.height;y++){
+                    for(int x=0;x<block.width;x++)walls.add(site(h).relative(right,x).relative(facing.getOpposite()).above(y));
+                    for(int front=0;front<=block.width;front++)for(int side:new int[]{-1,block.width})
+                        walls.add(site(h).relative(right,side).relative(facing,front).above(y));
+                }
+                for(var pos:walls)level.setBlockAndUpdate(pos,Blocks.STONE.defaultBlockState());
+                for(var cell:door.leafCells(true).entrySet()){
+                    h.assertTrue(!walls.contains(cell.getKey()),"Open handle stays inside the doorway width");
+                }
+                h.assertTrue(door.toggle(player)&&door.toggle(player),"Walls beside/behind do not prevent swing: "+facing+" "+rightHinge);
+                for(var pos:walls)h.assertTrue(level.getBlockState(pos).is(Blocks.STONE),"Wall remains intact");
+                door.dismantle(false);for(var pos:walls)level.removeBlock(pos,false);
+            }
+        h.succeed();
+    }
+    // Limpia la celda de una manija antigua sin desmontar la puerta ni su etiqueta.
+    @GameTest(template="empty")
+    public static void obsoleteSwingCellsAreReleased(GameTestHelper h){
+        var door=place(h,PostedSignage.CIT_SHORT_DOOR.get(),Direction.NORTH,false);var level=h.getLevel();
+        var player=actor(h,true,true);h.assertTrue(door.saveEdit(player,door.beginEdit(player),"0042B",6),"Label saved");
+        h.assertTrue(door.toggle(player),"Door opens");
+        var oldCell=site(h).west().north();
+        level.setBlockAndUpdate(oldCell,PostedSignage.CIT_DOOR_SWING.get().defaultBlockState());
+        ((CitSwingEntity)level.getBlockEntity(oldCell)).setOwner(site(h));
+        h.runAfterDelay(3,()->{
+            h.assertTrue(level.isEmptyBlock(oldCell),"Obsolete moving cell removed");
+            h.assertTrue(level.getBlockEntity(site(h))==door&&door.getBlockState().getValue(CitDoorBlock.OPEN),"Assembly remains open and intact");
+            h.assertTrue(door.room().equals("0042B")&&door.color()==6,"Label preserved");
+            h.assertTrue(door.toggle(player),"Migrated door closes");door.dismantle(false);h.succeed();
+        });
+    }
     // Verifica que los obstáculos impiden abrir la puerta.
     @GameTest(template="empty")
     public static void obstructionNeverOverwritesGlass(GameTestHelper h){
@@ -293,4 +398,125 @@ public final class CitArchitectureGameTests {
             h.assertTrue(sign.getFrontText().getMessage(0,false).getString().equals("0422B")&&sign.getBackText().getMessage(0,false).getString().equals("back"),"Authorized update preserves other face");l.removeBlock(p,false);
         }h.succeed();
     }
+    // Repartir un marco entre celdas conserva su área, normales y UV.
+    @GameTest(template="empty") public static void terrainFramesPartitionWithoutInteriorCaps(GameTestHelper h){
+        for(var block:new CitDoorBlock[]{PostedSignage.CIT_SHORT_DOOR.get(),PostedSignage.CIT_WIDE_DOOR.get(),
+                PostedSignage.CLEAR_SHORT_DOOR.get(),PostedSignage.CLEAR_WIDE_DOOR.get()})
+            for(Direction facing:Direction.Plane.HORIZONTAL){
+                var full=CitGeometryMesh.compile(CitDoorGeometry.frame(block.width,block.height),false);
+                double total=0;boolean intermediateUv=false;
+                // Cruza límites horizontales y verticales de sección, también en negativos.
+                var root=new BlockPos(-17,79,15);
+                for(int x=0;x<block.width;x++)for(int y=0;y<block.height;y++){
+                    var state=block.defaultBlockState().setValue(CitDoorBlock.FACING,facing)
+                            .setValue(CitDoorBlock.X,x).setValue(CitDoorBlock.Y,y);
+                    var pos=root.relative(facing.getClockWise(),x).above(y);
+                    float[] mesh=CitFrameGeometry.mesh(state,h.getLevel(),pos);total+=meshArea(mesh);
+                    for(int i=0;i<mesh.length;i+=8){
+                        for(int a=0;a<3;a++)h.assertTrue(mesh[i+a]>=-1e-6&&mesh[i+a]<=1+1e-6,"Frame vertex stays in its own cell");
+                        h.assertTrue(mesh[i+3]>=0&&mesh[i+3]<=1&&mesh[i+4]>=0&&mesh[i+4]<=1,"UV stays in source texture");
+                        if(mesh[i+4]>.01&&mesh[i+4]<.99)intermediateUv=true;
+                        double n=mesh[i+5]*mesh[i+5]+mesh[i+6]*mesh[i+6]+mesh[i+7]*mesh[i+7];
+                        h.assertTrue(Math.abs(n-1)<1e-6,"Unit normals preserved");
+                    }
+                    h.assertTrue(java.util.Arrays.equals(mesh,CitFrameGeometry.mesh(state.setValue(CitDoorBlock.OPEN,true)
+                            .setValue(CitDoorBlock.RIGHT,true),h.getLevel(),pos)),"Frame does not move with leaf or hinge");
+                }
+                h.assertTrue(Math.abs(meshArea(full)-total)<1e-5,"No missing surfaces or added caps: "+facing);
+                h.assertTrue(intermediateUv,"Texture coordinates continue across cell boundaries");
+            }
+        h.succeed();
+    }
+    // Calcula área de rectángulos usando dos lados consecutivos.
+    private static double meshArea(float[] mesh){
+        double total=0;
+        for(int i=0;i<mesh.length;i+=32){
+            var a=new Vec3(mesh[i+8]-mesh[i],mesh[i+9]-mesh[i+1],mesh[i+10]-mesh[i+2]);
+            var b=new Vec3(mesh[i+24]-mesh[i],mesh[i+25]-mesh[i+1],mesh[i+26]-mesh[i+2]);
+            total+=a.cross(b).length();
+        }
+        return total;
+    }
+    // Los vecinos verticales cambian el marco horneado sin incluir cristal en él.
+    @GameTest(template="empty") public static void terrainGlassFramesTrackVerticalNeighbors(GameTestHelper h){
+        var level=h.getLevel();var pos=site(h);var block=PostedSignage.CIT_GLASS.get();
+        level.setBlockAndUpdate(pos,block.defaultBlockState());var state=level.getBlockState(pos);
+        var before=CitFrameGeometry.mesh(state,level,pos);
+        level.setBlockAndUpdate(pos.above(),block.defaultBlockState());
+        var after=CitFrameGeometry.mesh(level.getBlockState(pos),level,pos);
+        h.assertTrue(meshArea(after)<meshArea(before),"Stacking removes internal upper border");
+        level.removeBlock(pos.above(),false);
+        h.assertTrue(java.util.Arrays.equals(before,CitFrameGeometry.mesh(level.getBlockState(pos),level,pos)),"Removing neighbor restores exposed border");
+        h.succeed();
+    }
+
+    // La profundidad de texto sigue ambas bisagras y todos los giros.
+    @GameTest(template="empty") public static void doorLabelDepthFollowsSwing(GameTestHelper h){
+        var root=new BlockPos(-123,64,237);
+        for(Direction facing:Direction.Plane.HORIZONTAL)for(int width:new int[]{1,2})
+            for(boolean right:new boolean[]{false,true})for(boolean open:new boolean[]{false,true})
+                for(double depth:new double[]{.2,.476,.5,.524,.8}){
+                    var local=new net.minecraft.world.phys.Vec3(right?width-.44:.44,1,depth);
+                    var world=CitDoorGeometry.world(open?CitDoorGeometry.swing(local,width,right):local,root,facing);
+                    h.assertTrue(Math.abs(CitDoorGeometry.leafDepth(world,root,facing,width,right,open)-depth)<1e-9,
+                            "Text plane follows leaf: "+facing+" right="+right+" open="+open);
+                }
+        h.succeed();
+    }
+    // La caja contiene toda la puerta, incluso si la celda raíz queda fuera de vista.
+    @GameTest(template="empty") public static void doorRenderBoundsContainFrameAndMovingLeaf(GameTestHelper h){
+        var root=site(h);
+        for(Direction facing:Direction.Plane.HORIZONTAL)for(int width:new int[]{1,2})
+            for(boolean right:new boolean[]{false,true})for(boolean open:new boolean[]{false,true}){
+                int height=width==1?2:3;
+                var bounds=CitDoorGeometry.renderBounds(root,facing,width,height,right,open);
+                for(boolean moving:new boolean[]{false,true})for(var p:moving?CitDoorGeometry.leaf(width,height,right):CitDoorGeometry.frame(width,height)){
+                    var box=CitDoorGeometry.transform(p.box(),root,facing,width,right,moving&&open);
+                    h.assertTrue(bounds.contains(box.minX,box.minY,box.minZ)&&bounds.contains(box.maxX,box.maxY,box.maxZ),"Bounds contain every corner");
+                }
+            }
+        var block=PostedSignage.CIT_SHORT_DOOR.get();h.getLevel().setBlockAndUpdate(root,block.defaultBlockState());
+        var e=(CitDoorEntity)h.getLevel().getBlockEntity(root);var before=e.renderBounds();
+        h.assertTrue(before==e.renderBounds(),"Bounds are reused between frames");
+        h.getLevel().setBlockAndUpdate(root,e.getBlockState().setValue(CitDoorBlock.OPEN,true));
+        h.assertTrue(!before.equals(e.renderBounds()),"Opening invalidates the cached bounds");
+        h.succeed();
+    }
+    // La unión reduce vértices sin alterar bordes opacos ni esquinas.
+    @GameTest(template="empty") public static void glassBatchingPreservesFramesAndCornerGeometry(GameTestHelper h){
+        var pos=site(h);var level=h.getLevel();var glass=PostedSignage.CIT_GLASS.get();
+        for(var axis:new Direction.Axis[]{Direction.Axis.X,Direction.Axis.Z})for(int mask=0;mask<16;mask++){
+            var state=glass.defaultBlockState().setValue(CitGlassBlock.AXIS,axis);int bit=0;
+            for(Direction d:Direction.Plane.HORIZONTAL)state=state.setValue(CitGlassBlock.property(d),(mask&(1<<bit++))!=0);
+            var pieces=CitGlassBlock.pieces(state,level,pos);var merged=CitDoorGeometry.mergeStraightGlass(pieces);
+            h.assertTrue(java.util.Arrays.equals(CitGeometryMesh.compile(pieces,false),CitGeometryMesh.compile(merged,false)),"Opaque vertices, normals and UV unchanged");
+            boolean straight=CitGlassBlock.arms(state).size()==2&&CitGlassBlock.arms(state).stream().map(Direction::getAxis).distinct().count()==1;
+            int oldLength=CitGeometryMesh.compile(pieces,true).length,newLength=CitGeometryMesh.compile(merged,true).length;
+            h.assertTrue(straight?newLength*2==oldLength:java.util.Arrays.equals(CitGeometryMesh.compile(pieces,true),CitGeometryMesh.compile(merged,true)),"Only straight panes merge");
+            double before=pieces.stream().filter(CitDoorGeometry.Piece::glass).mapToDouble(p->p.box().getXsize()*p.box().getZsize()).sum();
+            double after=merged.stream().filter(CitDoorGeometry.Piece::glass).mapToDouble(p->p.box().getXsize()*p.box().getZsize()).sum();
+            h.assertTrue(Math.abs(before-after)<1e-12,"Glass coverage preserved");
+        }
+        h.succeed();
+    }
+
+    // Reutilizar el panel no debe dejar marcos antiguos al cambiar sus vecinos.
+    @GameTest(template="empty")
+    public static void cachedGlassGeometryTracksNeighborChanges(GameTestHelper h){
+        var level=h.getLevel();var pos=site(h);var glass=PostedSignage.CIT_GLASS.get();
+        level.setBlockAndUpdate(pos,glass.defaultBlockState());
+        var entity=(CitGlassEntity)level.getBlockEntity(pos);var initial=entity.geometry();
+        h.assertTrue(initial==entity.geometry(),"Unchanged panel reuses geometry");
+        level.setBlockAndUpdate(pos.above(),glass.defaultBlockState());var stacked=entity.geometry();
+        h.assertTrue(!stacked.equals(initial),"Stacking removes the inner top frame");
+        h.assertTrue(stacked.equals(CitGlassBlock.pieces(entity.getBlockState(),level,pos)),"Cached stacked geometry matches current world");
+        level.setBlockAndUpdate(pos.east(),glass.defaultBlockState());var joined=entity.geometry();
+        h.assertTrue(!joined.equals(stacked),"Horizontal connection removes the internal side frame");
+        level.removeBlock(pos.above(),false);level.removeBlock(pos.east(),false);
+        h.assertTrue(entity.geometry().equals(initial),"Removing neighbors restores the exposed borders");
+        level.setBlockAndUpdate(pos.above(),PostedSignage.CIT_SHORT_DOOR.get().defaultBlockState());
+        h.assertTrue(entity.geometry().equals(CitGlassBlock.pieces(entity.getBlockState(),level,pos)),"Doorway above also invalidates cached borders");
+        h.succeed();
+    }
+
 }

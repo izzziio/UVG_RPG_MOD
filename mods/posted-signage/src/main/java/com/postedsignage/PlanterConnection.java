@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 
-/** The neighboring half joined to this planter, or {@link #SINGLE}. */
+/** Mitad vecina unida a esta maceta, o {@link #SINGLE}. */
 public enum PlanterConnection implements StringRepresentable {
     SINGLE("single", null),
     NORTH("north", Direction.NORTH),
@@ -28,7 +28,7 @@ public enum PlanterConnection implements StringRepresentable {
         return direction;
     }
 
-    /** Reject vertical connections because planter pairing is limited to the horizontal plane. */
+    /** Rechaza conexiones verticales entre macetas. */
     public static PlanterConnection fromDirection(Direction direction) {
         return switch (direction) {
             case NORTH -> NORTH;
@@ -39,7 +39,7 @@ public enum PlanterConnection implements StringRepresentable {
         };
     }
 
-    /** These names must match the connection values used by the generated blockstate JSON. */
+    /** Estos nombres coinciden con las conexiones del JSON generado. */
     @Override
     public String getSerializedName() {
         return serializedName;

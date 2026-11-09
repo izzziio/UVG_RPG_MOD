@@ -21,12 +21,16 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/** Central content registry and creative-tab ordering for signage, decorative blocks and the drinking fountain. */
+/** Registro de contenido y orden de objetos en la pestaña Creativo. */
 @Mod(PostedSignage.MOD_ID)
 public final class PostedSignage {
     public static final String MOD_ID = "posted_signage";
 
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MOD_ID);
+    public static final DeferredRegister<net.minecraft.world.entity.EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, MOD_ID);
+    public static final DeferredHolder<net.minecraft.world.entity.EntityType<?>, net.minecraft.world.entity.EntityType<TextureSkinEntity>> TEXTURE_SKIN =
+            ENTITIES.register("texture_skin", () -> net.minecraft.world.entity.EntityType.Builder.<TextureSkinEntity>of(TextureSkinEntity::new,
+                    net.minecraft.world.entity.MobCategory.MISC).sized(.01F, .01F).clientTrackingRange(10).updateInterval(20).fireImmune().build("posted_signage:texture_skin"));
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MOD_ID);
     public static final DeferredRegister<net.minecraft.world.inventory.MenuType<?>> MENUS =
             DeferredRegister.create(Registries.MENU, MOD_ID);
@@ -77,6 +81,23 @@ public final class PostedSignage {
                     .strength(2.5F).sound(SoundType.METAL).noOcclusion()));
     public static final DeferredItem<BlockItem> DRINKING_FOUNTAIN =
             ITEMS.registerSimpleBlockItem("drinking_fountain", DRINKING_FOUNTAIN_BLOCK);
+
+    // Objetos de interior horneados en el terreno, sin renderizadores por fotograma.
+    public static final DeferredBlock<WallFixtureBlock> WALL_TV_BLOCK=BLOCKS.register("wall_tv",()->new WallFixtureBlock(
+            BlockBehaviour.Properties.of().strength(.8F).sound(SoundType.METAL).noOcclusion(),InteriorGeometry.Kind.TV,2,2));
+    public static final DeferredBlock<ElevatorDoorBlock> ELEVATOR_DOOR_BLOCK=BLOCKS.register("elevator_door",()->new ElevatorDoorBlock(
+            BlockBehaviour.Properties.of().strength(2.5F).sound(SoundType.METAL).noOcclusion().pushReaction(net.minecraft.world.level.material.PushReaction.BLOCK)));
+    public static final DeferredBlock<ElevatorCallButtonBlock> ELEVATOR_BUTTONS_BLOCK=BLOCKS.register("elevator_buttons",()->new ElevatorCallButtonBlock(
+            BlockBehaviour.Properties.of().strength(.5F).sound(SoundType.METAL).noOcclusion().noCollission()));
+    public static final DeferredBlock<WallFixtureBlock> FIRE_HOSE_CABINET_BLOCK=BLOCKS.register("fire_hose_cabinet",()->new WallFixtureBlock(
+            BlockBehaviour.Properties.of().strength(1.5F).sound(SoundType.METAL).noOcclusion(),InteriorGeometry.Kind.CABINET,1,1));
+    public static final DeferredBlock<WallFixtureBlock> CAMPUS_RULES_POSTER_BLOCK=BLOCKS.register("campus_rules_poster",()->new WallFixtureBlock(
+            BlockBehaviour.Properties.of().strength(.2F).sound(SoundType.WOOD).noOcclusion().noCollission(),InteriorGeometry.Kind.RULES,1,2));
+    public static final DeferredItem<BlockItem> WALL_TV=ITEMS.registerSimpleBlockItem("wall_tv",WALL_TV_BLOCK);
+    public static final DeferredItem<BlockItem> ELEVATOR_DOOR=ITEMS.registerSimpleBlockItem("elevator_door",ELEVATOR_DOOR_BLOCK);
+    public static final DeferredItem<BlockItem> ELEVATOR_BUTTONS=ITEMS.registerSimpleBlockItem("elevator_buttons",ELEVATOR_BUTTONS_BLOCK);
+    public static final DeferredItem<BlockItem> FIRE_HOSE_CABINET=ITEMS.registerSimpleBlockItem("fire_hose_cabinet",FIRE_HOSE_CABINET_BLOCK);
+    public static final DeferredItem<BlockItem> CAMPUS_RULES_POSTER=ITEMS.registerSimpleBlockItem("campus_rules_poster",CAMPUS_RULES_POSTER_BLOCK);
 
     public static final DeferredBlock<WallSignBlock> RIGHT_ARROW_SIGN_BLOCK = signBlock("right_arrow_sign");
     public static final DeferredBlock<WallSignBlock> FIRE_EXTINGUISHER_SIGN_BLOCK = signBlock("fire_extinguisher_sign");
@@ -169,6 +190,11 @@ public final class PostedSignage {
                         output.accept(SMOOTH_QUARTZ_VERTICAL_SLAB.get());
                         output.accept(TEXTURE_APPLICATOR.get());
                         output.accept(TRASH_BIN.get());
+                        output.accept(WALL_TV.get());
+                        output.accept(ELEVATOR_DOOR.get());
+                        output.accept(ELEVATOR_BUTTONS.get());
+                        output.accept(FIRE_HOSE_CABINET.get());
+                        output.accept(CAMPUS_RULES_POSTER.get());
                         output.accept(CIT_SHORT_DOOR_ITEM.get());
                         output.accept(CIT_WIDE_DOOR_ITEM.get());
                         output.accept(CLEAR_SHORT_DOOR_ITEM.get());
@@ -189,7 +215,8 @@ public final class PostedSignage {
 
     // Conecta los registros y eventos del mod.
     public PostedSignage(IEventBus modEventBus, ModContainer modContainer) {
-        // Legacy placed blocks stay compatible; retired inventory items resolve to the new clear doors.
+        modContainer.registerConfig(net.neoforged.fml.config.ModConfig.Type.CLIENT,SignageClientConfig.SPEC);
+        // Los bloques antiguos siguen funcionando; sus objetos corresponden a puertas nuevas sin texto.
         var oldDoor = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(MOD_ID, "glass_door");
         var shortDoor = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(MOD_ID, "short_glass_door");
         BLOCKS.addAlias(oldDoor, shortDoor);
@@ -200,6 +227,7 @@ public final class PostedSignage {
         ITEMS.addAlias(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(MOD_ID, "wide_glass_door"), clearWide);
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
+        ENTITIES.register(modEventBus);
         MENUS.register(modEventBus);
         BLOCK_ENTITY_TYPES.register(modEventBus);
         CREATIVE_TABS.register(modEventBus);
@@ -208,7 +236,7 @@ public final class PostedSignage {
         modEventBus.addListener(CitDoorPayloads::register);
     }
 
-    /** Keep all thin wall signs consistent in hardness, sound and non-occluding rendering. */
+    /** Unifica dureza, sonido y dibujo sin oclusión de los letreros. */
     private static DeferredBlock<WallSignBlock> signBlock(String name) {
         return BLOCKS.register(name, () -> new WallSignBlock(BlockBehaviour.Properties.of()
                 .strength(0.2F)
@@ -216,7 +244,7 @@ public final class PostedSignage {
                 .noOcclusion()));
     }
 
-    /** Register every fixed restroom variant from the shared ID list. */
+    /** Registra variantes de baño desde la lista compartida de ID. */
     private static Map<String, DeferredBlock<HangingSignBlock>> registerRestroomBlocks() {
         Map<String, DeferredBlock<HangingSignBlock>> blocks = new LinkedHashMap<>();
         for (String name : RESTROOM_SIGN_NAMES) {
@@ -228,7 +256,7 @@ public final class PostedSignage {
         return Collections.unmodifiableMap(blocks);
     }
 
-    /** Pair each registered restroom block with its inventory item using the same ID. */
+    /** Registra cada letrero con su objeto usando el mismo ID. */
     private static Map<String, DeferredItem<BlockItem>> registerRestroomItems() {
         Map<String, DeferredItem<BlockItem>> items = new LinkedHashMap<>();
         RESTROOM_SIGN_BLOCKS.forEach((name, block) ->
@@ -249,7 +277,7 @@ public final class PostedSignage {
         return Collections.unmodifiableMap(blocks);
     }
 
-    /** Reuse the block map so item IDs and creative-tab iteration cannot drift apart. */
+    /** Reutiliza el registro de bloques para mantener objetos y pestaña alineados. */
     private static Map<String, DeferredItem<BlockItem>> registerCustomizableHangingSignItems() {
         Map<String, DeferredItem<BlockItem>> items = new LinkedHashMap<>();
         CUSTOMIZABLE_HANGING_SIGN_BLOCKS.forEach((name, block) ->

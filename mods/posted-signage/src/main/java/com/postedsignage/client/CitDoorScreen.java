@@ -31,10 +31,10 @@ public final class CitDoorScreen extends Screen {
             addRenderableWidget(Button.builder(Component.literal("■").withColor(CitDoorEntity.COLORS[i]),b->selected=index)
                     .bounds(left+9+i*34,top+78,30,22).tooltip(Tooltip.create(Component.translatable("color.minecraft."+NAMES[i]))).build());
         }
-        save=addRenderableWidget(Button.builder(Component.translatable("gui.done"),b->{
+        save=addRenderableWidget(Button.builder(Component.literal("Listo"),b->{
             PacketDistributor.sendToServer(new CitDoorPayloads.Save(data.pos(),room.getValue().toUpperCase(Locale.ROOT),selected,data.token()));onClose();
         }).bounds(left+8,top+126,116,20).build());
-        addRenderableWidget(Button.builder(Component.translatable("gui.cancel"),b->onClose()).bounds(left+130,top+126,116,20).build());
+        addRenderableWidget(Button.builder(Component.literal("Cancelar"),b->onClose()).bounds(left+130,top+126,116,20).build());
         room.setResponder(v->save.active=CitDoorEntity.validRoom(v.toUpperCase(Locale.ROOT)));
         save.active=CitDoorEntity.validRoom(value.toUpperCase(Locale.ROOT));setInitialFocus(room);
     }

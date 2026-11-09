@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-05",
+  "guide_version": "1.1.6",
+  "posted_version": "1.7.3",
+  "guide_tests_per_loader": 33,
+  "posted_tests_per_loader": 65,
+  "total_per_loader": 98,
+  "loaders": [
+    "21.1.248",
+    "21.1.250"
+  ],
+  "minimum": "21.1.248",
+  "guide_sha256": "cecc5000e874d9740b25bc872a32e68f791cb04c59d6cabbcb6f3ccf713fcde0",
+  "guide_size": 114430,
+  "jars_identical": true,
+  "features": [
+    "one-time instruction book and public recovery command",
+    "persistent receipt and safe full-inventory handling",
+    "160-character destination summary without loading all chunks",
+    "UVG title screen preserving native actions and classic fallback"
+  ],
+  "confirmed_by_team": [
+    "map and route preparation complete",
+    "permanent guide is the definitive flow"
+  ],
+  "feedback": [
+    "more decorative objects",
+    "additional optimization",
+    "redesign early constructions using new building tools"
+  ],
+  "video_count": 4,
+  "fps_measurement": "No comparable gain measured yet",
+  "menu_capture": "university-guide/run/guide-client-116/screenshots/uvg-menu-116.png"
+}

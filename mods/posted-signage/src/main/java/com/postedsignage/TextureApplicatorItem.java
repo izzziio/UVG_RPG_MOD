@@ -19,7 +19,7 @@ public final class TextureApplicatorItem extends Item {
     public TextureApplicatorItem(Properties properties) { super(properties); }
     // Da prioridad al aplicador frente al bloque pulsado.
     @Override public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
-        return useOn(context); // Sample/apply before chests, furnaces and other block interactions.
+        return useOn(context); // Muestrea o aplica antes de abrir cofres, hornos u otros bloques.
     }
     // Muestrea o aplica la textura según la interacción.
     @Override public InteractionResult useOn(UseOnContext context) {
@@ -30,12 +30,15 @@ public final class TextureApplicatorItem extends Item {
         BlockState clicked = level.getBlockState(pos);
         var stack = context.getItemInHand();
         if (player.isShiftKeyDown()) {
-            BlockState sample = clicked;
+            Direction half = TextureSkinSurface.halfAt(clicked,pos,context.getClickLocation());
+            BlockState sample = TextureSkinSurface.sample(clicked,half);
             Direction face = context.getClickedFace();
             if (level.getBlockEntity(pos) instanceof TextureCoverBlockEntity cover) {
                 sample = cover.sample();
                 face = cover.sampleFace();
             }
+            TextureSkinEntity skin = TextureSkinEntity.findAt(level, pos, face, context.getClickLocation());
+            if (skin != null) { sample = skin.sample(); face = skin.sampleFace(); }
             if (sample.getRenderShape() != RenderShape.MODEL) return message(context, "invalid_sample");
             if (!level.isClientSide) {
                 CompoundTag data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
@@ -52,23 +55,22 @@ public final class TextureApplicatorItem extends Item {
         if (sample.isAir() || sample.getRenderShape() != RenderShape.MODEL) return message(context, "invalid_sample");
         Direction sourceFace = Direction.byName(data.getString("SampleFace"));
         Direction face = context.getClickedFace();
-        boolean repaint = clicked.is(PostedSignage.TEXTURE_COVER_BLOCK.get());
-        BlockPos destination = repaint ? pos : pos.relative(face);
-        if (!level.mayInteract(player, destination) || !player.mayUseItemAt(destination, face, stack)) return InteractionResult.FAIL;
-        if (!repaint) {
-            if (!clicked.isFaceSturdy(level, pos, face) || !level.isEmptyBlock(destination) || level.isOutsideBuildHeight(destination)) return message(context, "no_space");
+        // Las capas antiguas se convierten sin perder su soporte ni orientación.
+        if (clicked.is(PostedSignage.TEXTURE_COVER_BLOCK.get())) {
+            face = clicked.getValue(TextureCoverBlock.FACING);
+            pos = pos.relative(face.getOpposite());
+            clicked = level.getBlockState(pos);
         }
+        if (!level.mayInteract(player, pos) || !player.mayUseItemAt(pos, face, stack)) return InteractionResult.FAIL;
+        if (clicked.isAir() || clicked.getShape(level, pos).isEmpty()) return message(context, "no_space");
         if (!level.isClientSide) {
-            if (!repaint) level.setBlockAndUpdate(destination, PostedSignage.TEXTURE_COVER_BLOCK.get().defaultBlockState().setValue(TextureCoverBlock.FACING, face));
-            if (level.getBlockEntity(destination) instanceof TextureCoverBlockEntity cover) {
-                Direction surface = cover.getBlockState().getValue(TextureCoverBlock.FACING);
-                cover.setSample(sample, sourceFace == null ? Direction.NORTH : sourceFace,
-                        placementRotation(surface, destination, player));
-            }
+            TextureSkinEntity.apply(level, pos, face, sample, sourceFace == null ? Direction.NORTH : sourceFace,
+                    placementRotation(face, pos.relative(face), player),
+                    TextureSkinSurface.halfAt(clicked,pos,context.getClickLocation()));
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
-    /** Horizontal surfaces read upright from the player's side; vertical faces stay upright. */
+    /** Mantiene las superficies horizontales legibles y las verticales derechas. */
     static int placementRotation(Direction surface, BlockPos destination, net.minecraft.world.entity.player.Player player) {
         if (surface.getAxis() != Direction.Axis.Y) return 0;
         double dx = player.getX() - (destination.getX() + 0.5);
@@ -82,7 +84,7 @@ public final class TextureApplicatorItem extends Item {
                     : (dz > 0 ? Direction.SOUTH : Direction.NORTH);
             top = towardPlayer.getOpposite();
         }
-        // The renderer's unrotated top edge points north on floors and south on ceilings.
+        // El borde superior sin girar apunta al norte en suelos y al sur en techos.
         return switch (top) {
             case EAST -> 1;
             case WEST -> 3;

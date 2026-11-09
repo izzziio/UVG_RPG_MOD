@@ -28,7 +28,7 @@ import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/** Operator-only destination marker. Its editable outline is separate from its invisible world rendering. */
+/** Marcador administrativo invisible, con contorno de edición independiente. */
 public final class TourStopBlock extends BaseEntityBlock {
     public static final MapCodec<TourStopBlock> CODEC = simpleCodec(TourStopBlock::new);
     private static final VoxelShape EDITOR_SHAPE = box(3.0, 0.0, 3.0, 13.0, 16.0, 13.0);
@@ -38,13 +38,13 @@ public final class TourStopBlock extends BaseEntityBlock {
         super(properties);
     }
 
-    /** Minecraft uses this codec when reconstructing the block from registry data. */
+    /** Minecraft reconstruye el bloque mediante este códec. */
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
 
-    /** Only creative operators may place markers; reject locations without a sturdy floor or headroom. */
+    /** Solo operadores creativos colocan marcadores con suelo y espacio suficiente. */
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
@@ -62,7 +62,7 @@ public final class TourStopBlock extends BaseEntityBlock {
         return defaultBlockState();
     }
 
-    /** Expose a selection outline to authorized editors while ordinary visitors see no selectable shape. */
+    /** Muestra contorno seleccionable solo a editores autorizados. */
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         if (context instanceof EntityCollisionContext entityContext
@@ -73,13 +73,13 @@ public final class TourStopBlock extends BaseEntityBlock {
         return Shapes.empty();
     }
 
-    /** The marker has no normal baked model; its editor-only outline is rendered separately. */
+    /** El marcador no tiene modelo normal; su contorno se dibuja aparte. */
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.INVISIBLE;
     }
 
-    /** Permissions are enforced before the server opens the stop editor. */
+    /** Comprueba permisos antes de abrir el editor de paradas. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!player.canUseGameMasterBlocks()) {
@@ -92,23 +92,23 @@ public final class TourStopBlock extends BaseEntityBlock {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** Protect administrative markers from ordinary players, including attempted client-side removal. */
+    /** Protege marcadores frente a jugadores sin permiso, también desde el cliente. */
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
         return player.canUseGameMasterBlocks()
                 && super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
     }
 
-    /** Index the new marker immediately so destination menus can discover it. */
+    /** Indexa el marcador nuevo para mostrarlo entre los destinos. */
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
         if (level instanceof ServerLevel serverLevel && level.getBlockEntity(pos) instanceof TourStopBlockEntity stop) {
-            TourStopSavedData.get(serverLevel).upsert(stop.getStopId(), pos, stop.getStopName());
+            TourStopSavedData.get(serverLevel).upsert(stop.getStopId(), pos, stop.getStopName(),stop.getDescription());
         }
     }
 
-    /** Delete the UUID entry before the block entity disappears, but not for same-block state updates. */
+    /** Elimina el UUID antes de retirar la entidad, salvo cambios del mismo bloque. */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!state.is(newState.getBlock()) && level instanceof ServerLevel serverLevel
@@ -118,7 +118,7 @@ public final class TourStopBlock extends BaseEntityBlock {
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
-    /** Each placed marker owns independent text and a stable UUID. */
+    /** Cada marcador conserva texto independiente y UUID estable. */
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {

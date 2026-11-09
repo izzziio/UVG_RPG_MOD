@@ -19,6 +19,10 @@ function Require-File([string]$Path, [string]$Reason) {
 }
 
 $requiredFiles = @(
+    (Join-Path $assetRoot 'blockstates/guide_barrier.json'),
+    (Join-Path $assetRoot 'models/block/guide_barrier.json'),
+    (Join-Path $assetRoot 'models/item/guide_barrier.json'),
+    (Join-Path $assetRoot 'textures/block/guide_barrier.png'),
     (Join-Path $assetRoot 'blockstates/tour_stop.json'),
     (Join-Path $assetRoot 'models/block/tour_stop.json'),
     (Join-Path $assetRoot 'models/item/tour_stop.json'),
@@ -91,6 +95,8 @@ if ($languageKeys.Count -eq $languagePaths.Count) {
 }
 
 $requiredTranslations = @(
+    'block.universityguide.guide_barrier',
+    'command.universityguide.barrier_given',
     'block.universityguide.tour_stop',
     'entity.universityguide.guide',
     'screen.universityguide.destinations',

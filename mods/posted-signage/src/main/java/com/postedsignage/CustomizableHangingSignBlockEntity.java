@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/** Stores the independently editable text for both faces of the custom sign. */
+/** Guarda texto independiente para ambas caras del letrero. */
 public final class CustomizableHangingSignBlockEntity extends SignBlockEntity {
     // Rechaza cambios de texto sin autorización del servidor.
     @Override public void updateSignText(net.minecraft.world.entity.player.Player player, boolean front,
@@ -16,13 +16,13 @@ public final class CustomizableHangingSignBlockEntity extends SignBlockEntity {
         super(PostedSignage.CUSTOMIZABLE_HANGING_SIGN_BLOCK_ENTITY.get(), pos, state);
     }
 
-    /** Limit editable text to the blank area of the CIT panel, measured in font pixels. */
+    /** Limita el texto al área vacía del panel CIT, en píxeles. */
     @Override
     public int getMaxTextLineWidth() {
         return 86;
     }
 
-    /** Keep vanilla editor line spacing aligned with the custom renderer's ten-pixel layout. */
+    /** Alinea el espacio entre líneas del editor con los diez píxeles del renderizador. */
     @Override
     public int getTextLineHeight() {
         return 10;

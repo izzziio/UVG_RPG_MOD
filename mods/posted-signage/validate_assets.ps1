@@ -182,6 +182,37 @@ foreach ($blockId in $blockIds) {
                 }
             }
         }
+        elseif ($blockId -in @('brick_vertical_slab','smooth_quartz_vertical_slab')) {
+            foreach ($facing in $expectedRotations.Keys) {
+                foreach ($fill in @('none','brick','quartz')) {
+                    $suffix = if ($fill -eq 'none') { '' } else { "_paired_$fill" }
+                    $expectedVariants["facing=$facing,fill=$fill"] = [ordered]@{
+                        model = "posted_signage:block/${blockId}${suffix}"; rotation = $expectedRotations[$facing]
+                    }
+                }
+            }
+        }
+        elseif ($blockId -in @('wall_tv','elevator_door','elevator_buttons','fire_hose_cabinet','campus_rules_poster')) {
+            $dims = @{wall_tv=@(2,2);elevator_door=@(2,3);elevator_buttons=@(1,1);fire_hose_cabinet=@(1,1);campus_rules_poster=@(1,2)}[$blockId]
+            foreach ($facing in $expectedRotations.Keys) {
+                for ($x=0;$x -lt $(if($blockId -eq 'elevator_buttons'){1}else{2});$x++) {
+                    for ($y=0;$y -lt $(if($blockId -eq 'elevator_buttons'){1}else{3});$y++) {
+                        foreach ($active in $(if($blockId -in @('elevator_door','elevator_buttons')){@('false','true')}else{@('false')})) {
+                            foreach ($glass in $(if($blockId -eq 'elevator_door'){@('false')}else{@('false','true')})) {
+                                $key="facing=$facing"; $suffix=if($active -eq 'true'){'_active'}else{''}
+                                if($blockId -ne 'elevator_door'){$key+=",glass_mounted=$glass"}
+                                if($blockId -eq 'elevator_door'){$key+=",open=$active"}
+                                if($blockId -ne 'elevator_buttons'){$key+=",part_x=$x,part_y=$y"}
+                                if($blockId -eq 'elevator_buttons'){$key+=",powered=$active"}
+                                $mx=[Math]::Min($x,$dims[0]-1);$my=[Math]::Min($y,$dims[1]-1)
+                                if($glass -eq 'true'){$suffix+='_glass'}
+                                $expectedVariants[$key]=[ordered]@{model="posted_signage:block/${blockId}_part_${mx}_${my}${suffix}";rotation=$expectedRotations[$facing]}
+                            }
+                        }
+                    }
+                }
+            }
+        }
         elseif ($blockId -eq 'texture_cover') {
             foreach ($facing in @('north', 'east', 'south', 'west', 'up', 'down')) {
                 $expectedVariants["facing=$facing"] = [ordered]@{ model = 'posted_signage:block/texture_cover'; rotation = 0 }
@@ -307,6 +338,30 @@ foreach ($blockId in $blockIds) {
                 Add-ValidationError "Internal texture covers must not drop items: $lootPath"
             }
         }
+        elseif ($blockId -in @('brick_vertical_slab','smooth_quartz_vertical_slab')) {
+            if ($loot.type -ne 'minecraft:block' -or $pools.Count -ne 3) {
+                Add-ValidationError "Paired slab loot must contain three pools: $lootPath"
+            }
+            else {
+                $dropIds = @($blockId,'brick_vertical_slab','smooth_quartz_vertical_slab')
+                for ($i = 0; $i -lt 3; $i++) {
+                    $pool = $pools[$i]
+                    if ($pool.rolls -ne 1 -or @($pool.entries).Count -ne 1 -or $pool.entries[0].name -ne "posted_signage:$($dropIds[$i])") {
+                        Add-ValidationError "Incorrect slab recovery pool $i in $lootPath"
+                    }
+                    if ('minecraft:survives_explosion' -notin @($pool.conditions | ForEach-Object condition)) {
+                        Add-ValidationError "Missing explosion condition in $lootPath"
+                    }
+                    if ($i -gt 0) {
+                        $condition = @($pool.conditions | Where-Object condition -EQ 'minecraft:block_state_property')
+                        $fill = if ($i -eq 1) { 'brick' } else { 'quartz' }
+                        if ($condition.Count -ne 1 -or $condition[0].block -ne "posted_signage:$blockId" -or $condition[0].properties.fill -ne $fill) {
+                            Add-ValidationError "Incorrect paired slab condition in $lootPath"
+                        }
+                    }
+                }
+            }
+        }
         elseif ($loot.type -ne 'minecraft:block' -or $pools.Count -ne 1) {
             Add-ValidationError "Loot table must contain exactly one block pool: $lootPath"
         }
@@ -327,7 +382,7 @@ foreach ($blockId in $blockIds) {
             if ('minecraft:survives_explosion' -notin $conditions) {
                 Add-ValidationError "Loot table is missing survives_explosion: $lootPath"
             }
-            if ($blockId -in @('statue_relief', 'trash_bin', 'wide_glass_door', 'short_glass_door')) {
+            if ($blockId -in @('statue_relief', 'trash_bin', 'wide_glass_door', 'short_glass_door','wall_tv','elevator_door','fire_hose_cabinet','campus_rules_poster')) {
                 $originConditions = @($pool.conditions | Where-Object condition -EQ 'minecraft:block_state_property')
                 if ($originConditions.Count -ne 1) {
                     Add-ValidationError "Multiblock loot must be restricted to its origin: $lootPath"
