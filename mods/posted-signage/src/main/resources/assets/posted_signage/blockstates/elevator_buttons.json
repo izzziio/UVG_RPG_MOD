@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,glass_mounted=false,powered=false": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0"
+    },
+    "facing=north,glass_mounted=true,powered=false": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0_glass"
+    },
+    "facing=east,glass_mounted=false,powered=false": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0",
+      "y": 90
+    },
+    "facing=east,glass_mounted=true,powered=false": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0_glass",
+      "y": 90
+    },
+    "facing=south,glass_mounted=false,powered=false": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0",
+      "y": 180
+    },
+    "facing=south,glass_mounted=true,powered=false": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0_glass",
+      "y": 180
+    },
+    "facing=west,glass_mounted=false,powered=false": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0",
+      "y": 270
+    },
+    "facing=west,glass_mounted=true,powered=false": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0_glass",
+      "y": 270
+    },
+    "facing=north,glass_mounted=false,powered=true": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0_active"
+    },
+    "facing=north,glass_mounted=true,powered=true": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0_active_glass"
+    },
+    "facing=east,glass_mounted=false,powered=true": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0_active",
+      "y": 90
+    },
+    "facing=east,glass_mounted=true,powered=true": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0_active_glass",
+      "y": 90
+    },
+    "facing=south,glass_mounted=false,powered=true": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0_active",
+      "y": 180
+    },
+    "facing=south,glass_mounted=true,powered=true": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0_active_glass",
+      "y": 180
+    },
+    "facing=west,glass_mounted=false,powered=true": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0_active",
+      "y": 270
+    },
+    "facing=west,glass_mounted=true,powered=true": {
+      "model": "posted_signage:block/elevator_buttons_part_0_0_active_glass",
+      "y": 270
+    }
+  }
+}

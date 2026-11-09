@@ -1,22 +1,62 @@
 {
   "variants": {
-    "facing=north": {
+    "facing=north,fill=none": {
       "model": "posted_signage:block/brick_vertical_slab",
       "y": 0,
       "uvlock": true
     },
-    "facing=east": {
+    "facing=north,fill=brick": {
+      "model": "posted_signage:block/brick_vertical_slab_paired_brick",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,fill=quartz": {
+      "model": "posted_signage:block/brick_vertical_slab_paired_quartz",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=east,fill=none": {
       "model": "posted_signage:block/brick_vertical_slab",
       "y": 90,
       "uvlock": true
     },
-    "facing=south": {
+    "facing=east,fill=brick": {
+      "model": "posted_signage:block/brick_vertical_slab_paired_brick",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,fill=quartz": {
+      "model": "posted_signage:block/brick_vertical_slab_paired_quartz",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south,fill=none": {
       "model": "posted_signage:block/brick_vertical_slab",
       "y": 180,
       "uvlock": true
     },
-    "facing=west": {
+    "facing=south,fill=brick": {
+      "model": "posted_signage:block/brick_vertical_slab_paired_brick",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,fill=quartz": {
+      "model": "posted_signage:block/brick_vertical_slab_paired_quartz",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,fill=none": {
       "model": "posted_signage:block/brick_vertical_slab",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,fill=brick": {
+      "model": "posted_signage:block/brick_vertical_slab_paired_brick",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,fill=quartz": {
+      "model": "posted_signage:block/brick_vertical_slab_paired_quartz",
       "y": 270,
       "uvlock": true
     }

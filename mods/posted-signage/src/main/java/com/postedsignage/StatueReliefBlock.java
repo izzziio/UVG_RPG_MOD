@@ -42,13 +42,13 @@ public final class StatueReliefBlock extends HorizontalDirectionalBlock {
                 .setValue(PART, StatuePart.STEM_BOTTOM_0));
     }
 
-    /** Minecraft uses this codec when reconstructing the block from registry data. */
+    /** Minecraft reconstruye el bloque mediante este códec. */
     @Override
     protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
         return CODEC;
     }
 
-    /** Use the clicked cell as the lower-left stem anchor and validate the entire mural footprint first. */
+    /** Usa la celda pulsada como ancla inferior izquierda y valida el mural completo. */
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
@@ -64,7 +64,7 @@ public final class StatueReliefBlock extends HorizontalDirectionalBlock {
         return defaultBlockState().setValue(FACING, facing).setValue(PART, StatuePart.STEM_BOTTOM_0);
     }
 
-    /** Every occupied cell must be replaceable, unobstructed, inside the border and supported by the wall. */
+    /** Exige celdas reemplazables, libres, dentro del borde y con soporte. */
     private boolean canPlaceStructure(BlockPlaceContext context, BlockPos anchor, Direction facing) {
         Level level = context.getLevel();
         CollisionContext collisionContext = context.getPlayer() == null
@@ -90,7 +90,7 @@ public final class StatueReliefBlock extends HorizontalDirectionalBlock {
         return true;
     }
 
-    /** Assemble the remaining 27 parts on the server after the anchor has been placed. */
+    /** Monta las otras 27 piezas después de colocar el ancla. */
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state,
             @Nullable LivingEntity placer, ItemStack stack) {
@@ -112,12 +112,12 @@ public final class StatueReliefBlock extends HorizontalDirectionalBlock {
 
     // Calcula la posición de una pieza del mural.
     private static BlockPos partPosition(BlockPos anchor, Direction facing, StatuePart part) {
-        // Increasing columns move toward the viewer's right while looking at
-        // the outward-facing relief. The viewer looks opposite FACING.
+        // Las columnas aumentan hacia la derecha al mirar
+        // el relieve desde fuera, en dirección contraria a FACING.
         return anchor.relative(facing.getCounterClockWise(), part.column()).above(part.row());
     }
 
-    /** Check the sturdy wall face behind the outward-facing block. */
+    /** Comprueba el soporte sólido detrás del bloque. */
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         Direction facing = state.getValue(FACING);
@@ -125,7 +125,7 @@ public final class StatueReliefBlock extends HorizontalDirectionalBlock {
         return level.getBlockState(supportPos).isFaceSturdy(level, supportPos, facing);
     }
 
-    /** Missing wall support or an expected adjacent part removes this cell and propagates structural collapse. */
+    /** Retira y propaga el desmontaje si faltan soporte o piezas. */
     @Override
     protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
             LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
@@ -161,7 +161,7 @@ public final class StatueReliefBlock extends HorizontalDirectionalBlock {
         return super.playerWillDestroy(level, pos, state, player);
     }
 
-    /** Translate a world-space neighbor direction into the mural's local row/column grid. */
+    /** Convierte la dirección vecina del mundo en fila y columna locales. */
     @Nullable
     private static StatuePart expectedNeighbor(StatuePart part, Direction facing, Direction direction) {
         int column = part.column();
@@ -183,7 +183,7 @@ public final class StatueReliefBlock extends HorizontalDirectionalBlock {
         return null;
     }
 
-    /** Return bounds matching the placed orientation for outline selection and default collision handling. */
+    /** Devuelve límites de selección y colisión según la orientación. */
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return switch (state.getValue(FACING)) {
@@ -194,20 +194,20 @@ public final class StatueReliefBlock extends HorizontalDirectionalBlock {
         };
     }
 
-    /** Rotate the stored facing so structure rotations preserve the attachment orientation. */
+    /** Gira la orientación guardada conservando el soporte. */
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
-    /** Mirror both wall orientation and the local part index so the T-shaped layout stays coherent. */
+    /** Refleja orientación e índice local para conservar la figura en T. */
     @Override
     protected BlockState mirror(BlockState state, Mirror mirror) {
         return rotate(state, mirror.getRotation(state.getValue(FACING)))
                 .setValue(PART, state.getValue(PART).mirrored());
     }
 
-    /** Declare the properties Minecraft serializes and uses to select blockstate model variants. */
+    /** Declara propiedades guardadas y usadas para elegir modelos. */
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, PART);

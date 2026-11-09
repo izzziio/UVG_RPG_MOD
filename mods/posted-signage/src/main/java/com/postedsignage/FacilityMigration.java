@@ -26,7 +26,7 @@ public final class FacilityMigration {
     @SubscribeEvent
     public static void onChunkLoad(ChunkEvent.Load event) {
         if (!(event.getLevel() instanceof ServerLevel level) || !(event.getChunk() instanceof LevelChunk chunk)) return;
-        // Queue after loading finishes, even when ChunkEvent runs on the server thread.
+        // Espera a terminar la carga incluso si el evento ocurre en el servidor.
         level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 1, () -> {
             if (!level.hasChunk(chunk.getPos().x, chunk.getPos().z)) return;
             var sections = chunk.getSections();

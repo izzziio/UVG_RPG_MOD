@@ -17,8 +17,8 @@ final class MultiblockRemoval {
     static void beforePlayerBreak(Level level, BlockPos selected, BlockPos origin,
             Map<BlockPos, BlockState> parts, Player player) {
         if (level.isClientSide()) return;
-        // Vanilla handles the selected cell's loot. Only the origin has a loot entry,
-        // so transfer its drop when the player instead selected a companion cell.
+        // Minecraft procesa el objeto de la celda seleccionada; solo el origen tiene botín,
+        // por eso transfiere el objeto si se rompe una pieza acompañante.
         BlockState originState = parts.get(origin);
         if (!player.isCreative() && !selected.equals(origin) && originState != null
                 && originState.canHarvestBlock(level, origin, player)) {

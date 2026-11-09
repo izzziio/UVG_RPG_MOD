@@ -76,5 +76,5 @@ public final class CitGlassBlock extends BaseEntityBlock {
     // Crea los datos asociados al bloque colocado.
     @Override public BlockEntity newBlockEntity(BlockPos p,BlockState s){return new CitGlassEntity(p,s);}
     // Elige cómo se dibuja el bloque.
-    @Override protected RenderShape getRenderShape(BlockState s){return RenderShape.ENTITYBLOCK_ANIMATED;}
+    @Override protected RenderShape getRenderShape(BlockState s){return RenderShape.MODEL;}
 }

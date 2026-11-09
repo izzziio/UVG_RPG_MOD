@@ -1,0 +1,219 @@
+{
+  "ambientocclusion": false,
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "black": "posted_signage:block/interior_black",
+    "bezel": "posted_signage:block/interior_bezel",
+    "red": "posted_signage:block/interior_red",
+    "dark": "posted_signage:block/interior_dark",
+    "white": "posted_signage:block/interior_white",
+    "steel": "posted_signage:block/interior_steel",
+    "buttons": "posted_signage:block/interior_buttons",
+    "buttons_on": "posted_signage:block/interior_buttons_on",
+    "cabinet": "posted_signage:block/interior_cabinet",
+    "rules": "posted_signage:block/interior_rules",
+    "particle": "posted_signage:block/interior_steel"
+  },
+  "elements": [
+    {
+      "from": [
+        12.5,
+        0.0,
+        22.88
+      ],
+      "to": [
+        16.0,
+        4.2,
+        23.68
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dark",
+          "uv": [
+            8.0,
+            0.0,
+            16.0,
+            9.08108108108108
+          ]
+        },
+        "south": {
+          "texture": "#dark",
+          "uv": [
+            12.5,
+            11.8,
+            16.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#dark",
+          "uv": [
+            15.2,
+            11.8,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#dark",
+          "uv": [
+            12.5,
+            15.2,
+            16.0,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        14.0,
+        0.0,
+        19.68
+      ],
+      "to": [
+        16.0,
+        3.0,
+        22.88
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dark",
+          "uv": [
+            8.0,
+            0.0,
+            16.0,
+            9.6
+          ]
+        },
+        "south": {
+          "texture": "#dark",
+          "uv": [
+            14.0,
+            13.0,
+            16.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#dark",
+          "uv": [
+            12.0,
+            13.0,
+            15.2,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#dark",
+          "uv": [
+            14.0,
+            12.0,
+            16.0,
+            15.2
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        0.0,
+        17.98
+      ],
+      "to": [
+        16.0,
+        9.0,
+        19.68
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bezel",
+          "uv": [
+            8.0,
+            0.0,
+            16.0,
+            8.0
+          ]
+        },
+        "south": {
+          "texture": "#bezel",
+          "uv": [
+            0.5,
+            7.0,
+            16.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#bezel",
+          "uv": [
+            10.3,
+            7.0,
+            12.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#bezel",
+          "uv": [
+            0.5,
+            10.3,
+            16.0,
+            12.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1.1,
+        0.0,
+        17.88
+      ],
+      "to": [
+        16.0,
+        8.4,
+        18.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#black",
+          "uv": [
+            8.0,
+            0,
+            16.0,
+            8.023880597014925
+          ]
+        },
+        "south": {
+          "texture": "#black",
+          "uv": [
+            1.1,
+            7.6,
+            16.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#black",
+          "uv": [
+            10.2,
+            7.6,
+            10.32,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#black",
+          "uv": [
+            1.1,
+            10.2,
+            16.0,
+            10.32
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -17,7 +17,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Server-side coverage for the generated multi-block facility objects. */
+/** Pruebas del servidor para las estructuras de varias piezas. */
 @GameTestHolder(PostedSignage.MOD_ID)
 @PrefixGameTestTemplate(false)
 public final class FacilityGameTests {
@@ -130,7 +130,7 @@ public final class FacilityGameTests {
                 && player.getInventory().countItem(net.minecraft.world.item.Items.EMERALD) == 5, "Shift-click recovers bin items without loss or duplication");
         bin.setItem(0, new ItemStack(net.minecraft.world.item.Items.DIAMOND, 7));
         var visitor = helper.makeMockPlayer(GameType.ADVENTURE);
-        // The mock overrides game-mode queries but does not initialize ability flags.
+        // El jugador de prueba redefine consultas de modo sin iniciar sus habilidades.
         GameType.ADVENTURE.updatePlayerAbilities(visitor.getAbilities());
         visitor.setPos(pos.getX() + .5, pos.getY(), pos.getZ() + 2);
         var deniedMenu = new TrashBinMenu(5, visitor.getInventory(), bin);
@@ -252,7 +252,7 @@ public final class FacilityGameTests {
         for (GameType mode : new GameType[] {GameType.SURVIVAL, GameType.CREATIVE}) {
             for (Direction facing : Direction.Plane.HORIZONTAL) {
                 for (StatuePart selected : StatuePart.values()) {
-                    // Assemble atomically so the test can focus on the real player-break path.
+                    // Monta todo junto para probar la rotura real del jugador.
                     for (StatuePart part : StatuePart.values()) {
                         BlockPos pos = origin.relative(facing.getCounterClockWise(), part.column()).above(part.row());
                         level.setBlock(pos.relative(facing.getOpposite()), Blocks.STONE.defaultBlockState(), 18);
@@ -299,7 +299,7 @@ public final class FacilityGameTests {
         helper.succeed();
     }
 
-    /** Exercise the real BlockItem path so origin survival checks cannot silently disable placement. */
+    /** Prueba la colocación real del objeto para detectar soportes inválidos. */
     @GameTest(template = "empty")
     public static void itemsPlaceEveryFacility(GameTestHelper helper) {
         verifyItemPlacement(helper, PostedSignage.TRASH_BIN.get().getDefaultInstance(),
@@ -337,7 +337,7 @@ public final class FacilityGameTests {
             }
         }
 
-        // Reuse an isolated site for the next item so player-facing direction cannot
+        // Reutiliza una zona aislada para que la orientación del jugador no
         // make one successfully placed facility obstruct another test case.
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {

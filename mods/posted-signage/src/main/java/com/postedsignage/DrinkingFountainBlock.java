@@ -37,7 +37,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/** Two-cell wall fountain sharing one block ID. HALF selects geometry; only the lower half yields loot. */
+/** Bebedero de dos celdas; HALF define forma y solo abajo suelta objeto. */
 public final class DrinkingFountainBlock extends HorizontalDirectionalBlock {
     public static final MapCodec<DrinkingFountainBlock> CODEC = simpleCodec(DrinkingFountainBlock::new);
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
@@ -47,7 +47,7 @@ public final class DrinkingFountainBlock extends HorizontalDirectionalBlock {
         super(properties);
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, DoubleBlockHalf.LOWER).setValue(ACTIVE, false));
     }
-    /** Minecraft uses this codec when reconstructing the block from registry data. */
+    /** Minecraft reconstruye el bloque mediante este códec. */
     @Override protected MapCodec<? extends HorizontalDirectionalBlock> codec() { return CODEC; }
     // Declara las propiedades guardadas en cada bloque.
     @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) { builder.add(FACING, HALF, ACTIVE); }
@@ -61,7 +61,7 @@ public final class DrinkingFountainBlock extends HorizontalDirectionalBlock {
         BlockState state = defaultBlockState().setValue(FACING, facing);
         return supported(state, context.getLevel(), pos) && supported(state, context.getLevel(), pos.above()) ? state : null;
     }
-    /** FACING points out from the wall; the support therefore lies in the opposite direction. */
+    /** FACING apunta fuera de la pared; el soporte está al lado contrario. */
     private boolean supported(BlockState state, LevelReader level, BlockPos pos) {
         Direction facing = state.getValue(FACING);
         BlockPos support = pos.relative(facing.getOpposite());
@@ -73,7 +73,7 @@ public final class DrinkingFountainBlock extends HorizontalDirectionalBlock {
     @Override public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         level.setBlock(pos.above(), state.setValue(HALF, DoubleBlockHalf.UPPER), UPDATE_ALL);
     }
-    /** Removing support or the matching other half collapses the pair through vanilla neighbor updates. */
+    /** Perder el soporte o la otra mitad desmonta el par. */
     @Override protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbor, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         boolean lower = state.getValue(HALF) == DoubleBlockHalf.LOWER;
         if (!supported(state, level, pos)) return Blocks.AIR.defaultBlockState();
@@ -82,14 +82,14 @@ public final class DrinkingFountainBlock extends HorizontalDirectionalBlock {
                 || neighbor.getValue(FACING) != state.getValue(FACING))) return Blocks.AIR.defaultBlockState();
         return state;
     }
-    /** Remove the lower half without loot when Creative breaks the upper half, avoiding an unintended drop. */
+    /** Romper arriba en Creativo elimina abajo sin soltar objetos. */
     @Override public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide() && player.isCreative() && state.getValue(HALF) == DoubleBlockHalf.UPPER) {
             if (level.getBlockState(pos.below()).is(this)) level.destroyBlock(pos.below(), false);
         }
         return super.playerWillDestroy(level, pos, state, player);
     }
-    /** Start from north-facing local bounds and rotate every box into the placed orientation. */
+    /** Gira los límites locales del norte a la orientación colocada. */
     @Override protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         VoxelShape shape = state.getValue(HALF) == DoubleBlockHalf.UPPER
                 ? Block.box(1, 0, 13, 15, 12, 16)
@@ -103,14 +103,14 @@ public final class DrinkingFountainBlock extends HorizontalDirectionalBlock {
         }
         return shape;
     }
-    /** Canonical coordinates face north; the long front push bar is easy to target. */
+    /** Coordenadas locales hacia el norte; la barra frontal facilita seleccionar. */
     public static boolean isButtonHit(BlockState state, BlockPos pos, BlockHitResult hit) {
         if (state.getValue(HALF) != DoubleBlockHalf.LOWER || hit.getDirection() != state.getValue(FACING)) return false;
         Vec3 point = hit.getLocation().subtract(Vec3.atLowerCornerOf(pos));
         double x = switch (state.getValue(FACING)) { case SOUTH -> 1-point.x; case EAST -> point.z; case WEST -> 1-point.z; default -> point.x; };
         return x >= 3.0/16 && x <= 13.0/16 && point.y >= 10.0/16 && point.y <= 13.0/16;
     }
-    /** The client acknowledges a valid click; only the server awards water/food and changes the active state. */
+    /** El cliente confirma el clic; el servidor entrega beneficios y cambia el estado. */
     private InteractionResult activate(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!isButtonHit(state, pos, hit) || player.isSpectator()) return InteractionResult.PASS;
         if (!level.isClientSide() && Hydration.drink(player)) {
@@ -121,32 +121,32 @@ public final class DrinkingFountainBlock extends HorizontalDirectionalBlock {
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
     }
-    /** Empty-hand clicks share the same button hit test and cooldown as held-item clicks. */
+    /** La mano vacía usa la misma zona de pulsación y espera. */
     @Override protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) { return activate(state, level, pos, player, hit); }
     // Activa el bebedero también con un objeto en la mano.
     @Override protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return activate(state, level, pos, player, hit).consumesAction() ? ItemInteractionResult.sidedSuccess(level.isClientSide()) : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
-    /** A scheduled tick releases the button after the two-second active interval. */
+    /** Libera el botón tras dos segundos mediante un tick programado. */
     @Override protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         level.setBlock(pos, state.setValue(ACTIVE, false), UPDATE_ALL);
     }
-    /** Client particles visualize the active state without placing fluid blocks or changing the world. */
+    /** Muestra partículas sin colocar agua ni modificar el mundo. */
     @Override public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (!state.getValue(ACTIVE) || state.getValue(HALF) != DoubleBlockHalf.LOWER) return;
         for (int i = 0; i <= 8; i++) {
             double t = i / 8.0;
-            // Small arc from the right bubbler toward the drain, staying inside the basin.
+            // Arco corto desde la boquilla derecha hasta el desagüe, dentro de la pila.
             double x = 3.5/16 + t*0.33, z = 5.0/16 + t*0.12, y = 15.0/16 + 0.28*4*t*(1-t) - 0.16*t;
             Vec3 p = rotatePoint(state.getValue(FACING), x,y,z).add(Vec3.atLowerCornerOf(pos));
             level.addParticle(ParticleTypes.FALLING_WATER, p.x,p.y,p.z, 0,0,0);
         }
     }
-    /** Use the same quarter-turn transform for particle origins as for collision/model orientation. */
+    /** Gira las partículas igual que el modelo y la colisión. */
     private static Vec3 rotatePoint(Direction facing, double x, double y, double z) {
         return switch(facing) { case EAST -> new Vec3(1-z,y,x); case SOUTH -> new Vec3(1-x,y,1-z); case WEST -> new Vec3(z,y,1-x); default -> new Vec3(x,y,z); };
     }
-    /** Rotate the stored facing so structure rotations preserve the attachment orientation. */
+    /** Gira la orientación guardada conservando el soporte. */
     @Override protected BlockState rotate(BlockState state, Rotation rotation) { return state.setValue(FACING, rotation.rotate(state.getValue(FACING))); }
     // Refleja la orientación del bloque.
     @Override protected BlockState mirror(BlockState state, Mirror mirror) { return rotate(state, mirror.getRotation(state.getValue(FACING))); }

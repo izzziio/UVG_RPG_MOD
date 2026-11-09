@@ -73,9 +73,9 @@ public class FacilityMultiBlock extends HorizontalDirectionalBlock {
     // Comprueba que el bloque conserva su soporte.
     @Override protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         if (isObsoletePart(state)) return false;
-        // The origin must be allowed to enter the world before it can anchor the
-        // remaining parts. Requiring it to find itself here makes BlockItem reject
-        // every initial placement before setPlacedBy has a chance to assemble it.
+        // El ancla debe poder colocarse antes de sujetar la
+        // estructura restante. Exigir que ya exista hace que BlockItem rechace
+        // la colocación inicial antes de que setPlacedBy pueda montarla.
         if (state.getValue(PART_X) == 0 && state.getValue(PART_Y) == 0) return true;
         BlockPos o = origin(pos, state);
         return level.getBlockState(o).is(this) && level.getBlockState(o).getValue(FACING) == state.getValue(FACING);
