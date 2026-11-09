@@ -1,0 +1,679 @@
+{
+    "meta":  {
+                 "format_version":  "4.10",
+                 "model_format":  "java_block",
+                 "box_uv":  false
+             },
+    "name":  "sansevieria_planter",
+    "geometry_name":  "",
+    "visible_box":  [
+                        1,
+                        1,
+                        1
+                    ],
+    "variable_placeholders":  "",
+    "resolution":  {
+                       "width":  16,
+                       "height":  16
+                   },
+    "elements":  [
+                     {
+                         "name":  "planter_part_0",
+                         "box_uv":  false,
+                         "rescale":  false,
+                         "locked":  false,
+                         "light_emission":  0,
+                         "render_order":  "default",
+                         "allow_mirror_modeling":  true,
+                         "from":  [
+                                      2,
+                                      0,
+                                      2
+                                  ],
+                         "to":  [
+                                    14,
+                                    1.5,
+                                    14
+                                ],
+                         "autouv":  0,
+                         "color":  0,
+                         "origin":  [
+                                        8,
+                                        8,
+                                        8
+                                    ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  0
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                }
+                                   },
+                         "uuid":  "93fee5ec-9206-fbfa-13e6-c36b36d55f08"
+                     },
+                     {
+                         "name":  "planter_part_1",
+                         "box_uv":  false,
+                         "rescale":  false,
+                         "locked":  false,
+                         "light_emission":  0,
+                         "render_order":  "default",
+                         "allow_mirror_modeling":  true,
+                         "from":  [
+                                      2,
+                                      1.5,
+                                      2
+                                  ],
+                         "to":  [
+                                    3,
+                                    6,
+                                    14
+                                ],
+                         "autouv":  0,
+                         "color":  0,
+                         "origin":  [
+                                        8,
+                                        8,
+                                        8
+                                    ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  0
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                }
+                                   },
+                         "uuid":  "f81b4157-028b-d535-caf7-76e5efb9c5e3"
+                     },
+                     {
+                         "name":  "planter_part_2",
+                         "box_uv":  false,
+                         "rescale":  false,
+                         "locked":  false,
+                         "light_emission":  0,
+                         "render_order":  "default",
+                         "allow_mirror_modeling":  true,
+                         "from":  [
+                                      13,
+                                      1.5,
+                                      2
+                                  ],
+                         "to":  [
+                                    14,
+                                    6,
+                                    14
+                                ],
+                         "autouv":  0,
+                         "color":  0,
+                         "origin":  [
+                                        8,
+                                        8,
+                                        8
+                                    ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  0
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                }
+                                   },
+                         "uuid":  "208e5770-de07-412d-9f3f-0d52674e94b7"
+                     },
+                     {
+                         "name":  "planter_part_3",
+                         "box_uv":  false,
+                         "rescale":  false,
+                         "locked":  false,
+                         "light_emission":  0,
+                         "render_order":  "default",
+                         "allow_mirror_modeling":  true,
+                         "from":  [
+                                      2,
+                                      1.5,
+                                      13
+                                  ],
+                         "to":  [
+                                    14,
+                                    6,
+                                    14
+                                ],
+                         "autouv":  0,
+                         "color":  0,
+                         "origin":  [
+                                        8,
+                                        8,
+                                        8
+                                    ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  0
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                }
+                                   },
+                         "uuid":  "ef5176d9-576f-2e7a-1a79-867436ba3100"
+                     },
+                     {
+                         "name":  "planter_part_4",
+                         "box_uv":  false,
+                         "rescale":  false,
+                         "locked":  false,
+                         "light_emission":  0,
+                         "render_order":  "default",
+                         "allow_mirror_modeling":  true,
+                         "from":  [
+                                      2,
+                                      1.5,
+                                      2
+                                  ],
+                         "to":  [
+                                    14,
+                                    6,
+                                    3
+                                ],
+                         "autouv":  0,
+                         "color":  0,
+                         "origin":  [
+                                        8,
+                                        8,
+                                        8
+                                    ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  0
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                }
+                                   },
+                         "uuid":  "ac0bf2c0-e2e6-7657-3ea3-6b942873a3d0"
+                     },
+                     {
+                         "name":  "planter_part_5",
+                         "box_uv":  false,
+                         "rescale":  false,
+                         "locked":  false,
+                         "light_emission":  0,
+                         "render_order":  "default",
+                         "allow_mirror_modeling":  true,
+                         "from":  [
+                                      3,
+                                      5.4,
+                                      3
+                                  ],
+                         "to":  [
+                                    13,
+                                    5.8,
+                                    13
+                                ],
+                         "autouv":  0,
+                         "color":  0,
+                         "origin":  [
+                                        8,
+                                        8,
+                                        8
+                                    ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  1
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  1
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  1
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  1
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  1
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  1
+                                                }
+                                   },
+                         "uuid":  "46274ae9-2e9e-89c5-8cd7-ec0f3c3207bf"
+                     },
+                     {
+                         "name":  "planter_part_6",
+                         "box_uv":  false,
+                         "rescale":  false,
+                         "locked":  false,
+                         "light_emission":  0,
+                         "render_order":  "default",
+                         "allow_mirror_modeling":  true,
+                         "from":  [
+                                      1,
+                                      4.8,
+                                      7.99
+                                  ],
+                         "to":  [
+                                    15,
+                                    22.8,
+                                    8.01
+                                ],
+                         "autouv":  0,
+                         "color":  0,
+                         "origin":  [
+                                        8,
+                                        8,
+                                        8
+                                    ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  2
+                                                 },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  2
+                                                 }
+                                   },
+                         "uuid":  "d4301c53-fff2-7830-6aa2-7e659cae92a1"
+                     },
+                     {
+                         "name":  "planter_part_7",
+                         "box_uv":  false,
+                         "rescale":  false,
+                         "locked":  false,
+                         "light_emission":  0,
+                         "render_order":  "default",
+                         "allow_mirror_modeling":  true,
+                         "from":  [
+                                      7.99,
+                                      4.8,
+                                      1
+                                  ],
+                         "to":  [
+                                    8.01,
+                                    22.8,
+                                    15
+                                ],
+                         "autouv":  0,
+                         "color":  0,
+                         "origin":  [
+                                        8,
+                                        8,
+                                        8
+                                    ],
+                         "faces":  {
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  2
+                                                },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  2
+                                                }
+                                   },
+                         "uuid":  "71db2781-ea8d-0e1e-df59-327373c5fd09"
+                     }
+                 ],
+    "outliner":  [
+                     "93fee5ec-9206-fbfa-13e6-c36b36d55f08",
+                     "f81b4157-028b-d535-caf7-76e5efb9c5e3",
+                     "208e5770-de07-412d-9f3f-0d52674e94b7",
+                     "ef5176d9-576f-2e7a-1a79-867436ba3100",
+                     "ac0bf2c0-e2e6-7657-3ea3-6b942873a3d0",
+                     "46274ae9-2e9e-89c5-8cd7-ec0f3c3207bf",
+                     "d4301c53-fff2-7830-6aa2-7e659cae92a1",
+                     "71db2781-ea8d-0e1e-df59-327373c5fd09"
+                 ],
+    "textures":  [
+                     {
+                         "path":  "minecraft:block/quartz_block_side",
+                         "name":  "quartz_block_side",
+                         "folder":  "textures",
+                         "namespace":  "posted_signage",
+                         "id":  "0",
+                         "particle":  true,
+                         "render_mode":  "default",
+                         "render_sides":  "auto",
+                         "frame_time":  1,
+                         "frame_order_type":  "loop",
+                         "frame_order":  "",
+                         "frame_interpolate":  false,
+                         "visible":  true,
+                         "internal":  false,
+                         "saved":  true,
+                         "uuid":  "705051d2-5fc5-1ed2-e092-2e2ac778986c"
+                     },
+                     {
+                         "path":  "minecraft:block/rooted_dirt",
+                         "name":  "rooted_dirt",
+                         "folder":  "textures",
+                         "namespace":  "posted_signage",
+                         "id":  "1",
+                         "particle":  false,
+                         "render_mode":  "default",
+                         "render_sides":  "auto",
+                         "frame_time":  1,
+                         "frame_order_type":  "loop",
+                         "frame_order":  "",
+                         "frame_interpolate":  false,
+                         "visible":  true,
+                         "internal":  false,
+                         "saved":  true,
+                         "uuid":  "ea388afb-43d4-a753-7bda-d4564d9079b0"
+                     },
+                     {
+                         "path":  "textures/sansevieria_foliage.png",
+                         "name":  "sansevieria_foliage.png",
+                         "folder":  "textures",
+                         "namespace":  "posted_signage",
+                         "id":  "2",
+                         "particle":  false,
+                         "render_mode":  "default",
+                         "render_sides":  "auto",
+                         "frame_time":  1,
+                         "frame_order_type":  "loop",
+                         "frame_order":  "",
+                         "frame_interpolate":  false,
+                         "visible":  true,
+                         "internal":  false,
+                         "saved":  true,
+                         "uuid":  "cfb22ee7-ea68-1707-882d-3d43f8b9c8c0"
+                     }
+                 ]
+}

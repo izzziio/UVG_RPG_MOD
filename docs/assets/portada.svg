@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+  <title id="title">UVG Minecraft</title>
+  <desc id="desc">Tour virtual del campus. Edificios y jardines sobre fondo verde.</desc>
+  <rect width="1200" height="300" rx="18" fill="#102b24"/>
+  <path d="M760 0H1200V300H650Z" fill="#173c31"/>
+  <rect x="46" y="42" width="6" height="34" fill="#a9d98b"/>
+  <text x="70" y="65" fill="#c4dfc1" font-family="Segoe UI,Arial,sans-serif" font-size="19" letter-spacing="3">UNIVERSIDAD DEL VALLE DE GUATEMALA</text>
+  <text x="46" y="151" fill="#f2f5e9" font-family="Segoe UI,Arial,sans-serif" font-size="62" font-weight="700">UVG MINECRAFT</text>
+  <text x="49" y="193" fill="#b9d0c1" font-family="Segoe UI,Arial,sans-serif" font-size="25">Tour virtual del campus</text>
+  <rect x="49" y="227" width="320" height="34" rx="5" fill="#294e3f"/>
+  <text x="65" y="250" fill="#daeccd" font-family="Segoe UI,Arial,sans-serif" font-size="15" letter-spacing="2">GUÍA · CONSTRUCCIÓN · DISEÑO</text>
+  <g transform="translate(795 66)">
+    <rect x="0" y="78" width="135" height="135" fill="#315c49"/>
+    <rect x="145" y="0" width="160" height="213" fill="#55745e"/>
+    <rect x="157" y="-10" width="136" height="10" fill="#91b880"/>
+    <g fill="#b6d5bc">
+      <path d="M12 92H47V119H12ZM54 92H89V119H54ZM96 92H123V119H96ZM12 132H47V159H12ZM54 132H89V159H54ZM96 132H123V159H96Z"/>
+      <path d="M160 18H196V48H160ZM206 18H242V48H206ZM252 18H290V48H252ZM160 62H196V92H160ZM206 62H242V92H206ZM252 62H290V92H252ZM160 106H196V136H160ZM206 106H242V136H206ZM252 106H290V136H252Z"/>
+    </g>
+    <rect x="182" y="156" width="88" height="57" fill="#16372e"/>
+    <path d="M225 156V213M182 185H270" stroke="#769b7c" stroke-width="4"/>
+    <rect x="-15" y="213" width="340" height="8" fill="#a9d98b"/>
+    <rect x="25" y="183" width="11" height="30" fill="#254e3c"/>
+    <rect x="6" y="163" width="49" height="33" fill="#87b568"/>
+  </g>
+</svg>
