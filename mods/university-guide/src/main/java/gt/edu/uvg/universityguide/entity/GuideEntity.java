@@ -1,6 +1,7 @@
 package gt.edu.uvg.universityguide.entity;
 
 import com.mojang.authlib.GameProfile;
+import gt.edu.uvg.universityguide.entity.navigation.*;
 import com.mojang.serialization.DataResult;
 import gt.edu.uvg.universityguide.block.entity.TourStopBlockEntity;
 import gt.edu.uvg.universityguide.data.TourStopSavedData;
@@ -42,7 +43,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.phys.Vec3;
 
-/** Server-driven tour state machine: gathers participants, navigates, waits for the group and reports arrival. */
+/** Controla el recorrido desde el servidor: reúne, navega, espera y anuncia llegada. */
 public final class GuideEntity extends PathfinderMob {
     public static final double MAX_DESTINATION_DISTANCE = 250.0;
     public static final double GROUP_JOIN_DISTANCE = 16.0;
@@ -74,6 +75,7 @@ public final class GuideEntity extends PathfinderMob {
     // Inicializa los datos de esta entidad.
     public GuideEntity(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
+        moveControl = new GuideMoveControl(this);
         setPersistenceRequired();
         setInvulnerable(true);
         if (getNavigation() instanceof GroundPathNavigation groundNavigation) {
@@ -83,26 +85,27 @@ public final class GuideEntity extends PathfinderMob {
         }
     }
 
-    /** Keep movement and follow-range settings together so navigation tuning stays consistent. */
+    /** Agrupa velocidad y alcance para ajustar la navegación coherentemente. */
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.28)
+                .add(Attributes.STEP_HEIGHT, 0.6)
                 .add(Attributes.FOLLOW_RANGE, 256.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
     }
 
-    /** Door-capable ground navigation lets the guide follow campus routes through wooden doors. */
+    /** Navegación terrestre compatible con puertas de madera. */
     @Override
     protected PathNavigation createNavigation(Level level) {
-        GroundPathNavigation navigation = new GroundPathNavigation(this, level);
+        GroundPathNavigation navigation = new GuideNavigation(this, level);
         navigation.setCanOpenDoors(true);
         navigation.setCanPassDoors(true);
         navigation.setCanFloat(false);
         return navigation;
     }
 
-    /** Ambient goals control looking and doors; the tour state machine chooses movement destinations. */
+    /** Las metas controlan mirada y puertas; el recorrido decide el destino. */
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new OpenDoorGoal(this, true));
@@ -110,7 +113,7 @@ public final class GuideEntity extends PathfinderMob {
         goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 
-    /** Only state and skin data are synchronized here; destination and participant bookkeeping stays server-side. */
+    /** Sincroniza estado y apariencia; destinos y participantes permanecen en el servidor. */
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
@@ -119,7 +122,7 @@ public final class GuideEntity extends PathfinderMob {
         builder.define(SKIN_PROFILE, new CompoundTag());
     }
 
-    /** Ignore the off hand so one click cannot open two menus; busy guides reject new tours. */
+    /** Ignora la mano secundaria y rechaza recorridos si el guía está ocupado. */
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (hand != InteractionHand.MAIN_HAND) {
@@ -135,7 +138,7 @@ public final class GuideEntity extends PathfinderMob {
         return InteractionResult.sidedSuccess(level().isClientSide);
     }
 
-    /** Fall back to IDLE when synchronized data contains an unknown enum ordinal. */
+    /** Usa IDLE si el estado sincronizado contiene un ordinal desconocido. */
     public TourState getTourState() {
         int raw = entityData.get(TOUR_STATE);
         return raw >= 0 && raw < TourState.values().length ? TourState.values()[raw] : TourState.IDLE;
@@ -151,7 +154,7 @@ public final class GuideEntity extends PathfinderMob {
         return entityData.get(SKIN_ACCOUNT);
     }
 
-    /** Decode the synchronized profile, using a deterministic offline UUID when no resolved skin is available. */
+    /** Lee el perfil sincronizado; usa un UUID determinista si falta la apariencia. */
     public GameProfile getSkinProfile() {
         CompoundTag encoded = entityData.get(SKIN_PROFILE);
         Optional<ResolvableProfile> decoded = ResolvableProfile.CODEC.parse(NbtOps.INSTANCE, encoded).result();
@@ -163,7 +166,7 @@ public final class GuideEntity extends PathfinderMob {
         return new GameProfile(fallbackId, account);
     }
 
-    /** Publish a fallback immediately, then resolve the account asynchronously and apply it on the server executor. */
+    /** Publica una apariencia provisional y resuelve la cuenta de forma asíncrona. */
     public void setSkinAccount(String requestedAccount) {
         String account = requestedAccount == null || requestedAccount.isBlank() ? "Steve" : requestedAccount.trim();
         if (account.length() > 16) {
@@ -183,14 +186,14 @@ public final class GuideEntity extends PathfinderMob {
         }
     }
 
-    /** Encode profile properties into synchronized NBT so clients can obtain the correct skin texture. */
+    /** Sincroniza propiedades del perfil para obtener la apariencia correcta. */
     private void setResolvedSkin(GameProfile profile) {
         DataResult<Tag> result = ResolvableProfile.CODEC.encodeStart(NbtOps.INSTANCE, new ResolvableProfile(profile));
         result.result().filter(CompoundTag.class::isInstance).map(CompoundTag.class::cast)
                 .ifPresent(tag -> entityData.set(SKIN_PROFILE, tag));
     }
 
-    /** Revalidate the indexed destination against the actual block before capturing the nearby participant group. */
+    /** Revalida el bloque de destino antes de reunir participantes cercanos. */
     public boolean startTour(ServerPlayer owner, UUID stopId) {
         if (getTourState() != TourState.IDLE || !(level() instanceof ServerLevel serverLevel)) {
             owner.displayClientMessage(Component.translatable("message.universityguide.busy"), true);
@@ -242,14 +245,14 @@ public final class GuideEntity extends PathfinderMob {
         return true;
     }
 
-    /** Require clear feet/head collision space and a sturdy floor before asking the pathfinder to reach a stop. */
+    /** Exige espacio para pies y cabeza y suelo firme antes de buscar ruta. */
     private static boolean isDestinationWalkable(ServerLevel level, BlockPos pos) {
         return level.getBlockState(pos).getCollisionShape(level, pos).isEmpty()
                 && level.getBlockState(pos.above()).getCollisionShape(level, pos.above()).isEmpty()
                 && level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), net.minecraft.core.Direction.UP);
     }
 
-    /** Order matters: validate the target, wait for participants, detect arrival, then retry stalled navigation. */
+    /** Valida destino, espera participantes, detecta llegada y reintenta navegación. */
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
@@ -264,6 +267,13 @@ public final class GuideEntity extends PathfinderMob {
         TourStopBlockEntity stop = getTargetStop(serverLevel);
         if (stop == null) {
             cancelTour(Component.translatable("message.universityguide.stop_invalid"));
+            return;
+        }
+
+        // Una barrera sobre el guía pausa el recorrido sin agotar reintentos.
+        if (GuideRouteRules.blocked(level(), getBoundingBox())) {
+            getNavigation().stop();
+            setDeltaMovement(0, getDeltaMovement().y, 0);
             return;
         }
 
@@ -291,20 +301,23 @@ public final class GuideEntity extends PathfinderMob {
             requestPath();
         }
 
-        if (distanceToSqr(Vec3.atCenterOf(targetPos)) <= ARRIVAL_DISTANCE * ARRIVAL_DISTANCE) {
+        if (distanceToSqr(Vec3.atCenterOf(targetPos)) <= ARRIVAL_DISTANCE * ARRIVAL_DISTANCE
+                && GuideRouteRules.canTraverse(level(), position(), Vec3.atBottomCenterOf(targetPos), getBbWidth(), getBbHeight())) {
             arrive(stop);
             return;
         }
 
         stalledPathTicks++;
-        if (position().distanceToSqr(lastProgressPosition) >= 0.25) {
+        // Rebotar verticalmente en un escalón no reinicia el detector de atasco.
+        if (position().subtract(lastProgressPosition).horizontalDistanceSqr() >= 0.25) {
             lastProgressPosition = position();
             stalledPathTicks = 0;
             pathRetries = 0;
         }
 
         if (stalledPathTicks > 0
-                && stalledPathTicks % PATH_RETRY_INTERVAL_TICKS == 0
+                && (stalledPathTicks % PATH_RETRY_INTERVAL_TICKS == 0
+                    || (getNavigation().isDone() && stalledPathTicks==10))
                 && pathRetries < MAX_PATH_RETRIES) {
             pathRetries++;
             requestPath();
@@ -315,7 +328,7 @@ public final class GuideEntity extends PathfinderMob {
         }
     }
 
-    /** A matching UUID prevents an old tour from targeting a replacement marker at the same coordinates. */
+    /** El UUID impide dirigir un recorrido antiguo a un marcador reemplazado. */
     @Nullable
     private TourStopBlockEntity getTargetStop(ServerLevel level) {
         if (targetPos == null || targetStopId == null
@@ -327,17 +340,30 @@ public final class GuideEntity extends PathfinderMob {
                 && stop.getStopId().equals(targetStopId) ? stop : null;
     }
 
-    /** Aim at the center of the destination cell, with feet at its base rather than its vertical center. */
-    private boolean requestPath() {
-        return targetPos != null && getNavigation().moveTo(
-                targetPos.getX() + 0.5,
-                targetPos.getY(),
-                targetPos.getZ() + 0.5,
-                1.0
-        );
+    // Recalcula al editar barreras, conservando destino y participantes.
+    public void routeChanged(BlockPos changed) {
+        if (getTourState() == TourState.IDLE) return;
+        if (!getNavigation().isDone() && !getNavigation().shouldRecomputePath(changed)
+                && !getBoundingBox().intersects(new net.minecraft.world.phys.AABB(changed))) return;
+        getNavigation().stop();
+        setDeltaMovement(0, getDeltaMovement().y, 0);
+        stalledPathTicks = 0;
+        pathRetries = 0;
+        lastProgressPosition = position();
+        if (getTourState() == TourState.WALKING && !GuideRouteRules.blocked(level(), getBoundingBox())) requestPath();
     }
 
-    /** Dimension presence controls the abandonment timer; it is distinct from following distance. */
+    /** Apunta al centro de destino con los pies en la base. */
+    private boolean requestPath() {
+        if (targetPos == null) return false;
+        var path = getNavigation().createPath(targetPos, 0);
+        // No avanza por rutas parciales que terminan ante una barrera.
+        if (path == null || !path.canReach()) { getNavigation().stop(); return false; }
+        // El multiplicador también se aplica a guías existentes con atributos guardados.
+        return getNavigation().moveTo(path, 1.10);
+    }
+
+    /** La dimensión controla el abandono, independientemente de la distancia de seguimiento. */
     private boolean hasParticipantInDimension(ServerLevel level) {
         for (UUID id : participants) {
             ServerPlayer player = level.getServer().getPlayerList().getPlayer(id);
@@ -348,7 +374,7 @@ public final class GuideEntity extends PathfinderMob {
         return false;
     }
 
-    /** One nearby registered participant is enough to resume the guide's movement. */
+    /** Un participante cercano basta para reanudar el movimiento. */
     private boolean hasNearbyParticipant(ServerLevel level) {
         double maximum = GROUP_FOLLOW_DISTANCE * GROUP_FOLLOW_DISTANCE;
         for (UUID id : participants) {
@@ -360,14 +386,14 @@ public final class GuideEntity extends PathfinderMob {
         return false;
     }
 
-    /** Stop movement before opening explanations, then release the guide for another tour. */
+    /** Detiene el movimiento antes de explicar y libera el guía al terminar. */
     private void arrive(TourStopBlockEntity stop) {
         getNavigation().stop();
         forEachParticipant(player -> TourNetwork.showArrival(player, stop.getStopName(), stop.getDescription()));
         clearTour();
     }
 
-    /** Notify the captured group before clearing the participant set and destination. */
+    /** Avisa al grupo antes de borrar participantes y destino. */
     public void cancelTour(Component reason) {
         if (getTourState() != TourState.IDLE) {
             forEachParticipant(player -> player.displayClientMessage(reason, false));
@@ -375,7 +401,7 @@ public final class GuideEntity extends PathfinderMob {
         clearTour();
     }
 
-    /** Reset navigation and retry counters together so the next tour starts from a clean IDLE state. */
+    /** Reinicia navegación y reintentos para comenzar en IDLE. */
     private void clearTour() {
         getNavigation().stop();
         targetStopId = null;
@@ -400,19 +426,19 @@ public final class GuideEntity extends PathfinderMob {
         }
     }
 
-    /** Tour guides are map content and must not despawn when visitors leave the area. */
+    /** El guía pertenece al mapa y no desaparece cuando se alejan visitantes. */
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false;
     }
 
-    /** Keep the NPC across chunk unloads even when no tour is active. */
+    /** Conserva el guía al descargar chunks aunque no esté en recorrido. */
     @Override
     public boolean requiresCustomPersistence() {
         return true;
     }
 
-    /** Persist skin and active-tour identity; transient pathfinder state is rebuilt after loading. */
+    /** Guarda apariencia y recorrido; reconstruye la ruta al cargar. */
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
