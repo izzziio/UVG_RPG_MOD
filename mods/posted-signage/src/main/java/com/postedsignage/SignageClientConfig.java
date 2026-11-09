@@ -8,7 +8,7 @@ public final class SignageClientConfig {
     public static final ModConfigSpec.IntValue TEXT_DISTANCE;
     static {
         var builder=new ModConfigSpec.Builder();
-        TEXT_DISTANCE=builder.comment("Maximum distance for editable CIT lettering in blocks. 0 keeps the original distance.")
+        TEXT_DISTANCE=builder.comment("Distancia máxima en bloques para las letras editables CIT. 0 conserva la distancia original.")
                 .defineInRange("textDistance",0,0,96);
         SPEC=builder.build();
     }

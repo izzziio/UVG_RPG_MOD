@@ -59,7 +59,7 @@ public final class TourPayloads {
             int entityId = buffer.readVarInt();
             String name = buffer.readUtf(64);
             int size = buffer.readVarInt();
-            if(size<0||size>512)throw new IllegalArgumentException("Invalid destination count");
+            if(size<0||size>512)throw new IllegalArgumentException("Cantidad de destinos inválida");
             List<StopSummary> stops = new ArrayList<>(size);
             for (int index = 0; index < size; index++) {
                 stops.add(StopSummary.read(buffer));

@@ -1,4 +1,4 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
     [ValidateSet('todos', 'posted-signage', 'university-guide')]
     [string]$Mod = 'todos',
@@ -16,7 +16,7 @@ foreach ($moduleName in $modules) {
         $gradleArguments = @('--no-daemon', 'build')
         if ($Offline) { $gradleArguments += '--offline' }
         & ./gradlew.bat @gradleArguments
-        if ($LASTEXITCODE -ne 0) { throw "No se pudo compilar $moduleName (codigo $LASTEXITCODE)." }
+        if ($LASTEXITCODE -ne 0) { throw "No se pudo compilar $moduleName (código $LASTEXITCODE)." }
     }
     finally { Pop-Location }
 }

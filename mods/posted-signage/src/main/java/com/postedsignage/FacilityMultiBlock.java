@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/** A thin decorative object whose item places a complete width-by-height structure. */
+/** Objeto decorativo delgado cuyo ítem coloca una estructura completa de ancho por alto. */
 public class FacilityMultiBlock extends HorizontalDirectionalBlock {
     public static final MapCodec<FacilityMultiBlock> CODEC = simpleCodec(p -> new FacilityMultiBlock(p, 1, 1));
     public static final IntegerProperty PART_X = IntegerProperty.create("part_x", 0, 1);

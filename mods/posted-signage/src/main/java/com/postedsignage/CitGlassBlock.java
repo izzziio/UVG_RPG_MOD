@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.*;
 
-/** Thin connected glass; arms meet without internal rails, corners retain a post. */
+/** Vidrio delgado conectado; los brazos se unen sin rieles internos y las esquinas conservan un poste. */
 public final class CitGlassBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction.Axis> AXIS=BlockStateProperties.HORIZONTAL_AXIS;
     public static final BooleanProperty N=BlockStateProperties.NORTH,E=BlockStateProperties.EAST,S=BlockStateProperties.SOUTH,W=BlockStateProperties.WEST;

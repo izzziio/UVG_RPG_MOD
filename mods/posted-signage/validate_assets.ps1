@@ -1,4 +1,4 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param()
 
 $ErrorActionPreference = 'Stop'
@@ -41,7 +41,7 @@ function Get-RegisteredBlockIds([string]$Path) {
         $pattern = "(?s)$listName\s*=\s*List\.of\((.*?)\);"
         $listMatch = [regex]::Match($source, $pattern)
         if (-not $listMatch.Success) {
-            Add-ValidationError "Could not find $listName in $Path"
+            Add-ValidationError "No se encontró $listName en $Path"
             continue
         }
         foreach ($idMatch in [regex]::Matches($listMatch.Groups[1].Value, '"([a-z0-9_]+)"')) {
@@ -51,7 +51,7 @@ function Get-RegisteredBlockIds([string]$Path) {
 
     $duplicates = @($ids | Group-Object | Where-Object Count -gt 1 | ForEach-Object Name)
     foreach ($duplicate in $duplicates) {
-        Add-ValidationError "Duplicate registered block ID in $Path`: $duplicate"
+        Add-ValidationError "ID de bloque registrado duplicado en $Path`: $duplicate"
     }
 
     return @($ids | Sort-Object -Unique)
@@ -63,17 +63,17 @@ function Test-ExactAssetSet(
         [string]$Description,
         [string[]]$ExpectedIds) {
     if (-not (Test-Path -LiteralPath $Root -PathType Container)) {
-        Add-ValidationError "Missing $Description directory: $Root"
+        Add-ValidationError "Falta el directorio de ${Description}: $Root"
         return
     }
 
     $actualIds = @(Get-ChildItem -LiteralPath $Root -File -Filter $Filter |
             ForEach-Object BaseName | Sort-Object -Unique)
     foreach ($missing in @($ExpectedIds | Where-Object { $_ -notin $actualIds })) {
-        Add-ValidationError "Missing $Description for registered block: $missing"
+        Add-ValidationError "Falta ${Description} para el bloque registrado: $missing"
     }
     foreach ($extra in @($actualIds | Where-Object { $_ -notin $ExpectedIds })) {
-        Add-ValidationError "Unregistered $Description found: $extra"
+        Add-ValidationError "Se encontró ${Description} sin registrar: $extra"
     }
 }
 
@@ -84,7 +84,7 @@ foreach ($file in $jsonFiles) {
         $parsedJson[$file.FullName] = Get-Content -Raw -Encoding UTF8 -LiteralPath $file.FullName | ConvertFrom-Json
     }
     catch {
-        Add-ValidationError "Invalid JSON in $($file.FullName): $($_.Exception.Message)"
+        Add-ValidationError "JSON inválido en $($file.FullName): $($_.Exception.Message)"
     }
 }
 
@@ -97,15 +97,15 @@ $blockIds = @(Get-ChildItem -LiteralPath $blockstateRoot -File -Filter '*.json' 
         Sort-Object BaseName | ForEach-Object BaseName)
 
 Test-ExactAssetSet $blockstateRoot '*.json' 'blockstate' $registeredBlockIds
-# Internal surface covers have no inventory item; the applicator is a standalone item.
+# Los recubrimientos internos no tienen objeto de inventario; el aplicador es un objeto independiente.
 $inventoryBlockIds = @($registeredBlockIds | Where-Object { $_ -notin @('texture_cover','cit_door_swing','short_glass_door','wide_glass_door') })
-Test-ExactAssetSet $itemModelRoot '*.json' 'item model' ($inventoryBlockIds + @('texture_applicator'))
-Test-ExactAssetSet $lootRoot '*.json' 'loot table' $registeredBlockIds
+Test-ExactAssetSet $itemModelRoot '*.json' 'modelo de objeto' ($inventoryBlockIds + @('texture_applicator'))
+Test-ExactAssetSet $lootRoot '*.json' 'tabla de botín' $registeredBlockIds
 
-# Every block needs a same-named base model for its inventory representation.
-# State-specific models may append a suffix, such as statue_relief_top_left.
+# Cada bloque necesita un modelo base con su mismo nombre para el inventario.
+# Los modelos de un estado pueden añadir un sufijo, como statue_relief_top_left.
 foreach ($blockId in $registeredBlockIds) {
-    Require-File (Join-Path $blockModelRoot "$blockId.json") "Missing base block model for $blockId"
+    Require-File (Join-Path $blockModelRoot "$blockId.json") "Falta el modelo base de bloque para $blockId"
 }
 $blockModelIds = @(Get-ChildItem -LiteralPath $blockModelRoot -File -Filter '*.json' |
         ForEach-Object BaseName | Sort-Object -Unique)
@@ -114,7 +114,7 @@ foreach ($modelId in $blockModelIds) {
             $modelId -eq $_ -or $modelId.StartsWith($_ + '_', [System.StringComparison]::Ordinal)
         })
     if ($modelOwner.Count -eq 0) {
-        Add-ValidationError "Unregistered block model found: $modelId"
+        Add-ValidationError "Se encontró un modelo de bloque sin registrar: $modelId"
     }
 }
 
@@ -139,17 +139,17 @@ foreach ($languageFile in $languageFiles) {
     }
     foreach ($translationKey in $requiredTranslationKeys) {
         if ($translationKey -notin $languageKeys[$languageFile]) {
-            Add-ValidationError "Missing $translationKey in $languageFile"
+            Add-ValidationError "Falta $translationKey en $languageFile"
         }
     }
 }
 
 foreach ($blockId in $blockIds) {
-    Require-File (Join-Path $blockModelRoot "$blockId.json") "Missing block model for $blockId"
+    Require-File (Join-Path $blockModelRoot "$blockId.json") "Falta el modelo de bloque para $blockId"
     if ($blockId -notin @('texture_cover','cit_door_swing','short_glass_door','wide_glass_door')) {
-        Require-File (Join-Path $itemModelRoot "$blockId.json") "Missing item model for $blockId"
+        Require-File (Join-Path $itemModelRoot "$blockId.json") "Falta el modelo de objeto para $blockId"
     }
-    Require-File (Join-Path $lootRoot "$blockId.json") "Missing loot table for $blockId"
+    Require-File (Join-Path $lootRoot "$blockId.json") "Falta la tabla de botín para $blockId"
     if ($blockId -eq 'trash_bin') {
         Require-File (Join-Path $blockModelRoot 'trash_bin.obj') 'Missing default tapered bin mesh'
         Require-File (Join-Path $blockModelRoot 'trash_bin_item.obj') 'Missing default tapered bin inventory mesh'
@@ -168,7 +168,7 @@ foreach ($blockId in $blockIds) {
         $expectedVariants = [ordered]@{}
         if ($blockId -in @('cit_short_door_test','cit_wide_door_test','clear_short_door_test','clear_wide_door_test','cit_glass_panel','cit_door_swing')) {
             if (@($blockstate.multipart).Count -ne 1 -or $blockstate.multipart[0].apply.model -ne "posted_signage:block/$blockId") {
-                Add-ValidationError "Incorrect entity-rendered multipart model in $blockstatePath"
+                Add-ValidationError "Modelo multiparte dibujado por entidad incorrecto en $blockstatePath"
             }
         }
         elseif ($blockId -match '^(customizable_hanging_sign|(?:mens|womens|mixed)_restroom_sign)' -or
@@ -301,12 +301,12 @@ foreach ($blockId in $blockIds) {
         foreach ($variantKey in $expectedVariants.Keys) {
             $variantProperty = $blockstate.variants.PSObject.Properties[$variantKey]
             if ($null -eq $variantProperty) {
-                Add-ValidationError "Missing $variantKey variant in $blockstatePath"
+                Add-ValidationError "Falta la variante $variantKey en $blockstatePath"
                 continue
             }
             $variant = $variantProperty.Value
             if ($variant.model -ne $expectedVariants[$variantKey].model) {
-                Add-ValidationError "Incorrect model for $variantKey in $blockstatePath"
+                Add-ValidationError "Modelo incorrecto para $variantKey en $blockstatePath"
             }
             $actualRotation = if ($null -eq $variant.PSObject.Properties['y']) {
                 0
@@ -315,18 +315,18 @@ foreach ($blockId in $blockIds) {
                 [int]$variant.y
             }
             if ($actualRotation -ne $expectedVariants[$variantKey].rotation) {
-                Add-ValidationError "Incorrect Y rotation for $variantKey in $blockstatePath"
+                Add-ValidationError "Rotación Y incorrecta para $variantKey en $blockstatePath"
             }
         }
         foreach ($extraVariant in @($actualVariantNames | Where-Object { $_ -notin $expectedVariants.Keys })) {
-            Add-ValidationError "Unexpected $extraVariant variant in $blockstatePath"
+            Add-ValidationError "Variante inesperada $extraVariant en $blockstatePath"
         }
     }
 
     $itemModelPath = Join-Path $itemModelRoot "$blockId.json"
     if ($parsedJson.ContainsKey($itemModelPath) -and
             $parsedJson[$itemModelPath].parent -ne "posted_signage:block/$blockId") {
-        Add-ValidationError "Item model does not inherit its block model: $itemModelPath"
+        Add-ValidationError "El modelo de objeto no hereda su modelo de bloque: $itemModelPath"
     }
 
     $lootPath = Join-Path $lootRoot "$blockId.json"
@@ -335,35 +335,35 @@ foreach ($blockId in $blockIds) {
         $pools = @($loot.pools)
         if ($blockId -in @('texture_cover','cit_short_door_test','cit_wide_door_test','clear_short_door_test','clear_wide_door_test','cit_door_swing')) {
             if ($loot.type -ne 'minecraft:block' -or $pools.Count -ne 0) {
-                Add-ValidationError "Internal texture covers must not drop items: $lootPath"
+                Add-ValidationError "Los recubrimientos internos de textura no deben soltar objetos: $lootPath"
             }
         }
         elseif ($blockId -in @('brick_vertical_slab','smooth_quartz_vertical_slab')) {
             if ($loot.type -ne 'minecraft:block' -or $pools.Count -ne 3) {
-                Add-ValidationError "Paired slab loot must contain three pools: $lootPath"
+                Add-ValidationError "El botín de la losa doble debe tener tres grupos: $lootPath"
             }
             else {
                 $dropIds = @($blockId,'brick_vertical_slab','smooth_quartz_vertical_slab')
                 for ($i = 0; $i -lt 3; $i++) {
                     $pool = $pools[$i]
                     if ($pool.rolls -ne 1 -or @($pool.entries).Count -ne 1 -or $pool.entries[0].name -ne "posted_signage:$($dropIds[$i])") {
-                        Add-ValidationError "Incorrect slab recovery pool $i in $lootPath"
+                        Add-ValidationError "Grupo $i de recuperación de losa incorrecto en $lootPath"
                     }
                     if ('minecraft:survives_explosion' -notin @($pool.conditions | ForEach-Object condition)) {
-                        Add-ValidationError "Missing explosion condition in $lootPath"
+                        Add-ValidationError "Falta la condición de explosión en $lootPath"
                     }
                     if ($i -gt 0) {
                         $condition = @($pool.conditions | Where-Object condition -EQ 'minecraft:block_state_property')
                         $fill = if ($i -eq 1) { 'brick' } else { 'quartz' }
                         if ($condition.Count -ne 1 -or $condition[0].block -ne "posted_signage:$blockId" -or $condition[0].properties.fill -ne $fill) {
-                            Add-ValidationError "Incorrect paired slab condition in $lootPath"
+                            Add-ValidationError "Condición de losa doble incorrecta en $lootPath"
                         }
                     }
                 }
             }
         }
         elseif ($loot.type -ne 'minecraft:block' -or $pools.Count -ne 1) {
-            Add-ValidationError "Loot table must contain exactly one block pool: $lootPath"
+            Add-ValidationError "La tabla de botín debe tener exactamente un grupo de bloque: $lootPath"
         }
         else {
             $pool = $pools[0]
@@ -376,27 +376,27 @@ foreach ($blockId in $blockIds) {
             if ([int]$pool.rolls -ne 1 -or $entries.Count -ne 1 -or
                     $entries[0].type -ne 'minecraft:item' -or
                     $entries[0].name -ne "posted_signage:$dropId") {
-                Add-ValidationError "Loot table must drop exactly one matching block item: $lootPath"
+                Add-ValidationError "La tabla de botín debe soltar exactamente un objeto de bloque coincidente: $lootPath"
             }
             $conditions = @($pool.conditions | ForEach-Object condition)
             if ('minecraft:survives_explosion' -notin $conditions) {
-                Add-ValidationError "Loot table is missing survives_explosion: $lootPath"
+                Add-ValidationError "A la tabla de botín le falta survives_explosion: $lootPath"
             }
             if ($blockId -in @('statue_relief', 'trash_bin', 'wide_glass_door', 'short_glass_door','wall_tv','elevator_door','fire_hose_cabinet','campus_rules_poster')) {
                 $originConditions = @($pool.conditions | Where-Object condition -EQ 'minecraft:block_state_property')
                 if ($originConditions.Count -ne 1) {
-                    Add-ValidationError "Multiblock loot must be restricted to its origin: $lootPath"
+                    Add-ValidationError "El botín de multibloque debe limitarse a su origen: $lootPath"
                 }
                 else {
                     $originCondition = $originConditions[0]
                     $expectedProperties = if ($blockId -eq 'statue_relief') { @{ part = 'stem_bottom_0' } } else { @{ part_x = '0'; part_y = '0' } }
                     if ($originCondition.block -ne "posted_signage:$blockId") {
-                        Add-ValidationError "Incorrect multiblock loot block: $lootPath"
+                        Add-ValidationError "Bloque de botín de multibloque incorrecto: $lootPath"
                     }
                     foreach ($key in $expectedProperties.Keys) {
                         $property = $originCondition.properties.PSObject.Properties[$key]
                         if ($null -eq $property -or $property.Value -cne $expectedProperties[$key]) {
-                            Add-ValidationError "Incorrect origin loot property $key`: $lootPath"
+                            Add-ValidationError "Propiedad de botín de origen incorrecta $key`: $lootPath"
                         }
                     }
                 }
@@ -405,13 +405,13 @@ foreach ($blockId in $blockIds) {
     }
 }
 
-# Verify local model and texture references. Minecraft namespace references are
-# supplied by the game and intentionally do not map to files in this project.
+# Verifica las referencias locales de modelos y texturas. Las del espacio de nombres minecraft
+# las aporta el juego y, a propósito, no corresponden a archivos de este proyecto.
 foreach ($file in $jsonFiles | Where-Object FullName -Match '[\\/]assets[\\/]posted_signage[\\/](blockstates|models)[\\/]') {
     $raw = Get-Content -Raw -Encoding UTF8 -LiteralPath $file.FullName
     foreach ($match in [regex]::Matches($raw, '"(?:model|parent)"\s*:\s*"posted_signage:(block|item)/([^"#]+)"')) {
         $modelPath = Join-Path $assetRoot "models/$($match.Groups[1].Value)/$($match.Groups[2].Value).json"
-        Require-File $modelPath "Broken model reference in $($file.FullName)"
+        Require-File $modelPath "Referencia de modelo rota en $($file.FullName)"
     }
 
     if ($parsedJson.ContainsKey($file.FullName)) {
@@ -421,7 +421,7 @@ foreach ($file in $jsonFiles | Where-Object FullName -Match '[\\/]assets[\\/]pos
             foreach ($texture in $textures.PSObject.Properties.Value) {
                 if ($texture -is [string] -and $texture -match '^posted_signage:(block|item)/(.+)$') {
                     $texturePath = Join-Path $assetRoot "textures/$($Matches[1])/$($Matches[2]).png"
-                    Require-File $texturePath "Broken texture reference in $($file.FullName)"
+                    Require-File $texturePath "Referencia de textura rota en $($file.FullName)"
                 }
             }
         }
@@ -429,9 +429,9 @@ foreach ($file in $jsonFiles | Where-Object FullName -Match '[\\/]assets[\\/]pos
 }
 
 if ($errors.Count -gt 0) {
-    Write-Error ("Asset validation failed with {0} error(s):`n- {1}" -f
+    Write-Error ("La validación de assets falló con {0} error(es):`n- {1}" -f
             $errors.Count, ($errors -join "`n- "))
     exit 1
 }
 
-Write-Host "Asset validation passed: $($jsonFiles.Count) JSON files and $($registeredBlockIds.Count) registered block asset sets."
+Write-Host "Validación de assets correcta: $($jsonFiles.Count) archivos JSON y $($registeredBlockIds.Count) conjuntos de assets de bloques registrados."

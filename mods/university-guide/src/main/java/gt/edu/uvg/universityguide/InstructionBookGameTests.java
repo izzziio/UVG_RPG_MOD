@@ -26,45 +26,45 @@ public final class InstructionBookGameTests {
 
     @GameTest(template="empty") public static void instructionsAreDeliveredOnceAndCanBeRecovered(GameTestHelper h){
         var p=player(h);
-        h.assertTrue(InstructionBook.give(p,true),"First delivery succeeds");
+        h.assertTrue(InstructionBook.give(p,true),"La primera entrega funciona");
         var book=p.getInventory().getItem(0);
-        h.assertTrue(InstructionBook.isInstructionBook(book),"Recognizable written book");
-        h.assertTrue(book.get(DataComponents.WRITTEN_BOOK_CONTENT).pages().size()==5,"Five instruction pages");
-        h.assertTrue(!InstructionBook.give(p,true)&&!InstructionBook.give(p,false),"No duplicate on login or command");
+        h.assertTrue(InstructionBook.isInstructionBook(book),"Libro escrito reconocible");
+        h.assertTrue(book.get(DataComponents.WRITTEN_BOOK_CONTENT).pages().size()==5,"Cinco páginas de instrucciones");
+        h.assertTrue(!InstructionBook.give(p,true)&&!InstructionBook.give(p,false),"Sin duplicados al entrar o con el comando");
         p.getInventory().setItem(40,book.copy());
         p.getInventory().setItem(0,ItemStack.EMPTY);
-        h.assertTrue(!InstructionBook.give(p,false),"Off-hand book also prevents duplicates");
+        h.assertTrue(!InstructionBook.give(p,false),"El libro en la mano secundaria también evita duplicados");
         p.getInventory().setItem(40,ItemStack.EMPTY);
-        h.assertTrue(!InstructionBook.give(p,true),"Losing book does not repeat initial delivery");
-        h.assertTrue(InstructionBook.give(p,false),"Recovery command can replace a lost book");h.succeed();
+        h.assertTrue(!InstructionBook.give(p,true),"Perder el libro no repite la entrega inicial");
+        h.assertTrue(InstructionBook.give(p,false),"El comando de recuperación puede reemplazar un libro perdido");h.succeed();
     }
 
     @GameTest(template="empty") public static void fullInventoryKeepsDeliveryPending(GameTestHelper h){
         var p=player(h);
         for(int i=0;i<p.getInventory().items.size();i++)p.getInventory().setItem(i,new ItemStack(Items.STONE,64));
-        h.assertTrue(!InstructionBook.give(p,true)&&!InstructionBook.hasReceived(p),"No loss or receipt when inventory is full");
-        h.assertTrue(p.getInventory().getItem(0).is(Items.STONE),"Existing items stay untouched");
+        h.assertTrue(!InstructionBook.give(p,true)&&!InstructionBook.hasReceived(p),"Sin pérdida ni marca de entrega con el inventario lleno");
+        h.assertTrue(p.getInventory().getItem(0).is(Items.STONE),"Los objetos existentes no se alteran");
         p.getInventory().setItem(0,ItemStack.EMPTY);
-        h.assertTrue(InstructionBook.give(p,true),"Delivery retries after space is freed");h.succeed();
+        h.assertTrue(InstructionBook.give(p,true),"La entrega se reintenta al liberar espacio");h.succeed();
     }
 
     @GameTest(template="empty") public static void deathPreservesReceiptAndOtherPersistentData(GameTestHelper h){
         var original=player(h);InstructionBook.give(original,true);var clone=player(h);
         clone.getPersistentData().putString("OtherMod","keep");
         InstructionBook.onClone(new PlayerEvent.Clone(clone,original,true));
-        h.assertTrue(InstructionBook.hasReceived(clone)&&!InstructionBook.give(clone,true),"Death does not duplicate book");
-        h.assertTrue(clone.getPersistentData().getString("OtherMod").equals("keep"),"Other persistent data preserved");
+        h.assertTrue(InstructionBook.hasReceived(clone)&&!InstructionBook.give(clone,true),"Morir no duplica el libro");
+        h.assertTrue(clone.getPersistentData().getString("OtherMod").equals("keep"),"Se conservan los demás datos persistentes");
         var saved=clone.getPersistentData().copy();var restored=player(h);restored.getPersistentData().merge(saved);
-        h.assertTrue(InstructionBook.hasReceived(restored),"Receipt survives NBT restoration");h.succeed();
+        h.assertTrue(InstructionBook.hasReceived(restored),"La marca de entrega sobrevive a la restauración de NBT");h.succeed();
     }
 
     @GameTest(template="empty") public static void bookIsPublicButAdministrationStaysRestricted(GameTestHelper h){
         var root=h.getLevel().getServer().getCommands().getDispatcher().getRoot().getChild("universityguide");
         var source=h.getLevel().getServer().createCommandSourceStack().withPermission(0);
-        h.assertTrue(root.canUse(source)&&root.getChild("book").canUse(source),"Book command works without operator permissions");
+        h.assertTrue(root.canUse(source)&&root.getChild("book").canUse(source),"El comando del libro funciona sin permisos de operador");
         for(var name:new String[]{"guide","barrier","marker"}){
-            h.assertTrue(!root.getChild(name).canUse(source),"Administrative branch stays restricted: "+name);
-            h.assertTrue(root.getChild(name).canUse(source.withPermission(2)),"Operator can use branch: "+name);
+            h.assertTrue(!root.getChild(name).canUse(source),"La rama administrativa sigue restringida:"+name);
+            h.assertTrue(root.getChild(name).canUse(source.withPermission(2)),"El operador puede usar la rama:"+name);
         }h.succeed();
     }
 }
