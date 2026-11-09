@@ -1,0 +1,78 @@
+{
+  "ambientocclusion": false,
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "black": "posted_signage:block/interior_black",
+    "bezel": "posted_signage:block/interior_bezel",
+    "red": "posted_signage:block/interior_red",
+    "dark": "posted_signage:block/interior_dark",
+    "white": "posted_signage:block/interior_white",
+    "steel": "posted_signage:block/interior_steel",
+    "buttons": "posted_signage:block/interior_buttons",
+    "buttons_on": "posted_signage:block/interior_buttons_on",
+    "cabinet": "posted_signage:block/interior_cabinet",
+    "rules": "posted_signage:block/interior_rules",
+    "particle": "posted_signage:block/interior_steel"
+  },
+  "elements": [
+    {
+      "from": [
+        1.0,
+        1.5,
+        23.23
+      ],
+      "to": [
+        15.0,
+        16.0,
+        23.68
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rules",
+          "uv": [
+            0.0,
+            8.0,
+            16.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#rules",
+          "uv": [
+            1.0,
+            0.0,
+            15.0,
+            14.5
+          ]
+        },
+        "east": {
+          "texture": "#white",
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            14.5
+          ]
+        },
+        "west": {
+          "texture": "#white",
+          "uv": [
+            15.55,
+            0.0,
+            16.0,
+            14.5
+          ]
+        },
+        "down": {
+          "texture": "#white",
+          "uv": [
+            1.0,
+            0.0,
+            15.0,
+            0.45
+          ]
+        }
+      }
+    }
+  ]
+}

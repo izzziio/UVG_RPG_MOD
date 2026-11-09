@@ -18,13 +18,13 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/** Server-owned hydration. Only this namespace is copied when a player is cloned. */
+/** Hidratación administrada por el servidor y copiada solo dentro del mod. */
 @EventBusSubscriber(modid = PostedSignage.MOD_ID)
 public final class Hydration {
     public static final int MAX = 20, DRAIN_TICKS = 1200, DRINK_AMOUNT = 6, COOLDOWN_TICKS = 60;
     private static final String KEY = "posted_signage_hydration";
     public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(Registries.MOB_EFFECT, PostedSignage.MOD_ID);
-    // Separate effect IDs let drinking remove our penalties without erasing potion effects.
+    // Los ID propios permiten retirar penalizaciones sin borrar efectos de pociones.
     public static final DeferredHolder<MobEffect, MobEffect> WEAKNESS = EFFECTS.register("dehydration_weakness",
             () -> new DehydrationEffect(0x9ba59a).addAttributeModifier(Attributes.ATTACK_DAMAGE,
                     ResourceLocation.fromNamespaceAndPath(PostedSignage.MOD_ID, "thirst_weakness"), -4,
@@ -50,11 +50,11 @@ public final class Hydration {
         }
         return persistent.getCompound(KEY);
     }
-    /** Clamp values loaded from saves or packets to the HUD's supported 0..20 range. */
+    /** Limita valores guardados y recibidos al intervalo 0..20. */
     public static int level(Player player) { return Math.clamp(data(player).getInt("level"), 0, MAX); }
-    /** Share the same range guard between server updates and client hydration snapshots. */
+    /** Comparte los límites de hidratación entre servidor y cliente. */
     public static void setLevel(Player player, int value) { data(player).putInt("level", Math.clamp(value, 0, MAX)); }
-    /** Creative and Spectator are exempt from draining and dehydration penalties. */
+    /** Creativo y Espectador no pierden hidratación ni reciben penalizaciones. */
     public static boolean eligible(Player player) { return !player.isCreative() && !player.isSpectator(); }
 
     /** Advance cooldown independently of thirst; only living Survival/Adventure players accumulate drain ticks. */
@@ -73,19 +73,19 @@ public final class Hydration {
         updateEffects(player);
     }
 
-    /** Apply all benefits once per player cooldown; this method is called by server-side interaction handling. */
+    /** Aplica beneficios una vez por intervalo y jugador, desde el servidor. */
     public static boolean drink(Player player) {
         if (player.isSpectator() || !player.isAlive() || data(player).getInt("cooldown") > 0) return false;
         data(player).putInt("cooldown", COOLDOWN_TICKS);
         setLevel(player, level(player) + DRINK_AMOUNT);
-        player.getFoodData().eat(2, 0.5F); // Two hunger points and two saturation points, capped by vanilla.
+        player.getFoodData().eat(2, 0.5F); // Dos puntos de comida y saturación, limitados por Minecraft.
         player.clearFire();
         updateEffects(player);
         sync(player);
         return true;
     }
 
-    /** Refresh only this mod's dehydration effects and remove them immediately when the player recovers. */
+    /** Actualiza solo los efectos propios y los retira al recuperarse. */
     private static void updateEffects(Player player) {
         if (eligible(player) && level(player) == 0 && player.isAlive()) {
             if (!player.hasEffect(WEAKNESS) || player.getEffect(WEAKNESS).getDuration() < 20)
@@ -97,20 +97,20 @@ public final class Hydration {
             player.removeEffect(SLOWNESS);
         }
     }
-    /** Send the authoritative value only to its owning player; mock players without a connection need no packet. */
+    /** Envía el valor oficial solo al dueño con conexión activa. */
     public static void sync(Player player) {
         if (player instanceof ServerPlayer serverPlayer && serverPlayer.connection != null)
             PacketDistributor.sendToPlayer(serverPlayer, new HydrationPayload(level(player)));
     }
-    /** Copy only this mod's compound into the replacement player, preserving death/respawn hydration progress. */
+    /** Copia únicamente los datos del mod al jugador que reaparece. */
     public static void copy(Player oldPlayer, Player newPlayer) {
         newPlayer.getPersistentData().put(KEY, data(oldPlayer).copy());
     }
-    /** The tick event fires on both sides; only the logical server may advance persistent hydration. */
+    /** Solo el servidor lógico actualiza hidratación persistente. */
     @SubscribeEvent public static void tick(PlayerTickEvent.Post event) {
         if (!event.getEntity().level().isClientSide()) advance(event.getEntity());
     }
-    /** Minecraft creates a new player entity on respawn, so transfer the namespaced state explicitly. */
+    /** Transfiere los datos del mod al jugador creado tras reaparecer. */
     @SubscribeEvent public static void clonePlayer(PlayerEvent.Clone event) { copy(event.getOriginal(), event.getEntity()); }
     // Sincroniza la hidratación al entrar al servidor.
     @SubscribeEvent public static void login(PlayerEvent.PlayerLoggedInEvent event) { sync(event.getEntity()); }
