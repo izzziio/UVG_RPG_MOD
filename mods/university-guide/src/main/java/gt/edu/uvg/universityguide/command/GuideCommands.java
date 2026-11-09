@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import gt.edu.uvg.universityguide.ModContent;
+import gt.edu.uvg.universityguide.InstructionBook;
 import gt.edu.uvg.universityguide.entity.GuideEntity;
 import java.util.Comparator;
 import java.util.UUID;
@@ -18,18 +19,20 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
-/** Operator command tree for spawning, finding, cancelling and removing guides or obtaining stop markers. */
+/** Comandos para administrar guías y obtener marcadores de paradas. */
 public final class GuideCommands {
     // Evita crear instancias de esta clase de utilidades.
     private GuideCommands() {
     }
 
-    /** The root permission gate protects every administrative subcommand. */
+    /** El libro es público; cada rama administrativa conserva su permiso. */
     public static void register(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
         dispatcher.register(Commands.literal("universityguide")
-                .requires(source -> source.hasPermission(2))
+                .then(Commands.literal("book").executes(context ->
+                        InstructionBook.give(context.getSource().getPlayerOrException(),false)?1:0))
                 .then(Commands.literal("guide")
+                        .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("spawn")
                                 .then(Commands.argument("skinAccount", StringArgumentType.word())
                                         .then(Commands.argument("displayName", StringArgumentType.greedyString())
@@ -40,11 +43,15 @@ public final class GuideCommands {
                         .then(Commands.literal("remove")
                                 .then(Commands.argument("target", StringArgumentType.word())
                                         .executes(context -> affectGuide(context, true)))))
+                .then(Commands.literal("barrier")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands.literal("give").executes(GuideCommands::giveBarrier)))
                 .then(Commands.literal("marker")
+                        .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("give").executes(GuideCommands::giveMarker))));
     }
 
-    /** Validate the display name, initialize the skin and place the guide at the invoking player's location. */
+    /** Valida nombre, prepara apariencia y coloca el guía junto al jugador. */
     private static int spawnGuide(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         ServerLevel level = context.getSource().getLevel();
@@ -73,7 +80,7 @@ public final class GuideCommands {
         return 1;
     }
 
-    /** Markers are editing tools; require creative-operator access and drop the item if inventory is full. */
+    /** Entrega marcadores solo a operadores creativos; suelta el objeto si no cabe. */
     private static int giveMarker(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         if (!player.canUseGameMasterBlocks()) {
@@ -88,7 +95,20 @@ public final class GuideCommands {
         return 1;
     }
 
-    /** Share target resolution while keeping cancellation distinct from permanent entity removal. */
+    // Entrega la barrera únicamente a operadores en Creativo.
+    private static int giveBarrier(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        if (!gt.edu.uvg.universityguide.block.GuideBarrierBlock.canEdit(player)) {
+            context.getSource().sendFailure(Component.translatable("command.universityguide.creative_required"));
+            return 0;
+        }
+        ItemStack item = new ItemStack(ModContent.GUIDE_BARRIER_ITEM.get());
+        if (!player.addItem(item)) player.drop(item, false);
+        context.getSource().sendSuccess(() -> Component.translatable("command.universityguide.barrier_given"), false);
+        return 1;
+    }
+
+    /** Comparte resolución del objetivo sin confundir cancelación y eliminación. */
     private static int affectGuide(CommandContext<CommandSourceStack> context, boolean remove)
             throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
@@ -109,7 +129,7 @@ public final class GuideCommands {
         return 1;
     }
 
-    /** The nearest search is local; explicit UUID lookup is restricted to the player's current dimension. */
+    /** Busca cerca; los UUID explícitos se limitan a la dimensión actual. */
     @Nullable
     private static GuideEntity findGuide(ServerLevel level, ServerPlayer player, String target) {
         if (target.equalsIgnoreCase("nearest")) {
