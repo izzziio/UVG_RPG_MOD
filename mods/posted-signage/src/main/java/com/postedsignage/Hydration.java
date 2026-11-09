@@ -40,7 +40,7 @@ public final class Hydration {
     // Evita crear instancias de esta clase de utilidades.
     private Hydration() {}
 
-    /** Lazily initialize namespaced persistent NBT; absent data means a new player starts fully hydrated. */
+    /** Inicializa bajo demanda el NBT persistente con espacio de nombres; sin datos, un jugador nuevo empieza con hidratación completa. */
     public static CompoundTag data(Player player) {
         CompoundTag persistent = player.getPersistentData();
         if (!persistent.contains(KEY)) {
@@ -57,7 +57,7 @@ public final class Hydration {
     /** Creativo y Espectador no pierden hidratación ni reciben penalizaciones. */
     public static boolean eligible(Player player) { return !player.isCreative() && !player.isSpectator(); }
 
-    /** Advance cooldown independently of thirst; only living Survival/Adventure players accumulate drain ticks. */
+    /** Avanza la espera sin depender de la sed; solo los jugadores vivos en Supervivencia o Aventura acumulan ticks de consumo. */
     public static void advance(Player player) {
         CompoundTag tag = data(player);
         tag.putInt("cooldown", Math.max(0, tag.getInt("cooldown") - 1));

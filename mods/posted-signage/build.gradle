@@ -22,9 +22,9 @@ sourceSets.main.resources {
     srcDir('src/generated/resources')
 
     // Excluye recursos exclusivos del desarrollo.
-    exclude("**/*.bbmodel") // BlockBench project files
+    exclude("**/*.bbmodel") // Archivos de proyecto de BlockBench
 
-    exclude("src/generated/**/.cache") // datagen cache files
+    exclude("src/generated/**/.cache") // Archivos de caché de datagen
 }
 
 repositories {
@@ -57,7 +57,7 @@ neoForge {
             client()
             // Separa mundos y ajustes interactivos de las pruebas del servidor.
             gameDirectory = project.file('run/client-test')
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            // Lista separada por comas de los espacios de nombres cuyas pruebas se cargan. Vacía = todos.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
@@ -94,7 +94,7 @@ neoForge {
 
             // Nivel recomendado para la consola.
             // Permite configurar distintos niveles.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            // Más información: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             logLevel = org.slf4j.event.Level.DEBUG
         }
     }
@@ -180,7 +180,7 @@ publishing {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.encoding = 'UTF-8' // Usa UTF-8 para compilar Java
     options.compilerArgs.add('-Xlint:deprecation')
 }
 

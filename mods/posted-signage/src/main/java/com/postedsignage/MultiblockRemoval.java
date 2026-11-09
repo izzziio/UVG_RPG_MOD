@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-/** Remove companion cells without recursive shape updates evaluating their loot. */
+/** Retira las celdas asociadas sin que las actualizaciones recursivas de forma evalúen su botín. */
 final class MultiblockRemoval {
     // Evita crear instancias de esta clase de utilidades.
     private MultiblockRemoval() {}

@@ -50,22 +50,22 @@ public final class CitArchitectureGameTests {
     // Una consulta de iluminación nunca espera al controlador de otro chunk.
     @GameTest(template="empty") public static void doorLightingNeverLoadsControllerChunks(GameTestHelper h){
         BlockGetter unloaded=new BlockGetter(){
-            @Override public net.minecraft.world.level.block.entity.BlockEntity getBlockEntity(BlockPos pos){throw new AssertionError("Lighting queried block entity");}
-            @Override public net.minecraft.world.level.block.state.BlockState getBlockState(BlockPos pos){throw new AssertionError("Lighting queried world state");}
-            @Override public net.minecraft.world.level.material.FluidState getFluidState(BlockPos pos){throw new AssertionError("Lighting queried fluid");}
+            @Override public net.minecraft.world.level.block.entity.BlockEntity getBlockEntity(BlockPos pos){throw new AssertionError("La iluminación consultó la entidad de bloque");}
+            @Override public net.minecraft.world.level.block.state.BlockState getBlockState(BlockPos pos){throw new AssertionError("La iluminación consultó el estado del mundo");}
+            @Override public net.minecraft.world.level.material.FluidState getFluidState(BlockPos pos){throw new AssertionError("La iluminación consultó el fluido");}
             @Override public int getHeight(){return 384;}
             @Override public int getMinBuildHeight(){return -64;}
         };
         var boundary=new BlockPos(15,64,15);
         for(var block:new Block[]{PostedSignage.CIT_SHORT_DOOR.get(),PostedSignage.CIT_WIDE_DOOR.get(),PostedSignage.CLEAR_SHORT_DOOR.get(),PostedSignage.CLEAR_WIDE_DOOR.get(),PostedSignage.CIT_DOOR_SWING.get()}){
             var state=block.defaultBlockState();
-            h.assertTrue(state.getLightBlock(unloaded,boundary)==0,"Glass door does not block light");
-            h.assertTrue(state.propagatesSkylightDown(unloaded,boundary),"Skylight is independent of controller");
+            h.assertTrue(state.getLightBlock(unloaded,boundary)==0,"La puerta de vidrio no bloquea la luz");
+            h.assertTrue(state.propagatesSkylightDown(unloaded,boundary),"La luz del cielo es independiente del controlador");
         }
         var far=h.absolutePos(new BlockPos(8192,1,8192));var chunks=h.getLevel().getChunkSource();
-        h.assertTrue(chunks.getChunkNow(far.getX()>>4,far.getZ()>>4)==null,"Remote chunk starts unloaded");
-        h.assertTrue(CitDoorEntity.find(h.getLevel(),far)==null,"Absent controller is not loaded");
-        h.assertTrue(chunks.getChunkNow(far.getX()>>4,far.getZ()>>4)==null,"Lookup leaves chunk unloaded");h.succeed();
+        h.assertTrue(chunks.getChunkNow(far.getX()>>4,far.getZ()>>4)==null,"El chunk remoto empieza sin cargar");
+        h.assertTrue(CitDoorEntity.find(h.getLevel(),far)==null,"El controlador ausente no se carga");
+        h.assertTrue(chunks.getChunkNow(far.getX()>>4,far.getZ()>>4)==null,"La consulta deja el chunk sin cargar");h.succeed();
     }
     // Obtiene la posición base del escenario de prueba.
     private static BlockPos site(GameTestHelper h){return h.absolutePos(new BlockPos(3,1,3));}
@@ -98,10 +98,10 @@ public final class CitArchitectureGameTests {
         var ids=net.minecraft.core.registries.BuiltInRegistries.ITEM;
         for(String name:new String[]{"glass_door","short_glass_door","wide_glass_door"}){
             var expected=name.equals("wide_glass_door")?PostedSignage.CLEAR_WIDE_DOOR_ITEM.get():PostedSignage.CLEAR_SHORT_DOOR_ITEM.get();
-            h.assertTrue(ids.get(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(PostedSignage.MOD_ID,name))==expected,"Old inventories resolve to clear door: "+name);
+            h.assertTrue(ids.get(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(PostedSignage.MOD_ID,name))==expected,"Los inventarios antiguos se resuelven a la puerta sin texto:"+name);
         }
-        h.assertTrue(PostedSignage.WIDE_GLASS_DOOR_BLOCK.get().asItem()==PostedSignage.CLEAR_WIDE_DOOR_ITEM.get(),"Picking/breaking legacy wide door returns current door");
-        h.assertTrue(PostedSignage.SHORT_GLASS_DOOR_BLOCK.get().asItem()==PostedSignage.CLEAR_SHORT_DOOR_ITEM.get(),"Picking/breaking legacy short door returns current door");
+        h.assertTrue(PostedSignage.WIDE_GLASS_DOOR_BLOCK.get().asItem()==PostedSignage.CLEAR_WIDE_DOOR_ITEM.get(),"Seleccionar o romper la puerta ancha antigua devuelve la puerta actual");
+        h.assertTrue(PostedSignage.SHORT_GLASS_DOOR_BLOCK.get().asItem()==PostedSignage.CLEAR_SHORT_DOOR_ITEM.get(),"Seleccionar o romper la puerta corta antigua devuelve la puerta actual");
         h.succeed();
     }
     // Verifica montaje en ambas caras y cambios de soporte.
@@ -118,21 +118,21 @@ public final class CitArchitectureGameTests {
                     var signPos=support.relative(side);var stack=new ItemStack(block);player.setItemInHand(InteractionHand.MAIN_HAND,stack);
                     var surface=support.getCenter().add(side.getStepX()*.02,0,side.getStepZ()*.02);
                     var context=new BlockPlaceContext(player,InteractionHand.MAIN_HAND,stack,new BlockHitResult(surface,side,support,false));
-                    h.assertTrue(stack.useOn(context).consumesAction(),"Place "+block+" on glass "+side);
+                    h.assertTrue(stack.useOn(context).consumesAction(),"Place "+block+" sobre vidrio"+side);
                     var placed=level.getBlockState(signPos);
-                    h.assertTrue(placed.is(block)&&placed.getValue(facingProperty)==side&&placed.getValue(GlassSignMount.GLASS_MOUNTED),"Mounted orientation and state");
+                    h.assertTrue(placed.is(block)&&placed.getValue(facingProperty)==side&&placed.getValue(GlassSignMount.GLASS_MOUNTED),"Orientación y estado al montarse");
                     var shape=placed.getShape(level,signPos);
                     var regular=placed.setValue(GlassSignMount.GLASS_MOUNTED,false).getShape(level,signPos);
                     var expected=regular.move(-side.getStepX()*.48,0,-side.getStepZ()*.48);
-                    h.assertTrue(!Shapes.joinIsNotEmpty(shape,expected,BooleanOp.NOT_SAME),"Selection bounds are flush with glass");
+                    h.assertTrue(!Shapes.joinIsNotEmpty(shape,expected,BooleanOp.NOT_SAME),"Los límites de selección quedan al ras del vidrio");
                     var from=support.getCenter().add(side.getStepX()*2,0,side.getStepZ()*2);
                     var hit=level.clip(new ClipContext(from,support.getCenter(),ClipContext.Block.OUTLINE,ClipContext.Fluid.NONE,player));
-                    h.assertTrue(hit.getBlockPos().equals(signPos),"Mounted sign remains selectable ahead of glass");
+                    h.assertTrue(hit.getBlockPos().equals(signPos),"El rótulo montado sigue siendo seleccionable delante del vidrio");
                 }
                 level.setBlockAndUpdate(support,Blocks.STONE.defaultBlockState());
-                for(Direction side:new Direction[]{facing,facing.getOpposite()})h.assertTrue(!level.getBlockState(support.relative(side)).getValue(GlassSignMount.GLASS_MOUNTED),"Replacing support with a full wall restores wall alignment");
+                for(Direction side:new Direction[]{facing,facing.getOpposite()})h.assertTrue(!level.getBlockState(support.relative(side)).getValue(GlassSignMount.GLASS_MOUNTED),"Reemplazar el soporte por una pared completa restaura la alineación con la pared");
                 level.removeBlock(support,false);
-                for(Direction side:new Direction[]{facing,facing.getOpposite()})h.assertTrue(level.isEmptyBlock(support.relative(side)),"Removing support releases sign");
+                for(Direction side:new Direction[]{facing,facing.getOpposite()})h.assertTrue(level.isEmptyBlock(support.relative(side)),"Retirar el soporte libera el rótulo");
             }
         }h.succeed();
     }
@@ -142,11 +142,11 @@ public final class CitArchitectureGameTests {
         for(var b:new CitDoorBlock[]{PostedSignage.CLEAR_SHORT_DOOR.get(),PostedSignage.CLEAR_WIDE_DOOR.get()})
             for(Direction facing:Direction.Plane.HORIZONTAL)for(boolean right:new boolean[]{false,true}){
                 var e=place(h,b,facing,right);var player=actor(h,true,true);
-                h.assertTrue(!e.hasLabel(),"Plain variant never renders text");
-                h.assertTrue(e.beginEdit(player)==null&&!e.saveEdit(player,UUID.randomUUID(),"123",0),"Plain variant rejects editor and label packets");
-                var framed=e.frameCells();h.assertTrue(e.toggle(player)&&e.toggle(player),"Same opening and closing behavior");
-                var item=e.asItem();h.assertTrue(item.is(b.asItem())&&!item.has(net.minecraft.core.component.DataComponents.CUSTOM_DATA),"Recovered plain item has no label");
-                e.dismantle(false);for(var pos:framed)h.assertTrue(h.getLevel().isEmptyBlock(pos),"Whole plain assembly removed");
+                h.assertTrue(!e.hasLabel(),"La variante sin texto nunca dibuja texto");
+                h.assertTrue(e.beginEdit(player)==null&&!e.saveEdit(player,UUID.randomUUID(),"123",0),"La variante sin texto rechaza los paquetes del editor y del rótulo");
+                var framed=e.frameCells();h.assertTrue(e.toggle(player)&&e.toggle(player),"Mismo comportamiento al abrir y cerrar");
+                var item=e.asItem();h.assertTrue(item.is(b.asItem())&&!item.has(net.minecraft.core.component.DataComponents.CUSTOM_DATA),"El objeto sin texto recuperado no tiene rótulo");
+                e.dismantle(false);for(var pos:framed)h.assertTrue(h.getLevel().isEmptyBlock(pos),"Se retira todo el conjunto sin texto");
             }
         h.succeed();
     }
@@ -160,29 +160,29 @@ public final class CitArchitectureGameTests {
             var stack=new ItemStack(b);player.setItemInHand(InteractionHand.MAIN_HAND,stack);
             var hit=new BlockHitResult(Vec3.atBottomCenterOf(p).add(r.getStepX()*offset,0,r.getStepZ()*offset),Direction.UP,p.below(),false);
             var context=new BlockPlaceContext(player,InteractionHand.MAIN_HAND,stack,hit);
-            h.assertTrue(stack.useOn(context).consumesAction(),"BlockItem places complete door");
-            var e=CitDoorEntity.find(l,p);h.assertTrue(e!=null&&e.getBlockState().getValue(CitDoorBlock.FACING)==f&&e.getBlockState().getValue(CitDoorBlock.RIGHT)==right,"Click half selects hinge in "+f);
-            h.assertTrue(e.frameCells().size()==b.width*b.height,"Complete assembly");e.dismantle(false);
+            h.assertTrue(stack.useOn(context).consumesAction(),"BlockItem coloca la puerta completa");
+            var e=CitDoorEntity.find(l,p);h.assertTrue(e!=null&&e.getBlockState().getValue(CitDoorBlock.FACING)==f&&e.getBlockState().getValue(CitDoorBlock.RIGHT)==right,"La mitad pulsada selecciona la bisagra en"+f);
+            h.assertTrue(e.frameCells().size()==b.width*b.height,"Conjunto completo");e.dismantle(false);
         }h.succeed();
     }
     // Rechaza guardados tras perder permisos de edición.
     @GameTest(template="empty")
     public static void permissionsAreRecheckedAfterOpeningEditor(GameTestHelper h){
         var e=place(h,PostedSignage.CIT_SHORT_DOOR.get(),Direction.NORTH,false);var p=(EditorPlayer)actor(h,true,true);
-        var token=e.beginEdit(p);p.creative=false;h.assertTrue(!e.saveEdit(p,token,"123",0),"Survival operator loses save access");
-        p.creative=true;p.op=false;h.assertTrue(!e.saveEdit(p,token,"123",0),"Creative nonoperator loses save access");
-        p.op=true;h.assertTrue(e.saveEdit(p,token,"123",0),"Authorized player can save valid session");e.dismantle(false);h.succeed();
+        var token=e.beginEdit(p);p.creative=false;h.assertTrue(!e.saveEdit(p,token,"123",0),"Un operador en Supervivencia pierde el acceso a guardar");
+        p.creative=true;p.op=false;h.assertTrue(!e.saveEdit(p,token,"123",0),"Un jugador en Creativo sin ser operador pierde el acceso a guardar");
+        p.op=true;h.assertTrue(e.saveEdit(p,token,"123",0),"Un jugador autorizado puede guardar una sesión válida");e.dismantle(false);h.succeed();
     }
     // Conserva el bloque que reemplaza una pieza.
     @GameTest(template="empty")
     public static void replacementCleansAssemblyWithoutRemovingReplacement(GameTestHelper h){
         var l=h.getLevel();
         for(boolean root:new boolean[]{false,true}){
-            var e=place(h,PostedSignage.CIT_WIDE_DOOR.get(),Direction.NORTH,false);h.assertTrue(e.toggle(actor(h,false,false)),"Open assembly");
+            var e=place(h,PostedSignage.CIT_WIDE_DOOR.get(),Direction.NORTH,false);h.assertTrue(e.toggle(actor(h,false,false)),"Abrir el conjunto");
             var cells=new HashSet<>(e.frameCells());cells.addAll(e.leafCells(true).keySet());var selected=root?site(h):site(h).above();
             l.setBlockAndUpdate(selected,Blocks.STONE.defaultBlockState());
-            h.assertTrue(l.getBlockState(selected).is(Blocks.STONE),"Replacement block remains");
-            for(var cell:cells)if(!cell.equals(selected))h.assertTrue(l.isEmptyBlock(cell),"Replacement leaves no orphan assembly");
+            h.assertTrue(l.getBlockState(selected).is(Blocks.STONE),"El bloque de reemplazo permanece");
+            for(var cell:cells)if(!cell.equals(selected))h.assertTrue(l.isEmptyBlock(cell),"El reemplazo no deja conjuntos huérfanos");
             l.removeBlock(selected,false);
         }h.succeed();
     }
@@ -192,9 +192,9 @@ public final class CitArchitectureGameTests {
         var buffer=new net.minecraft.network.RegistryFriendlyByteBuf(io.netty.buffer.Unpooled.buffer(),h.getLevel().registryAccess());
         try{
             var open=new CitDoorPayloads.Open(site(h),"0042B",6,UUID.randomUUID());CitDoorPayloads.Open.CODEC.encode(buffer,open);
-            h.assertTrue(open.equals(CitDoorPayloads.Open.CODEC.decode(buffer)),"Open message round trip");
+            h.assertTrue(open.equals(CitDoorPayloads.Open.CODEC.decode(buffer)),"Ida y vuelta del mensaje de apertura");
             var save=new CitDoorPayloads.Save(open.pos(),open.room(),open.color(),open.token());CitDoorPayloads.Save.CODEC.encode(buffer,save);
-            h.assertTrue(save.equals(CitDoorPayloads.Save.CODEC.decode(buffer)),"Save message round trip");
+            h.assertTrue(save.equals(CitDoorPayloads.Save.CODEC.decode(buffer)),"Ida y vuelta del mensaje de guardado");
         }finally{buffer.release();}h.succeed();
     }
     // Verifica marcos fijos y colisiones en las cuatro direcciones.
@@ -204,13 +204,13 @@ public final class CitArchitectureGameTests {
             for(Direction f:Direction.Plane.HORIZONTAL)for(boolean right:new boolean[]{false,true}){
                 var e=place(h,b,f,right);var player=actor(h,false,false);var frames=e.frameCells();
                 var closed=e.leafCells(false);var open=e.leafCells(true);
-                h.assertTrue(e.toggle(player),"Survival visitor opens "+f+" hinge "+right);
-                h.assertTrue(h.getLevel().getBlockEntity(site(h))==e,"Controller stays stationary");
-                for(var p:frames)h.assertTrue(h.getLevel().getBlockState(p).getValue(CitDoorBlock.OPEN),"All fixed frame cells retained");
-                for(var cell:open.entrySet())h.assertTrue(!Shapes.joinIsNotEmpty(cell.getValue(),h.getLevel().getBlockState(cell.getKey()).getCollisionShape(h.getLevel(),cell.getKey()),BooleanOp.ONLY_FIRST),"Moving leaf has full collision");
-                h.assertTrue(e.toggle(player),"Visitor can close door");
-                for(var p:open.keySet())if(!frames.contains(p))h.assertTrue(h.getLevel().isEmptyBlock(p),"Closing removes moving cells");
-                h.assertTrue(e.leafCells(false).keySet().equals(closed.keySet()),"Closed footprint restored");e.dismantle(false);
+                h.assertTrue(e.toggle(player),"El visitante en Supervivencia abre"+f+" hinge "+right);
+                h.assertTrue(h.getLevel().getBlockEntity(site(h))==e,"El controlador permanece inmóvil");
+                for(var p:frames)h.assertTrue(h.getLevel().getBlockState(p).getValue(CitDoorBlock.OPEN),"Se conservan todas las celdas fijas del marco");
+                for(var cell:open.entrySet())h.assertTrue(!Shapes.joinIsNotEmpty(cell.getValue(),h.getLevel().getBlockState(cell.getKey()).getCollisionShape(h.getLevel(),cell.getKey()),BooleanOp.ONLY_FIRST),"La hoja en movimiento tiene colisión completa");
+                h.assertTrue(e.toggle(player),"El visitante puede cerrar la puerta");
+                for(var p:open.keySet())if(!frames.contains(p))h.assertTrue(h.getLevel().isEmptyBlock(p),"Al cerrar se retiran las celdas móviles");
+                h.assertTrue(e.leafCells(false).keySet().equals(closed.keySet()),"Se restaura la huella cerrada");e.dismantle(false);
             }
         h.succeed();
     }
@@ -227,10 +227,10 @@ public final class CitArchitectureGameTests {
                 var second=(CitDoorEntity)level.getBlockEntity(secondPos);
                 for(int order=0;order<2;order++){
                     var a=order==0?first:second;var b=order==0?second:first;
-                    h.assertTrue(a.toggle(player),"First leaf opens: "+block+" "+facing+" "+firstRight+"/"+secondRight);
-                    h.assertTrue(b.toggle(player),"Neighbor opens independently: "+block+" "+facing+" "+firstRight+"/"+secondRight);
-                    h.assertTrue(a.toggle(player)&&b.getBlockState().getValue(CitDoorBlock.OPEN),"Closing one leaves neighbor open");
-                    h.assertTrue(b.toggle(player),"Neighbor can close independently");
+                    h.assertTrue(a.toggle(player),"La primera hoja se abre:"+block+" "+facing+" "+firstRight+"/"+secondRight);
+                    h.assertTrue(b.toggle(player),"La vecina se abre de forma independiente:"+block+" "+facing+" "+firstRight+"/"+secondRight);
+                    h.assertTrue(a.toggle(player)&&b.getBlockState().getValue(CitDoorBlock.OPEN),"Cerrar una deja abierta la vecina");
+                    h.assertTrue(b.toggle(player),"La vecina puede cerrarse de forma independiente");
                 }
                 first.dismantle(false);second.dismantle(false);
             }
@@ -250,10 +250,10 @@ public final class CitArchitectureGameTests {
                 }
                 for(var pos:walls)level.setBlockAndUpdate(pos,Blocks.STONE.defaultBlockState());
                 for(var cell:door.leafCells(true).entrySet()){
-                    h.assertTrue(!walls.contains(cell.getKey()),"Open handle stays inside the doorway width");
+                    h.assertTrue(!walls.contains(cell.getKey()),"La manija abierta permanece dentro del ancho del vano");
                 }
-                h.assertTrue(door.toggle(player)&&door.toggle(player),"Walls beside/behind do not prevent swing: "+facing+" "+rightHinge);
-                for(var pos:walls)h.assertTrue(level.getBlockState(pos).is(Blocks.STONE),"Wall remains intact");
+                h.assertTrue(door.toggle(player)&&door.toggle(player),"Las paredes laterales o traseras no impiden el giro:"+facing+" "+rightHinge);
+                for(var pos:walls)h.assertTrue(level.getBlockState(pos).is(Blocks.STONE),"La pared permanece intacta");
                 door.dismantle(false);for(var pos:walls)level.removeBlock(pos,false);
             }
         h.succeed();
@@ -262,16 +262,16 @@ public final class CitArchitectureGameTests {
     @GameTest(template="empty")
     public static void obsoleteSwingCellsAreReleased(GameTestHelper h){
         var door=place(h,PostedSignage.CIT_SHORT_DOOR.get(),Direction.NORTH,false);var level=h.getLevel();
-        var player=actor(h,true,true);h.assertTrue(door.saveEdit(player,door.beginEdit(player),"0042B",6),"Label saved");
-        h.assertTrue(door.toggle(player),"Door opens");
+        var player=actor(h,true,true);h.assertTrue(door.saveEdit(player,door.beginEdit(player),"0042B",6),"Se guarda el rótulo");
+        h.assertTrue(door.toggle(player),"La puerta se abre");
         var oldCell=site(h).west().north();
         level.setBlockAndUpdate(oldCell,PostedSignage.CIT_DOOR_SWING.get().defaultBlockState());
         ((CitSwingEntity)level.getBlockEntity(oldCell)).setOwner(site(h));
         h.runAfterDelay(3,()->{
-            h.assertTrue(level.isEmptyBlock(oldCell),"Obsolete moving cell removed");
-            h.assertTrue(level.getBlockEntity(site(h))==door&&door.getBlockState().getValue(CitDoorBlock.OPEN),"Assembly remains open and intact");
-            h.assertTrue(door.room().equals("0042B")&&door.color()==6,"Label preserved");
-            h.assertTrue(door.toggle(player),"Migrated door closes");door.dismantle(false);h.succeed();
+            h.assertTrue(level.isEmptyBlock(oldCell),"Se retira la celda móvil obsoleta");
+            h.assertTrue(level.getBlockEntity(site(h))==door&&door.getBlockState().getValue(CitDoorBlock.OPEN),"El conjunto sigue abierto e intacto");
+            h.assertTrue(door.room().equals("0042B")&&door.color()==6,"Se conserva el rótulo");
+            h.assertTrue(door.toggle(player),"La puerta migrada se cierra");door.dismantle(false);h.succeed();
         });
     }
     // Verifica que los obstáculos impiden abrir la puerta.
@@ -282,10 +282,10 @@ public final class CitArchitectureGameTests {
                 var e=place(h,b,f,right);var frames=e.frameCells();
                 BlockPos obstruction=e.leafCells(true).keySet().stream().filter(p->!frames.contains(p)).findFirst().orElseThrow();
                 h.getLevel().setBlockAndUpdate(obstruction,PostedSignage.CIT_GLASS.get().defaultBlockState());
-                h.assertTrue(!e.toggle(actor(h,false,false)),"Glass prevents swing");
-                h.assertTrue(h.getLevel().getBlockState(obstruction).is(PostedSignage.CIT_GLASS.get()),"Glass preserved");
-                h.assertTrue(!e.getBlockState().getValue(CitDoorBlock.OPEN),"Blocked swing stays closed");
-                h.getLevel().removeBlock(obstruction,false);h.assertTrue(e.toggle(actor(h,false,false)),"Cleared destination opens");e.dismantle(false);
+                h.assertTrue(!e.toggle(actor(h,false,false)),"El vidrio impide el giro");
+                h.assertTrue(h.getLevel().getBlockState(obstruction).is(PostedSignage.CIT_GLASS.get()),"Se conserva el vidrio");
+                h.assertTrue(!e.getBlockState().getValue(CitDoorBlock.OPEN),"Con el giro bloqueado sigue cerrada");
+                h.getLevel().removeBlock(obstruction,false);h.assertTrue(e.toggle(actor(h,false,false)),"Con el destino despejado se abre");e.dismantle(false);
             }
         h.succeed();
     }
@@ -296,37 +296,37 @@ public final class CitArchitectureGameTests {
         h.assertTrue(e.room().equals("525")&&e.color()==3,"Default yellow CIT-525");
         for(boolean creative:new boolean[]{false,true})for(boolean op:new boolean[]{false,true}){
             var p=actor(h,creative,op);var token=e.beginEdit(p);
-            h.assertTrue((token!=null)==(creative&&op),"Both creative and command access required");
-            if(token==null)h.assertTrue(!e.saveEdit(p,UUID.randomUUID(),"123",0),"Forged save rejected");
+            h.assertTrue((token!=null)==(creative&&op),"Se requiere acceso a Creativo y a comandos");
+            if(token==null)h.assertTrue(!e.saveEdit(p,UUID.randomUUID(),"123",0),"Se rechaza el guardado falsificado");
         }
         var p=actor(h,true,true);
         for(String invalid:new String[]{"","12345","422b","CIT-123","1AB","-1","１２"}){
-            var token=e.beginEdit(p);h.assertTrue(!e.saveEdit(p,token,invalid,0),"Invalid room rejected: "+invalid);
+            var token=e.beginEdit(p);h.assertTrue(!e.saveEdit(p,token,invalid,0),"Se rechaza el salón inválido:"+invalid);
         }
         for(int c=0;c<7;c++){
-            var token=e.beginEdit(p);h.assertTrue(e.saveEdit(p,token,"0042B",c),"Every palette color saves");
-            h.assertTrue(e.room().equals("0042B")&&e.color()==c,"Leading zeros retained");
-            h.assertTrue(!e.saveEdit(p,token,"123",0),"Replayed save rejected");
+            var token=e.beginEdit(p);h.assertTrue(e.saveEdit(p,token,"0042B",c),"Se guarda cada color de la paleta");
+            h.assertTrue(e.room().equals("0042B")&&e.color()==c,"Se conservan los ceros a la izquierda");
+            h.assertTrue(!e.saveEdit(p,token,"123",0),"Se rechaza el guardado repetido");
         }
-        var token=e.beginEdit(p);h.assertTrue(!e.saveEdit(actor(h,true,true),token,"1",0),"Other player rejected");
-        h.assertTrue(!e.saveEdit(p,token,"1",7),"Invalid color rejected");
-        var newer=e.beginEdit(p);h.assertTrue(!e.saveEdit(p,token,"1",0),"Superseded editor rejected");
-        p.setPos(site(h).getCenter().add(100,0,0));h.assertTrue(!e.saveEdit(p,newer,"1",0),"Distant save rejected");
+        var token=e.beginEdit(p);h.assertTrue(!e.saveEdit(actor(h,true,true),token,"1",0),"Se rechaza al otro jugador");
+        h.assertTrue(!e.saveEdit(p,token,"1",7),"Se rechaza el color inválido");
+        var newer=e.beginEdit(p);h.assertTrue(!e.saveEdit(p,token,"1",0),"Se rechaza el editor reemplazado");
+        p.setPos(site(h).getCenter().add(100,0,0));h.assertTrue(!e.saveEdit(p,newer,"1",0),"Se rechaza el guardado lejano");
         p.setPos(site(h).getCenter());var last=e.beginEdit(p);e.dismantle(false);
-        h.assertTrue(!e.saveEdit(p,last,"1",0),"Destroyed controller rejects stale save");h.succeed();
+        h.assertTrue(!e.saveEdit(p,last,"1",0),"Un controlador destruido rechaza el guardado obsoleto");h.succeed();
     }
     // Verifica etiquetas al girar, recargar y recuperar puertas.
     @GameTest(template="empty")
     public static void labelsPersistAcrossSwingSaveAndRecovery(GameTestHelper h){
         var e=place(h,PostedSignage.CIT_WIDE_DOOR.get(),Direction.EAST,true);var p=actor(h,true,true);
         h.assertTrue(e.saveEdit(p,e.beginEdit(p),"0001A",6),"Edited label");
-        h.assertTrue(e.toggle(p),"Open before save");
+        h.assertTrue(e.toggle(p),"Abrir antes de guardar");
         var copy=new CitDoorEntity(site(h),e.getBlockState());copy.loadWithComponents(e.saveWithFullMetadata(h.getLevel().registryAccess()),h.getLevel().registryAccess());
-        h.assertTrue(copy.room().equals("0001A")&&copy.color()==6&&copy.getBlockState().getValue(CitDoorBlock.OPEN),"NBT retains open state and label");
+        h.assertTrue(copy.room().equals("0001A")&&copy.color()==6&&copy.getBlockState().getValue(CitDoorBlock.OPEN),"NBT conserva el estado abierto y el rótulo");
         var remote=new CitDoorEntity(site(h),e.getBlockState());remote.loadWithComponents(e.getUpdateTag(h.getLevel().registryAccess()),h.getLevel().registryAccess());
-        h.assertTrue(remote.room().equals(e.room())&&remote.color()==e.color(),"Client synchronization tag retains label");
+        h.assertTrue(remote.room().equals(e.room())&&remote.color()==e.color(),"La etiqueta de sincronización con el cliente conserva el rótulo");
         var item=e.asItem();e.dismantle(false);var next=place(h,PostedSignage.CIT_WIDE_DOOR.get(),Direction.SOUTH,false);next.readItem(item);
-        h.assertTrue(next.room().equals("0001A")&&next.color()==6,"Recovered item preserves label");next.dismantle(false);h.succeed();
+        h.assertTrue(next.room().equals("0001A")&&next.color()==6,"El objeto recuperado conserva el rótulo");next.dismantle(false);h.succeed();
     }
     // Verifica una sola puerta recuperable desde cualquier pieza.
     @GameTest(template="empty")
@@ -337,14 +337,14 @@ public final class CitArchitectureGameTests {
                 var sample=place(h,b,f,right);Set<BlockPos> parts=new LinkedHashSet<>(sample.frameCells());if(open)parts.addAll(sample.leafCells(true).keySet());sample.dismantle(false);
                 for(var mode:new GameType[]{GameType.CREATIVE,GameType.SURVIVAL})for(var selected:parts){
                     var e=place(h,b,f,right);var editor=actor(h,true,true);e.saveEdit(editor,e.beginEdit(editor),"0422B",4);
-                    if(open)h.assertTrue(e.toggle(editor),"Open for break test");
+                    if(open)h.assertTrue(e.toggle(editor),"Abrir para la prueba de ruptura");
                     player.setGameMode(mode);player.setItemInHand(InteractionHand.MAIN_HAND,ItemStack.EMPTY);
                     var existing=new HashSet<>(l.getEntitiesOfClass(ItemEntity.class,new AABB(site(h)).inflate(6)));
-                    h.assertTrue(player.gameMode.destroyBlock(selected),"Break selected frame/leaf");
+                    h.assertTrue(player.gameMode.destroyBlock(selected),"Romper el marco u hoja seleccionados");
                     var drops=l.getEntitiesOfClass(ItemEntity.class,new AABB(site(h)).inflate(6),i->i.getItem().is(b.asItem())&&!existing.contains(i));
-                    h.assertTrue(drops.stream().mapToInt(i->i.getItem().getCount()).sum()==(mode==GameType.CREATIVE?0:1),"Exact door item count");
-                    for(var drop:drops){var restored=new CitDoorEntity(site(h),b.defaultBlockState());restored.readItem(drop.getItem());h.assertTrue(restored.room().equals("0422B")&&restored.color()==4,"Drop retains label");drop.discard();}
-                    for(var part:parts)h.assertTrue(l.isEmptyBlock(part),"No orphan parts");
+                    h.assertTrue(drops.stream().mapToInt(i->i.getItem().getCount()).sum()==(mode==GameType.CREATIVE?0:1),"Cantidad exacta de objetos de puerta");
+                    for(var drop:drops){var restored=new CitDoorEntity(site(h),b.defaultBlockState());restored.readItem(drop.getItem());h.assertTrue(restored.room().equals("0422B")&&restored.color()==4,"El objeto soltado conserva el rótulo");drop.discard();}
+                    for(var part:parts)h.assertTrue(l.isEmptyBlock(part),"Sin partes huérfanas");
                 }
             }
         h.succeed();
@@ -354,13 +354,13 @@ public final class CitArchitectureGameTests {
     public static void glassRemovesInternalFramesAndUpdatesCorners(GameTestHelper h){
         var l=h.getLevel();var p=site(h);var b=PostedSignage.CIT_GLASS.get();
         l.setBlockAndUpdate(p,b.defaultBlockState());l.setBlockAndUpdate(p.east(),b.defaultBlockState());
-        h.assertTrue(l.getBlockState(p).getValue(CitGlassBlock.E),"Adjacent pane connects");
-        h.assertTrue(CitGlassBlock.pieces(l.getBlockState(p),l,p).stream().noneMatch(q->!q.glass()&&q.box().minX>=.9&&q.box().maxY==1&&q.box().minY==0),"No internal vertical border");
+        h.assertTrue(l.getBlockState(p).getValue(CitGlassBlock.E),"El panel adyacente se conecta");
+        h.assertTrue(CitGlassBlock.pieces(l.getBlockState(p),l,p).stream().noneMatch(q->!q.glass()&&q.box().minX>=.9&&q.box().maxY==1&&q.box().minY==0),"Sin borde vertical interno");
         l.setBlockAndUpdate(p.above(),b.defaultBlockState());
-        h.assertTrue(CitGlassBlock.pieces(l.getBlockState(p),l,p).stream().noneMatch(q->!q.glass()&&q.box().minY==.9),"No stacked internal border");
+        h.assertTrue(CitGlassBlock.pieces(l.getBlockState(p),l,p).stream().noneMatch(q->!q.glass()&&q.box().minY==.9),"Sin borde interno apilado");
         l.setBlockAndUpdate(p.north(),b.defaultBlockState());
-        h.assertTrue(CitGlassBlock.pieces(l.getBlockState(p),l,p).stream().anyMatch(q->!q.glass()&&q.box().equals(new AABB(.4,0,.4,.6,1,.6))),"Corner retains center post");
-        l.removeBlock(p.east(),false);h.assertTrue(!l.getBlockState(p).getValue(CitGlassBlock.E),"Removal updates connection");h.succeed();
+        h.assertTrue(CitGlassBlock.pieces(l.getBlockState(p),l,p).stream().anyMatch(q->!q.glass()&&q.box().equals(new AABB(.4,0,.4,.6,1,.6))),"La esquina conserva el poste central");
+        l.removeBlock(p.east(),false);h.assertTrue(!l.getBlockState(p).getValue(CitGlassBlock.E),"Retirar actualiza la conexión");h.succeed();
     }
     // Verifica que el vidrio vecino sobrevive a los giros.
     @GameTest(template="empty")
@@ -371,9 +371,9 @@ public final class CitArchitectureGameTests {
             for(int y=0;y<b.height;y++){panels.add(site(h).relative(r,-1).above(y));panels.add(site(h).relative(r,b.width).above(y));}
             for(int x=0;x<b.width;x++)panels.add(site(h).relative(r,x).above(b.height));
             for(var p:panels)l.setBlockAndUpdate(p,glass.defaultBlockState().setValue(CitGlassBlock.AXIS,r.getAxis()));
-            h.assertTrue(l.getBlockState(site(h).relative(r,-1)).getValue(CitGlassBlock.property(r)),"Glass connects doorway "+f);
-            h.assertTrue(e.toggle(actor(h,false,false)),"Door opens beside glass "+f);
-            for(var p:panels)h.assertTrue(l.getBlockState(p).is(glass),"Surrounding glass remains");
+            h.assertTrue(l.getBlockState(site(h).relative(r,-1)).getValue(CitGlassBlock.property(r)),"El vidrio conecta el vano"+f);
+            h.assertTrue(e.toggle(actor(h,false,false)),"La puerta se abre junto al vidrio"+f);
+            for(var p:panels)h.assertTrue(l.getBlockState(p).is(glass),"El vidrio circundante permanece");
             e.dismantle(false);for(var p:panels)l.removeBlock(p,false);
         }h.succeed();
     }
@@ -389,13 +389,13 @@ public final class CitArchitectureGameTests {
             for(boolean creative:new boolean[]{false,true})for(boolean op:new boolean[]{false,true})if(!creative||!op){
                 var player=actor(h,creative,op);sign.setAllowedPlayerEditor(player.getUUID());
                 sign.updateSignText(player,true,List.of(FilteredText.passThrough("bad"),FilteredText.EMPTY,FilteredText.EMPTY,FilteredText.EMPTY));
-                h.assertTrue(sign.getFrontText().getMessage(0,false).getString().equals("front"),"Direct unauthorized update blocked");
+                h.assertTrue(sign.getFrontText().getMessage(0,false).getString().equals("front"),"Se bloquea la actualización directa no autorizada");
                 for(var item:new Item[]{Items.RED_DYE,Items.GLOW_INK_SAC,Items.HONEYCOMB})b.useItemOn(new ItemStack(item),state,l,p,player,InteractionHand.MAIN_HAND,new BlockHitResult(p.getCenter(),Direction.NORTH,p,false));
-                h.assertTrue(!sign.isWaxed()&&!sign.getFrontText().hasGlowingText()&&sign.getFrontText().getColor()==DyeColor.BLACK,"Unauthorized appearance changes blocked");
+                h.assertTrue(!sign.isWaxed()&&!sign.getFrontText().hasGlowingText()&&sign.getFrontText().getColor()==DyeColor.BLACK,"Se bloquean los cambios de apariencia no autorizados");
             }
             var owner=actor(h,true,true);sign.setAllowedPlayerEditor(owner.getUUID());
             sign.updateSignText(owner,true,List.of(FilteredText.passThrough("0422B"),FilteredText.EMPTY,FilteredText.EMPTY,FilteredText.EMPTY));
-            h.assertTrue(sign.getFrontText().getMessage(0,false).getString().equals("0422B")&&sign.getBackText().getMessage(0,false).getString().equals("back"),"Authorized update preserves other face");l.removeBlock(p,false);
+            h.assertTrue(sign.getFrontText().getMessage(0,false).getString().equals("0422B")&&sign.getBackText().getMessage(0,false).getString().equals("back"),"La actualización autorizada conserva la otra cara");l.removeBlock(p,false);
         }h.succeed();
     }
     // Repartir un marco entre celdas conserva su área, normales y UV.
@@ -413,17 +413,17 @@ public final class CitArchitectureGameTests {
                     var pos=root.relative(facing.getClockWise(),x).above(y);
                     float[] mesh=CitFrameGeometry.mesh(state,h.getLevel(),pos);total+=meshArea(mesh);
                     for(int i=0;i<mesh.length;i+=8){
-                        for(int a=0;a<3;a++)h.assertTrue(mesh[i+a]>=-1e-6&&mesh[i+a]<=1+1e-6,"Frame vertex stays in its own cell");
-                        h.assertTrue(mesh[i+3]>=0&&mesh[i+3]<=1&&mesh[i+4]>=0&&mesh[i+4]<=1,"UV stays in source texture");
+                        for(int a=0;a<3;a++)h.assertTrue(mesh[i+a]>=-1e-6&&mesh[i+a]<=1+1e-6,"El vértice del marco permanece en su propia celda");
+                        h.assertTrue(mesh[i+3]>=0&&mesh[i+3]<=1&&mesh[i+4]>=0&&mesh[i+4]<=1,"El UV permanece en la textura de origen");
                         if(mesh[i+4]>.01&&mesh[i+4]<.99)intermediateUv=true;
                         double n=mesh[i+5]*mesh[i+5]+mesh[i+6]*mesh[i+6]+mesh[i+7]*mesh[i+7];
-                        h.assertTrue(Math.abs(n-1)<1e-6,"Unit normals preserved");
+                        h.assertTrue(Math.abs(n-1)<1e-6,"Se conservan las normales unitarias");
                     }
                     h.assertTrue(java.util.Arrays.equals(mesh,CitFrameGeometry.mesh(state.setValue(CitDoorBlock.OPEN,true)
-                            .setValue(CitDoorBlock.RIGHT,true),h.getLevel(),pos)),"Frame does not move with leaf or hinge");
+                            .setValue(CitDoorBlock.RIGHT,true),h.getLevel(),pos)),"El marco no se mueve con la hoja ni con la bisagra");
                 }
-                h.assertTrue(Math.abs(meshArea(full)-total)<1e-5,"No missing surfaces or added caps: "+facing);
-                h.assertTrue(intermediateUv,"Texture coordinates continue across cell boundaries");
+                h.assertTrue(Math.abs(meshArea(full)-total)<1e-5,"Sin superficies faltantes ni tapas agregadas:"+facing);
+                h.assertTrue(intermediateUv,"Las coordenadas de textura continúan entre celdas");
             }
         h.succeed();
     }
@@ -444,9 +444,9 @@ public final class CitArchitectureGameTests {
         var before=CitFrameGeometry.mesh(state,level,pos);
         level.setBlockAndUpdate(pos.above(),block.defaultBlockState());
         var after=CitFrameGeometry.mesh(level.getBlockState(pos),level,pos);
-        h.assertTrue(meshArea(after)<meshArea(before),"Stacking removes internal upper border");
+        h.assertTrue(meshArea(after)<meshArea(before),"Apilar retira el borde superior interno");
         level.removeBlock(pos.above(),false);
-        h.assertTrue(java.util.Arrays.equals(before,CitFrameGeometry.mesh(level.getBlockState(pos),level,pos)),"Removing neighbor restores exposed border");
+        h.assertTrue(java.util.Arrays.equals(before,CitFrameGeometry.mesh(level.getBlockState(pos),level,pos)),"Retirar el vecino restaura el borde expuesto");
         h.succeed();
     }
 
@@ -459,7 +459,7 @@ public final class CitArchitectureGameTests {
                     var local=new net.minecraft.world.phys.Vec3(right?width-.44:.44,1,depth);
                     var world=CitDoorGeometry.world(open?CitDoorGeometry.swing(local,width,right):local,root,facing);
                     h.assertTrue(Math.abs(CitDoorGeometry.leafDepth(world,root,facing,width,right,open)-depth)<1e-9,
-                            "Text plane follows leaf: "+facing+" right="+right+" open="+open);
+                            "El plano del texto sigue la hoja:"+facing+" right="+right+" open="+open);
                 }
         h.succeed();
     }
@@ -472,14 +472,14 @@ public final class CitArchitectureGameTests {
                 var bounds=CitDoorGeometry.renderBounds(root,facing,width,height,right,open);
                 for(boolean moving:new boolean[]{false,true})for(var p:moving?CitDoorGeometry.leaf(width,height,right):CitDoorGeometry.frame(width,height)){
                     var box=CitDoorGeometry.transform(p.box(),root,facing,width,right,moving&&open);
-                    h.assertTrue(bounds.contains(box.minX,box.minY,box.minZ)&&bounds.contains(box.maxX,box.maxY,box.maxZ),"Bounds contain every corner");
+                    h.assertTrue(bounds.contains(box.minX,box.minY,box.minZ)&&bounds.contains(box.maxX,box.maxY,box.maxZ),"Los límites contienen todas las esquinas");
                 }
             }
         var block=PostedSignage.CIT_SHORT_DOOR.get();h.getLevel().setBlockAndUpdate(root,block.defaultBlockState());
         var e=(CitDoorEntity)h.getLevel().getBlockEntity(root);var before=e.renderBounds();
-        h.assertTrue(before==e.renderBounds(),"Bounds are reused between frames");
+        h.assertTrue(before==e.renderBounds(),"Los límites se reutilizan entre fotogramas");
         h.getLevel().setBlockAndUpdate(root,e.getBlockState().setValue(CitDoorBlock.OPEN,true));
-        h.assertTrue(!before.equals(e.renderBounds()),"Opening invalidates the cached bounds");
+        h.assertTrue(!before.equals(e.renderBounds()),"Abrir invalida los límites en caché");
         h.succeed();
     }
     // La unión reduce vértices sin alterar bordes opacos ni esquinas.
@@ -489,13 +489,13 @@ public final class CitArchitectureGameTests {
             var state=glass.defaultBlockState().setValue(CitGlassBlock.AXIS,axis);int bit=0;
             for(Direction d:Direction.Plane.HORIZONTAL)state=state.setValue(CitGlassBlock.property(d),(mask&(1<<bit++))!=0);
             var pieces=CitGlassBlock.pieces(state,level,pos);var merged=CitDoorGeometry.mergeStraightGlass(pieces);
-            h.assertTrue(java.util.Arrays.equals(CitGeometryMesh.compile(pieces,false),CitGeometryMesh.compile(merged,false)),"Opaque vertices, normals and UV unchanged");
+            h.assertTrue(java.util.Arrays.equals(CitGeometryMesh.compile(pieces,false),CitGeometryMesh.compile(merged,false)),"Vértices opacos, normales y UV sin cambios");
             boolean straight=CitGlassBlock.arms(state).size()==2&&CitGlassBlock.arms(state).stream().map(Direction::getAxis).distinct().count()==1;
             int oldLength=CitGeometryMesh.compile(pieces,true).length,newLength=CitGeometryMesh.compile(merged,true).length;
-            h.assertTrue(straight?newLength*2==oldLength:java.util.Arrays.equals(CitGeometryMesh.compile(pieces,true),CitGeometryMesh.compile(merged,true)),"Only straight panes merge");
+            h.assertTrue(straight?newLength*2==oldLength:java.util.Arrays.equals(CitGeometryMesh.compile(pieces,true),CitGeometryMesh.compile(merged,true)),"Solo se unen los paneles rectos");
             double before=pieces.stream().filter(CitDoorGeometry.Piece::glass).mapToDouble(p->p.box().getXsize()*p.box().getZsize()).sum();
             double after=merged.stream().filter(CitDoorGeometry.Piece::glass).mapToDouble(p->p.box().getXsize()*p.box().getZsize()).sum();
-            h.assertTrue(Math.abs(before-after)<1e-12,"Glass coverage preserved");
+            h.assertTrue(Math.abs(before-after)<1e-12,"Se conserva la cobertura del vidrio");
         }
         h.succeed();
     }
@@ -506,16 +506,16 @@ public final class CitArchitectureGameTests {
         var level=h.getLevel();var pos=site(h);var glass=PostedSignage.CIT_GLASS.get();
         level.setBlockAndUpdate(pos,glass.defaultBlockState());
         var entity=(CitGlassEntity)level.getBlockEntity(pos);var initial=entity.geometry();
-        h.assertTrue(initial==entity.geometry(),"Unchanged panel reuses geometry");
+        h.assertTrue(initial==entity.geometry(),"El panel sin cambios reutiliza la geometría");
         level.setBlockAndUpdate(pos.above(),glass.defaultBlockState());var stacked=entity.geometry();
-        h.assertTrue(!stacked.equals(initial),"Stacking removes the inner top frame");
-        h.assertTrue(stacked.equals(CitGlassBlock.pieces(entity.getBlockState(),level,pos)),"Cached stacked geometry matches current world");
+        h.assertTrue(!stacked.equals(initial),"Apilar retira el marco superior interior");
+        h.assertTrue(stacked.equals(CitGlassBlock.pieces(entity.getBlockState(),level,pos)),"La geometría apilada en caché coincide con el mundo actual");
         level.setBlockAndUpdate(pos.east(),glass.defaultBlockState());var joined=entity.geometry();
-        h.assertTrue(!joined.equals(stacked),"Horizontal connection removes the internal side frame");
+        h.assertTrue(!joined.equals(stacked),"La conexión horizontal retira el marco lateral interno");
         level.removeBlock(pos.above(),false);level.removeBlock(pos.east(),false);
-        h.assertTrue(entity.geometry().equals(initial),"Removing neighbors restores the exposed borders");
+        h.assertTrue(entity.geometry().equals(initial),"Retirar los vecinos restaura los bordes expuestos");
         level.setBlockAndUpdate(pos.above(),PostedSignage.CIT_SHORT_DOOR.get().defaultBlockState());
-        h.assertTrue(entity.geometry().equals(CitGlassBlock.pieces(entity.getBlockState(),level,pos)),"Doorway above also invalidates cached borders");
+        h.assertTrue(entity.geometry().equals(CitGlassBlock.pieces(entity.getBlockState(),level,pos)),"El vano superior también invalida los bordes en caché");
         h.succeed();
     }
 

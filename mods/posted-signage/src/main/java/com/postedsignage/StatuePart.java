@@ -60,7 +60,7 @@ public enum StatuePart implements StringRepresentable {
         if (part != null) {
             return part;
         }
-        throw new IllegalArgumentException("No statue part at " + column + ", " + row);
+        throw new IllegalArgumentException("No hay parte de estatua en " + column + ", " + row);
     }
 
     /** Devuelve null fuera de la figura en T, incluidas sus esquinas vacías. */

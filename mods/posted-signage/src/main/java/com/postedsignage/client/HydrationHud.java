@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 /** Indicador de diez gotas situado después del espacio de comida y aire. */
 @EventBusSubscriber(modid = PostedSignage.MOD_ID, value = Dist.CLIENT)
 public final class HydrationHud {
-    /** Reserve one additional HUD row after air/food to avoid overlapping vanilla status bars. */
+    /** Reserva una fila adicional del HUD después del aire y la comida para no encimar las barras vanilla. */
     @SubscribeEvent public static void register(RegisterGuiLayersEvent event) {
         event.registerAbove(VanillaGuiLayers.AIR_LEVEL, ResourceLocation.fromNamespaceAndPath(PostedSignage.MOD_ID, "hydration"), (gui, delta) -> {
             Minecraft mc = Minecraft.getInstance();

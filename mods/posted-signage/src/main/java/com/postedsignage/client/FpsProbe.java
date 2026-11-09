@@ -75,7 +75,7 @@ public final class FpsProbe {
             }
         } catch(Exception error){
             // Un fallo del archivo no interrumpe el juego.
-            failed=true;System.err.println("FPS probe disabled: "+error);
+            failed=true;System.err.println("Medición de FPS desactivada: "+error);
         }
         count=0;sum=0;max=0;lastSample=now;
     }

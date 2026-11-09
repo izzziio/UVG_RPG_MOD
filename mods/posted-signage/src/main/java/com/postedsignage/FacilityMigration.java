@@ -9,7 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 
-/** Remove only obsolete upper cells after legacy IDs have resolved through registry aliases. */
+/** Retira solo las celdas superiores obsoletas después de resolver los ID antiguos mediante alias del registro. */
 @EventBusSubscriber(modid = PostedSignage.MOD_ID)
 public final class FacilityMigration {
     // Evita crear instancias de esta clase de utilidades.
@@ -18,7 +18,7 @@ public final class FacilityMigration {
     public static void removeObsoleteCell(ServerLevel level, BlockPos pos) {
         var state = level.getBlockState(pos);
         if (state.getBlock() instanceof FacilityMultiBlock block && block.isObsoletePart(state)) {
-            // Old decorative upper cells had no inventory or independent item ownership.
+            // Las celdas superiores decorativas antiguas no tenían inventario ni objeto propio.
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
         }
     }
