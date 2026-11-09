@@ -17,15 +17,15 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-/** Registers packet directions and validates client requests before changing stops or starting tours. */
+/** Registra paquetes y valida solicitudes antes de modificar recorridos. */
 public final class TourNetwork {
     // Evita crear instancias de esta clase de utilidades.
     private TourNetwork() {
     }
 
-    /** Register both packet direction and protocol version before a connection can exchange tour data. */
+    /** Registra direcciones y versión del protocolo antes de intercambiar datos. */
     public static void register(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar("1");
+        PayloadRegistrar registrar = event.registrar("2");
         registrar.playToClient(TourPayloads.OpenDestinations.TYPE, TourPayloads.OpenDestinations.STREAM_CODEC,
                 TourNetwork::handleOpenDestinationsClient);
         registrar.playToServer(TourPayloads.SelectDestination.TYPE, TourPayloads.SelectDestination.STREAM_CODEC,
@@ -38,28 +38,28 @@ public final class TourNetwork {
                 TourNetwork::handleShowArrivalClient);
     }
 
-    /** Defer client-only screen linkage until this handler actually executes on a client. */
+    /** Carga las pantallas únicamente cuando se ejecuta en el cliente. */
     private static void handleOpenDestinationsClient(TourPayloads.OpenDestinations payload, IPayloadContext context) {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             ClientPayloadHandler.openDestinations(payload, context);
         }
     }
 
-    /** Keep client screen construction out of dedicated-server initialization. */
+    /** Evita crear pantallas al iniciar un servidor dedicado. */
     private static void handleOpenStopEditorClient(TourPayloads.OpenStopEditor payload, IPayloadContext context) {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             ClientPayloadHandler.openStopEditor(payload, context);
         }
     }
 
-    /** Dispatch the explanation screen only in the physical client environment. */
+    /** Abre la explicación únicamente en el cliente físico. */
     private static void handleShowArrivalClient(TourPayloads.ShowArrival payload, IPayloadContext context) {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             ClientPayloadHandler.showArrival(payload, context);
         }
     }
 
-    /** Build a bounded, alphabetically sorted snapshot; distance filtering uses the guide's current position. */
+    /** Genera una lista limitada y ordenada, filtrada desde el guía. */
     public static void openDestinations(ServerPlayer player, GuideEntity guide) {
         if (!(guide.level() instanceof ServerLevel level)) {
             return;
@@ -70,7 +70,7 @@ public final class TourNetwork {
             double distanceSquared = guide.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(entry.pos()));
             if (distanceSquared <= maximumSquared && summaries.size() < 512) {
                 summaries.add(new TourPayloads.StopSummary(
-                        entry.id(), entry.name(), entry.pos(), (int)Math.round(Math.sqrt(distanceSquared))));
+                        entry.id(), entry.name(), entry.pos(), (int)Math.round(Math.sqrt(distanceSquared)),entry.summary()));
             }
         }
         String guideName = guide.getCustomName() == null
@@ -80,18 +80,18 @@ public final class TourNetwork {
                 new TourPayloads.OpenDestinations(guide.getId(), guideName, List.copyOf(summaries)));
     }
 
-    /** Send the stored text to the requesting player instead of exposing a mutable block entity. */
+    /** Envía el texto guardado sin exponer una entidad mutable. */
     public static void openStopEditor(ServerPlayer player, TourStopBlockEntity stop) {
         PacketDistributor.sendToPlayer(player,
                 new TourPayloads.OpenStopEditor(stop.getBlockPos(), stop.getStopName(), stop.getDescription()));
     }
 
-    /** Send the title and explanation as a dedicated client screen payload. */
+    /** Envía título y explicación en un paquete de pantalla. */
     public static void showArrival(ServerPlayer player, String title, String description) {
         PacketDistributor.sendToPlayer(player, new TourPayloads.ShowArrival(title, description));
     }
 
-    /** Treat entity IDs and stop UUIDs as untrusted input; check the guide and interaction distance again. */
+    /** Trata ID y UUID recibidos como datos no fiables y revalida distancia. */
     private static void selectDestination(TourPayloads.SelectDestination payload, IPayloadContext context) {
         if (!(context.player() instanceof ServerPlayer player)) {
             return;
@@ -104,7 +104,7 @@ public final class TourNetwork {
         guide.startTour(player, payload.stopId());
     }
 
-    /** Check operator privileges, proximity and text limits on the server, even when the UI already validates them. */
+    /** Valida permisos, cercanía y límites de texto en el servidor. */
     private static void updateStop(TourPayloads.UpdateStop payload, IPayloadContext context) {
         if (!(context.player() instanceof ServerPlayer player)
                 || !player.canUseGameMasterBlocks()

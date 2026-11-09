@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.blockentity.*;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 
-/** Uses the sampled face's atlas sprite, including animated/resource-pack textures. */
+/** Usa la textura de la cara muestreada, incluidas animaciones y paquetes. */
 public final class TextureCoverRenderer implements BlockEntityRenderer<TextureCoverBlockEntity> {
     // Crea el renderizador del cliente.
     public TextureCoverRenderer(BlockEntityRendererProvider.Context context) {}
@@ -33,9 +33,9 @@ public final class TextureCoverRenderer implements BlockEntityRenderer<TextureCo
             case UP -> new float[][]{{0,e,1},{1,e,1},{1,e,0},{0,e,0}};
             case DOWN -> new float[][]{{0,1-e,0},{1,1-e,0},{1,1-e,1},{0,1-e,1}};
         };
-        // Use the block shader: the entity shader applies a second directional-light
-        // multiplier on top of getShade(), making covers unnaturally dark. The block
-        // shader applies the supplied world lightmap without that extra shading.
+        // Usa el sombreador de bloques; el de entidades añade otro factor
+        // de luz sobre getShade(), oscureciendo las cubiertas. El sombreador
+        // de bloques usa la iluminación del mundo sin esa sombra adicional.
         var consumer = buffers.getBuffer(RenderType.cutout());
         float shade = cover.getLevel() == null ? 1 : cover.getLevel().getShade(face, true);
         for (int i = 0; i < 4; i++) {

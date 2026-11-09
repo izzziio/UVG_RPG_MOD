@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/** Stores a sampled state and face, with vanilla chunk/update packet synchronization. */
+/** Guarda bloque y cara muestreados con sincronización normal de chunks. */
 public final class TextureCoverBlockEntity extends BlockEntity {
     private BlockState sample = Blocks.BRICKS.defaultBlockState();
     private Direction sampleFace = Direction.NORTH;
@@ -46,7 +46,7 @@ public final class TextureCoverBlockEntity extends BlockEntity {
         sample = NbtUtils.readBlockState(registries.lookupOrThrow(Registries.BLOCK), tag.getCompound("Sample"));
         Direction face = Direction.byName(tag.getString("SampleFace"));
         sampleFace = face == null ? Direction.NORTH : face;
-        // Older covers did not store rotation and retain their original UV layout.
+        // Las cubiertas antiguas conservan su orientación de textura original.
         rotation = Math.floorMod(tag.getInt("Rotation"), 4);
     }
     // Prepara los datos que recibe el cliente.

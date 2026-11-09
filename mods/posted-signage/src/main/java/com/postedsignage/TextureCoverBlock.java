@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.*;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.shapes.*;
 
-/** A removable, non-colliding skin. FACING points away from its supporting face. */
+/** Cubierta removible sin colisión; FACING señala hacia fuera del soporte. */
 public final class TextureCoverBlock extends BaseEntityBlock {
     public static final MapCodec<TextureCoverBlock> CODEC = simpleCodec(TextureCoverBlock::new);
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -37,13 +37,19 @@ public final class TextureCoverBlock extends BaseEntityBlock {
     }
     // Devuelve los límites de selección y colisión.
     @Override protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return switch (state.getValue(FACING)) {
-            case NORTH -> box(0, 0, 15.98, 16, 16, 16);
-            case SOUTH -> box(0, 0, 0, 16, 16, 0.02);
-            case WEST -> box(15.98, 0, 0, 16, 16, 16);
-            case EAST -> box(0, 0, 0, 0.02, 16, 16);
-            case UP -> box(0, 0, 0, 16, 0.02, 16);
-            case DOWN -> box(0, 15.98, 0, 16, 16, 16);
+        return Shapes.empty();
+    }
+    // Migra los recubrimientos guardados a capas sin ocupar el bloque vecino.
+    @Override public <T extends BlockEntity> net.minecraft.world.level.block.entity.BlockEntityTicker<T> getTicker(Level level, BlockState state,
+            net.minecraft.world.level.block.entity.BlockEntityType<T> type) {
+        if (level.isClientSide) return null;
+        return (world, pos, current, entity) -> {
+            if (!(entity instanceof TextureCoverBlockEntity cover)) return;
+            Direction face = current.getValue(FACING);
+            BlockPos support = pos.relative(face.getOpposite());
+            if (!world.getBlockState(support).isAir() && TextureSkinEntity.find(world, support, face) == null)
+                TextureSkinEntity.apply(world, support, face, cover.sample(), cover.sampleFace(), cover.rotation());
+            world.removeBlock(pos, false);
         };
     }
     // Gira la orientación guardada.

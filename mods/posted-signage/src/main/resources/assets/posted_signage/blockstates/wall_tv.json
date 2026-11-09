@@ -1,0 +1,184 @@
+{
+  "variants": {
+    "facing=north,glass_mounted=false,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_0_0"
+    },
+    "facing=north,glass_mounted=true,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_0_0_glass"
+    },
+    "facing=north,glass_mounted=false,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_0_1"
+    },
+    "facing=north,glass_mounted=true,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_0_1_glass"
+    },
+    "facing=north,glass_mounted=false,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_0_1"
+    },
+    "facing=north,glass_mounted=true,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_0_1_glass"
+    },
+    "facing=north,glass_mounted=false,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_1_0"
+    },
+    "facing=north,glass_mounted=true,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_1_0_glass"
+    },
+    "facing=north,glass_mounted=false,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_1_1"
+    },
+    "facing=north,glass_mounted=true,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_1_1_glass"
+    },
+    "facing=north,glass_mounted=false,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_1_1"
+    },
+    "facing=north,glass_mounted=true,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_1_1_glass"
+    },
+    "facing=east,glass_mounted=false,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_0_0",
+      "y": 90
+    },
+    "facing=east,glass_mounted=true,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_0_0_glass",
+      "y": 90
+    },
+    "facing=east,glass_mounted=false,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_0_1",
+      "y": 90
+    },
+    "facing=east,glass_mounted=true,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_0_1_glass",
+      "y": 90
+    },
+    "facing=east,glass_mounted=false,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_0_1",
+      "y": 90
+    },
+    "facing=east,glass_mounted=true,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_0_1_glass",
+      "y": 90
+    },
+    "facing=east,glass_mounted=false,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_1_0",
+      "y": 90
+    },
+    "facing=east,glass_mounted=true,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_1_0_glass",
+      "y": 90
+    },
+    "facing=east,glass_mounted=false,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_1_1",
+      "y": 90
+    },
+    "facing=east,glass_mounted=true,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_1_1_glass",
+      "y": 90
+    },
+    "facing=east,glass_mounted=false,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_1_1",
+      "y": 90
+    },
+    "facing=east,glass_mounted=true,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_1_1_glass",
+      "y": 90
+    },
+    "facing=south,glass_mounted=false,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_0_0",
+      "y": 180
+    },
+    "facing=south,glass_mounted=true,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_0_0_glass",
+      "y": 180
+    },
+    "facing=south,glass_mounted=false,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_0_1",
+      "y": 180
+    },
+    "facing=south,glass_mounted=true,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_0_1_glass",
+      "y": 180
+    },
+    "facing=south,glass_mounted=false,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_0_1",
+      "y": 180
+    },
+    "facing=south,glass_mounted=true,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_0_1_glass",
+      "y": 180
+    },
+    "facing=south,glass_mounted=false,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_1_0",
+      "y": 180
+    },
+    "facing=south,glass_mounted=true,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_1_0_glass",
+      "y": 180
+    },
+    "facing=south,glass_mounted=false,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_1_1",
+      "y": 180
+    },
+    "facing=south,glass_mounted=true,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_1_1_glass",
+      "y": 180
+    },
+    "facing=south,glass_mounted=false,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_1_1",
+      "y": 180
+    },
+    "facing=south,glass_mounted=true,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_1_1_glass",
+      "y": 180
+    },
+    "facing=west,glass_mounted=false,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_0_0",
+      "y": 270
+    },
+    "facing=west,glass_mounted=true,part_x=0,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_0_0_glass",
+      "y": 270
+    },
+    "facing=west,glass_mounted=false,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_0_1",
+      "y": 270
+    },
+    "facing=west,glass_mounted=true,part_x=0,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_0_1_glass",
+      "y": 270
+    },
+    "facing=west,glass_mounted=false,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_0_1",
+      "y": 270
+    },
+    "facing=west,glass_mounted=true,part_x=0,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_0_1_glass",
+      "y": 270
+    },
+    "facing=west,glass_mounted=false,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_1_0",
+      "y": 270
+    },
+    "facing=west,glass_mounted=true,part_x=1,part_y=0": {
+      "model": "posted_signage:block/wall_tv_part_1_0_glass",
+      "y": 270
+    },
+    "facing=west,glass_mounted=false,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_1_1",
+      "y": 270
+    },
+    "facing=west,glass_mounted=true,part_x=1,part_y=1": {
+      "model": "posted_signage:block/wall_tv_part_1_1_glass",
+      "y": 270
+    },
+    "facing=west,glass_mounted=false,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_1_1",
+      "y": 270
+    },
+    "facing=west,glass_mounted=true,part_x=1,part_y=2": {
+      "model": "posted_signage:block/wall_tv_part_1_1_glass",
+      "y": 270
+    }
+  }
+}
