@@ -1,4 +1,4 @@
-# Outputs and local caches; sources and presentation deliverables stay versioned.
+# Salidas y cachés locales; las fuentes y los entregables de presentación se mantienen versionados.
 .cache/
 **/__pycache__/
 *.pyc
