@@ -14,8 +14,6 @@ Dos mods para Minecraft Java 1.21.1 con NeoForge y Java 21.
 | Axel Rubén Díaz Castellanos | 261794 | [izzziio](https://github.com/izzziio) |
 | Aleshka Valdez | 252179 | [Sof-ff](https://github.com/Sof-ff) |
 
-El código se desarrolla en colaboración con otro grupo del curso, con conocimiento del profesor.
-
 ## Compilación
 Con Java 21, desde la raíz, en PowerShell:
 
