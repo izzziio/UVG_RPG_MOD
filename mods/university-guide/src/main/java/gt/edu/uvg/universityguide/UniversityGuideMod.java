@@ -9,7 +9,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 
-/** NeoForge entry point: connects content, networking, commands and entity attributes to their event buses. */
+/** Entrada NeoForge que enlaza contenido, red, comandos y atributos. */
 @Mod(UniversityGuideMod.MOD_ID)
 public final class UniversityGuideMod {
     public static final String MOD_ID = "universityguide";
@@ -20,6 +20,8 @@ public final class UniversityGuideMod {
         modBus.addListener(TourNetwork::register);
         modBus.addListener(this::registerAttributes);
         NeoForge.EVENT_BUS.addListener(GuideCommands::register);
+        NeoForge.EVENT_BUS.addListener(InstructionBook::onLogin);
+        NeoForge.EVENT_BUS.addListener(InstructionBook::onClone);
     }
 
     // Registra los atributos básicos del guía.
