@@ -36,12 +36,12 @@ public final class BuildingToolsGameTests {
             for (Direction face : Direction.Plane.HORIZONTAL) {
                 var placement = new BlockPlaceContext(context(player, pos, face));
                 var state = block.getStateForPlacement(placement);
-                helper.assertTrue(state.getValue(VerticalSlabBlock.FACING) == face.getOpposite(), "Slab hugs clicked face");
+                helper.assertTrue(state.getValue(VerticalSlabBlock.FACING) == face.getOpposite(), "La losa se pega a la cara pulsada");
                 var shape = state.getShape(helper.getLevel(), placement.getClickedPos());
                 var bounds = shape.bounds();
-                helper.assertTrue(Math.abs(bounds.getXsize()*bounds.getYsize()*bounds.getZsize()-0.5) < 0.0001, "Slab occupies half a block");
-                helper.assertTrue(bounds.getYsize() == 1, "Vertical slabs are full height");
-                helper.assertTrue(state.rotate(Rotation.CLOCKWISE_90).getValue(VerticalSlabBlock.FACING) == face.getOpposite().getClockWise(), "Rotation follows collision geometry");
+                helper.assertTrue(Math.abs(bounds.getXsize()*bounds.getYsize()*bounds.getZsize()-0.5) < 0.0001, "La losa ocupa medio bloque");
+                helper.assertTrue(bounds.getYsize() == 1, "Las losas verticales tienen altura completa");
+                helper.assertTrue(state.rotate(Rotation.CLOCKWISE_90).getValue(VerticalSlabBlock.FACING) == face.getOpposite().getClockWise(), "La rotación sigue la geometría de colisión");
             }
         }
         helper.succeed();
@@ -58,18 +58,18 @@ public final class BuildingToolsGameTests {
             var start=pos.getCenter().add(Vec3.atLowerCornerOf(half.getOpposite().getNormal()).scale(2));
             var end=pos.getCenter().add(Vec3.atLowerCornerOf(half.getNormal()).scale(.4));
             var hit=level.clip(new net.minecraft.world.level.ClipContext(start,end,net.minecraft.world.level.ClipContext.Block.OUTLINE,net.minecraft.world.level.ClipContext.Fluid.NONE,player));
-            helper.assertTrue(hit.getBlockPos().equals(pos)&&hit.getDirection()==half.getOpposite(),"Ray targets inner half face");
-            helper.assertTrue(player.getMainHandItem().useOn(new UseOnContext(player,InteractionHand.MAIN_HAND,hit)).consumesAction(),"Second half places");
+            helper.assertTrue(hit.getBlockPos().equals(pos)&&hit.getDirection()==half.getOpposite(),"El rayo apunta a la cara interna de la mitad");
+            helper.assertTrue(player.getMainHandItem().useOn(new UseOnContext(player,InteractionHand.MAIN_HAND,hit)).consumesAction(),"La segunda mitad se coloca");
             var paired=level.getBlockState(pos);
-            helper.assertTrue(paired.is(first)&&paired.getValue(VerticalSlabBlock.FACING)==half,"First half stays in place");
+            helper.assertTrue(paired.is(first)&&paired.getValue(VerticalSlabBlock.FACING)==half,"La primera mitad se mantiene en su lugar");
             var fill=second==slabs[0]?VerticalSlabBlock.Fill.BRICK:VerticalSlabBlock.Fill.QUARTZ;
-            helper.assertTrue(paired.getValue(VerticalSlabBlock.FILL)==fill,"Second material stored");
-            helper.assertTrue(player.getMainHandItem().getCount()==2,"Exactly one item consumed");
-            helper.assertTrue(!net.minecraft.world.phys.shapes.Shapes.joinIsNotEmpty(paired.getCollisionShape(level,pos),net.minecraft.world.phys.shapes.Shapes.block(),net.minecraft.world.phys.shapes.BooleanOp.NOT_SAME),"Pair has full-block collision");
-            helper.assertTrue(level.isEmptyBlock(pos.relative(half.getOpposite())),"Second slab shares original cell");
-            helper.assertTrue(player.getMainHandItem().useOn(context(player,pos,half.getOpposite())).consumesAction(),"Third slab places next door");
-            helper.assertTrue(level.getBlockState(pos).equals(paired),"Third slab cannot overwrite pair");
-            helper.assertTrue(level.getBlockState(pos.relative(half.getOpposite())).is(second),"Third slab occupies next cell");
+            helper.assertTrue(paired.getValue(VerticalSlabBlock.FILL)==fill,"Se guarda el segundo material");
+            helper.assertTrue(player.getMainHandItem().getCount()==2,"Se consume exactamente un objeto");
+            helper.assertTrue(!net.minecraft.world.phys.shapes.Shapes.joinIsNotEmpty(paired.getCollisionShape(level,pos),net.minecraft.world.phys.shapes.Shapes.block(),net.minecraft.world.phys.shapes.BooleanOp.NOT_SAME),"El par tiene colisión de bloque completo");
+            helper.assertTrue(level.isEmptyBlock(pos.relative(half.getOpposite())),"La segunda losa comparte la celda original");
+            helper.assertTrue(player.getMainHandItem().useOn(context(player,pos,half.getOpposite())).consumesAction(),"La tercera losa se coloca al lado");
+            helper.assertTrue(level.getBlockState(pos).equals(paired),"La tercera losa no puede sobrescribir el par");
+            helper.assertTrue(level.getBlockState(pos.relative(half.getOpposite())).is(second),"La tercera losa ocupa la siguiente celda");
             level.removeBlock(pos,false);level.removeBlock(pos.relative(half.getOpposite()),false);
         }
         helper.succeed();
@@ -81,13 +81,13 @@ public final class BuildingToolsGameTests {
         for(Direction half:Direction.Plane.HORIZONTAL){
             var original=brick.defaultBlockState().setValue(VerticalSlabBlock.FACING,half);level.setBlockAndUpdate(pos,original);
             player.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(quartz,3));
-            helper.assertTrue(player.getMainHandItem().useOn(context(player,pos,half)).consumesAction(),"Outer face places adjacent slab");
-            helper.assertTrue(level.getBlockState(pos).equals(original)&&level.getBlockState(pos.relative(half)).is(quartz),"Occupied half is never replaced");
+            helper.assertTrue(player.getMainHandItem().useOn(context(player,pos,half)).consumesAction(),"La cara exterior coloca una losa adyacente");
+            helper.assertTrue(level.getBlockState(pos).equals(original)&&level.getBlockState(pos.relative(half)).is(quartz),"La mitad ocupada nunca se reemplaza");
             level.removeBlock(pos.relative(half),false);
             var freeTop=pos.getCenter().add(half.getOpposite().getStepX()*.25,.5,half.getOpposite().getStepZ()*.25);
             var top=new UseOnContext(player,InteractionHand.MAIN_HAND,new BlockHitResult(freeTop,Direction.UP,pos,false));
-            helper.assertTrue(player.getMainHandItem().useOn(top).consumesAction(),"Top click over free half can pair");
-            helper.assertTrue(level.getBlockState(pos).getValue(VerticalSlabBlock.FILL)==VerticalSlabBlock.Fill.QUARTZ,"Correct half filled from above");
+            helper.assertTrue(player.getMainHandItem().useOn(top).consumesAction(),"Un clic superior sobre la mitad libre puede formar el par");
+            helper.assertTrue(level.getBlockState(pos).getValue(VerticalSlabBlock.FILL)==VerticalSlabBlock.Fill.QUARTZ,"La mitad correcta se llena desde arriba");
             level.removeBlock(pos,false);
         }
         helper.succeed();
@@ -100,16 +100,16 @@ public final class BuildingToolsGameTests {
             var state=first.defaultBlockState().setValue(VerticalSlabBlock.FACING,half).setValue(VerticalSlabBlock.FILL,fill);
             var saved=net.minecraft.nbt.NbtUtils.writeBlockState(state);
             var restored=net.minecraft.nbt.NbtUtils.readBlockState(level.holderLookup(net.minecraft.core.registries.Registries.BLOCK),saved);
-            helper.assertTrue(state.equals(restored),"Facing and both materials survive save/load");
+            helper.assertTrue(state.equals(restored),"La orientación y ambos materiales sobreviven al guardar y cargar");
             var drops=Block.getDrops(state,level,pos,null);
             int bricks=(first==slabs[0]?1:0)+(fill==VerticalSlabBlock.Fill.BRICK?1:0);
             int quartz=(first==slabs[1]?1:0)+(fill==VerticalSlabBlock.Fill.QUARTZ?1:0);
-            helper.assertTrue(drops.stream().filter(i->i.is(slabs[0].asItem())).mapToInt(ItemStack::getCount).sum()==bricks,"Exact brick recovery");
-            helper.assertTrue(drops.stream().filter(i->i.is(slabs[1].asItem())).mapToInt(ItemStack::getCount).sum()==quartz,"Exact quartz recovery");
-            helper.assertTrue(state.rotate(Rotation.CLOCKWISE_90).getValue(VerticalSlabBlock.FILL)==fill,"Rotation preserves pair material");
+            helper.assertTrue(drops.stream().filter(i->i.is(slabs[0].asItem())).mapToInt(ItemStack::getCount).sum()==bricks,"Recuperación exacta del ladrillo");
+            helper.assertTrue(drops.stream().filter(i->i.is(slabs[1].asItem())).mapToInt(ItemStack::getCount).sum()==quartz,"Recuperación exacta del cuarzo");
+            helper.assertTrue(state.rotate(Rotation.CLOCKWISE_90).getValue(VerticalSlabBlock.FILL)==fill,"La rotación conserva el material del par");
             saved.getCompound("Properties").remove("fill");
             var legacy=net.minecraft.nbt.NbtUtils.readBlockState(level.holderLookup(net.minecraft.core.registries.Registries.BLOCK),saved);
-            helper.assertTrue(legacy.getValue(VerticalSlabBlock.FILL)==VerticalSlabBlock.Fill.NONE,"Old single slabs remain single");
+            helper.assertTrue(legacy.getValue(VerticalSlabBlock.FILL)==VerticalSlabBlock.Fill.NONE,"Las losas simples antiguas siguen siendo simples");
         }
         helper.succeed();
     }
@@ -121,12 +121,12 @@ public final class BuildingToolsGameTests {
         for (Direction face : Direction.values()) {
             var dest = pos.relative(face);
             BlockState cover = PostedSignage.TEXTURE_COVER_BLOCK.get().defaultBlockState().setValue(TextureCoverBlock.FACING,face);
-            helper.assertTrue(cover.canSurvive(level,dest), "Solid support accepted on " + face);
+            helper.assertTrue(cover.canSurvive(level,dest), "Soporte sólido aceptado en" + face);
             level.setBlockAndUpdate(dest,cover);
-            helper.assertTrue(cover.getCollisionShape(level,dest).isEmpty(), "Cover must not change movement collision");
+            helper.assertTrue(cover.getCollisionShape(level,dest).isEmpty(), "El recubrimiento no debe cambiar la colisión de movimiento");
         }
         level.destroyBlock(pos,false);
-        for (Direction face : Direction.values()) helper.assertTrue(level.isEmptyBlock(pos.relative(face)), "Unsupported cover removed on " + face);
+        for (Direction face : Direction.values()) helper.assertTrue(level.isEmptyBlock(pos.relative(face)), "Recubrimiento sin soporte retirado en" + face);
         helper.succeed();
     }
 
@@ -138,29 +138,29 @@ public final class BuildingToolsGameTests {
         var tool = PostedSignage.TEXTURE_APPLICATOR.get();
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(tool));
         player.setShiftKeyDown(true);
-        helper.assertTrue(tool.useOn(context(player,pos,Direction.UP)).consumesAction(), "Sample source");
+        helper.assertTrue(tool.useOn(context(player,pos,Direction.UP)).consumesAction(), "Tomar muestra de origen");
         player.setShiftKeyDown(false);
         player.setItemInHand(InteractionHand.MAIN_HAND, player.getMainHandItem().copy());
         level.setBlockAndUpdate(pos, Blocks.STONE.defaultBlockState());
-        helper.assertTrue(tool.useOn(context(player,pos,Direction.NORTH)).consumesAction(), "Apply skin");
+        helper.assertTrue(tool.useOn(context(player,pos,Direction.NORTH)).consumesAction(), "Aplicar capa");
         var skin = TextureSkinEntity.find(level,pos,Direction.NORTH);
-        helper.assertTrue(skin != null && skin.sample().is(Blocks.BRICKS) && skin.sampleFace()==Direction.UP, "Selected sample applied");
-        helper.assertTrue(level.getBlockState(pos).is(Blocks.STONE) && level.isEmptyBlock(pos.north()), "Support and neighboring air unchanged");
+        helper.assertTrue(skin != null && skin.sample().is(Blocks.BRICKS) && skin.sampleFace()==Direction.UP, "Se aplica la muestra seleccionada");
+        helper.assertTrue(level.getBlockState(pos).is(Blocks.STONE) && level.isEmptyBlock(pos.north()), "El soporte y el aire vecino no cambian");
         var tag = new net.minecraft.nbt.CompoundTag(); skin.saveWithoutId(tag);
         var restored = new TextureSkinEntity(PostedSignage.TEXTURE_SKIN.get(),level); restored.load(tag);
-        helper.assertTrue(restored.sample().equals(skin.sample()) && restored.support().equals(pos) && restored.face()==Direction.NORTH, "Disk round trip");
+        helper.assertTrue(restored.sample().equals(skin.sample()) && restored.support().equals(pos) && restored.face()==Direction.NORTH, "Ida y vuelta a disco");
         var synced = new TextureSkinEntity(PostedSignage.TEXTURE_SKIN.get(),level);
         synced.getEntityData().assignValues(skin.getEntityData().getNonDefaultValues());
-        helper.assertTrue(synced.sample().equals(skin.sample()) && synced.face()==skin.face(), "Tracking data includes texture and face");
-        helper.assertTrue(skin.isIgnoringBlockTriggers(), "Skin cannot trigger pressure plates");
-        helper.assertTrue(!skin.isPickable() && !skin.canBeCollidedWith() && !skin.isPushable(), "No hitbox or interaction target");
+        helper.assertTrue(synced.sample().equals(skin.sample()) && synced.face()==skin.face(), "Los datos de seguimiento incluyen la textura y la cara");
+        helper.assertTrue(skin.isIgnoringBlockTriggers(), "La capa no puede activar placas de presión");
+        helper.assertTrue(!skin.isPickable() && !skin.canBeCollidedWith() && !skin.isPushable(), "Sin caja de colisión ni objetivo de interacción");
         player.setShiftKeyDown(true); tool.useOn(context(player,pos,Direction.EAST)); player.setShiftKeyDown(false);
         tool.useOn(context(player,pos,Direction.NORTH));
-        helper.assertTrue(TextureSkinEntity.find(level,pos,Direction.NORTH)==skin && skin.sample().is(Blocks.STONE), "Repaint reuses skin");
+        helper.assertTrue(TextureSkinEntity.find(level,pos,Direction.NORTH)==skin && skin.sample().is(Blocks.STONE), "Repintar reutiliza la capa");
         player.setShiftKeyDown(true); tool.useOn(context(player,pos,Direction.NORTH));
-        helper.assertTrue(player.getMainHandItem().get(DataComponents.CUSTOM_DATA).copyTag().getString("SampleFace").equals("east"), "Sample existing painted face");
+        helper.assertTrue(player.getMainHandItem().get(DataComponents.CUSTOM_DATA).copyTag().getString("SampleFace").equals("east"), "Tomar muestra de una cara ya pintada");
         level.destroyBlock(pos,false); skin.tick();
-        helper.assertTrue(skin.isRemoved(), "Breaking support removes skin");
+        helper.assertTrue(skin.isRemoved(), "Romper el soporte retira la capa");
         helper.succeed();
     }
 
@@ -170,22 +170,22 @@ public final class BuildingToolsGameTests {
         level.setBlockAndUpdate(pos,Blocks.STONE.defaultBlockState());
         var player=helper.makeMockPlayer(GameType.SURVIVAL); var tool=PostedSignage.TEXTURE_APPLICATOR.get();
         player.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(tool));
-        helper.assertTrue(!tool.useOn(context(player,pos,Direction.NORTH)).consumesAction(),"Selection required");
+        helper.assertTrue(!tool.useOn(context(player,pos,Direction.NORTH)).consumesAction(),"Se requiere una selección");
         player.setShiftKeyDown(true); tool.useOn(context(player,pos,Direction.UP)); player.setShiftKeyDown(false);
-        for(Direction face:Direction.values()) helper.assertTrue(tool.useOn(context(player,pos,face)).consumesAction(),"Paint all faces");
+        for(Direction face:Direction.values()) helper.assertTrue(tool.useOn(context(player,pos,face)).consumesAction(),"Pintar todas las caras");
         var paintedTool=player.getMainHandItem().copy();
         player.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(net.minecraft.world.item.Items.OAK_FENCE));
-        helper.assertTrue(player.getMainHandItem().useOn(context(player,pos,Direction.NORTH)).consumesAction(),"Place actual fence against painted face");
-        helper.assertTrue(level.getBlockState(pos.north()).is(Blocks.OAK_FENCE),"Fence occupies neighboring cell");
-        helper.assertTrue(level.getBlockState(pos.north()).getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.SOUTH),"Fence connects to original support");
+        helper.assertTrue(player.getMainHandItem().useOn(context(player,pos,Direction.NORTH)).consumesAction(),"Colocar una valla real contra la cara pintada");
+        helper.assertTrue(level.getBlockState(pos.north()).is(Blocks.OAK_FENCE),"La valla ocupa la celda vecina");
+        helper.assertTrue(level.getBlockState(pos.north()).getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.SOUTH),"La valla se conecta al soporte original");
         player.setItemInHand(InteractionHand.MAIN_HAND,paintedTool);
-        helper.assertTrue(tool.useOn(context(player,pos,Direction.NORTH)).consumesAction(),"Paint beside an existing fence");
+        helper.assertTrue(tool.useOn(context(player,pos,Direction.NORTH)).consumesAction(),"Pintar junto a una valla existente");
         level.setBlockAndUpdate(pos.east(),Blocks.STONE.defaultBlockState());
-        helper.assertTrue(tool.useOn(context(player,pos.east(),Direction.NORTH)).consumesAction(),"Paint adjoining corner");
-        helper.assertTrue(level.getBlockState(pos).getCollisionShape(level,pos).equals(Blocks.STONE.defaultBlockState().getCollisionShape(level,pos)),"Original collision unchanged");
+        helper.assertTrue(tool.useOn(context(player,pos.east(),Direction.NORTH)).consumesAction(),"Pintar la esquina contigua");
+        helper.assertTrue(level.getBlockState(pos).getCollisionShape(level,pos).equals(Blocks.STONE.defaultBlockState().getCollisionShape(level,pos)),"La colisión original no cambia");
         var adventure=helper.makeMockPlayer(GameType.ADVENTURE); GameType.ADVENTURE.updatePlayerAbilities(adventure.getAbilities());
         adventure.setItemInHand(InteractionHand.MAIN_HAND,paintedTool.copy());
-        helper.assertTrue(!tool.useOn(context(adventure,pos,Direction.SOUTH)).consumesAction(),"Adventure cannot paint");
+        helper.assertTrue(!tool.useOn(context(adventure,pos,Direction.SOUTH)).consumesAction(),"En Aventura no se puede pintar");
         helper.succeed();
     }
 
@@ -201,17 +201,17 @@ public final class BuildingToolsGameTests {
         for(Direction face:Direction.values()) for(int i=0;i<4;i++) {
             var destination=pos.relative(face); var side=sides[i];
             player.setPos(destination.getX()+.5+side.getStepX()*3,destination.getY()+1,destination.getZ()+.5+side.getStepZ()*3);
-            helper.assertTrue(tool.useOn(context(player,pos,face)).consumesAction(),"Paint surface");
+            helper.assertTrue(tool.useOn(context(player,pos,face)).consumesAction(),"Pintar la superficie");
             var skin=TextureSkinEntity.find(level,pos,face); int expected=face==Direction.UP?floor[i]:face==Direction.DOWN?ceiling[i]:0;
-            helper.assertTrue(skin.rotation()==expected,"Correct rotation");
+            helper.assertTrue(skin.rotation()==expected,"Rotación correcta");
             var tag=new net.minecraft.nbt.CompoundTag(); skin.saveWithoutId(tag);
             var restored=new TextureSkinEntity(PostedSignage.TEXTURE_SKIN.get(),level); restored.load(tag);
-            helper.assertTrue(restored.rotation()==expected,"Rotation survives reload");
+            helper.assertTrue(restored.rotation()==expected,"La rotación sobrevive a la recarga");
         }
         for(var block:new Block[]{Blocks.STONE_SLAB,Blocks.STONE_STAIRS,PostedSignage.BRICK_VERTICAL_SLAB_BLOCK.get()}) {
             level.setBlockAndUpdate(pos,block.defaultBlockState());
-            for(Direction face:Direction.values()) helper.assertTrue(tool.useOn(context(player,pos,face)).consumesAction(),"Partial blocks accept faces");
-            helper.assertTrue(level.getBlockState(pos).is(block),"Partial support preserved");
+            for(Direction face:Direction.values()) helper.assertTrue(tool.useOn(context(player,pos,face)).consumesAction(),"Los bloques parciales aceptan caras");
+            helper.assertTrue(level.getBlockState(pos).is(block),"Se conserva el soporte parcial");
         }
         helper.succeed();
     }
@@ -225,8 +225,8 @@ public final class BuildingToolsGameTests {
         var cover=(TextureCoverBlockEntity)level.getBlockEntity(dest); cover.setSample(Blocks.BRICKS.defaultBlockState(),Direction.UP,3);
         helper.runAfterDelay(3,()->{
             var skin=TextureSkinEntity.find(level,pos,Direction.NORTH);
-            helper.assertTrue(level.isEmptyBlock(dest),"Legacy cell freed");
-            helper.assertTrue(skin!=null && skin.sample().is(Blocks.BRICKS) && skin.rotation()==3,"Legacy sample and rotation preserved");
+            helper.assertTrue(level.isEmptyBlock(dest),"Se libera la celda antigua");
+            helper.assertTrue(skin!=null && skin.sample().is(Blocks.BRICKS) && skin.rotation()==3,"Se conservan la muestra y la rotación antiguas");
             helper.succeed();
         });
     }
@@ -246,7 +246,7 @@ public final class BuildingToolsGameTests {
     }
     // El recorte que consume el renderizador ocupa solo media celda.
     private static void assertHalfSkin(GameTestHelper h, TextureSkinEntity skin, Direction half) {
-        h.assertTrue(skin!=null&&skin.half()==half,"Layer belongs to the selected half");double volume=0;
+        h.assertTrue(skin!=null&&skin.half()==half,"La capa pertenece a la mitad seleccionada");double volume=0;
         for(var box:skin.surfaceBoxes()) {
             volume+=box.getXsize()*box.getYsize()*box.getZsize();
             boolean contained=switch(half) {
@@ -254,9 +254,9 @@ public final class BuildingToolsGameTests {
                 case WEST -> box.maxX<=.5; case EAST -> box.minX>=.5;
                 default -> false;
             };
-            h.assertTrue(contained,"Rendered surface never extends onto the other slab");
+            h.assertTrue(contained,"La superficie dibujada nunca se extiende a la otra losa");
         }
-        h.assertTrue(Math.abs(volume-.5)<.00001,"Paint geometry covers exactly one half");
+        h.assertTrue(Math.abs(volume-.5)<.00001,"La geometría de pintura cubre exactamente una mitad");
     }
     // Las caras compartidas admiten dos texturas independientes en todas las orientaciones.
     @GameTest(template="empty") public static void pairedSlabPaintingStaysOnClickedHalf(GameTestHelper h) {
@@ -270,21 +270,21 @@ public final class BuildingToolsGameTests {
                 var paired=first.defaultBlockState().setValue(VerticalSlabBlock.FACING,facing).setValue(VerticalSlabBlock.FILL,fill);
                 level.setBlockAndUpdate(pos,paired);sampleTexture(player,source,level,Blocks.STONE);
                 var hit=halfContext(player,pos,face,half);
-                h.assertTrue(tool.useOn(hit).consumesAction(),"Paint clicked half");
+                h.assertTrue(tool.useOn(hit).consumesAction(),"Pintar la mitad pulsada");
                 var skin=TextureSkinEntity.findAt(level,pos,face,hit.getClickLocation());assertHalfSkin(h,skin,half);
-                h.assertTrue(skin.sample().is(Blocks.STONE),"Selected material applied");
+                h.assertTrue(skin.sample().is(Blocks.STONE),"Se aplica el material seleccionado");
                 if(face.getAxis()!=facing.getAxis()) {
                     var other=halfContext(player,pos,face,half.getOpposite());
-                    h.assertTrue(TextureSkinEntity.findAt(level,pos,face,other.getClickLocation())==null,"Other half remains unpainted");
+                    h.assertTrue(TextureSkinEntity.findAt(level,pos,face,other.getClickLocation())==null,"La otra mitad sigue sin pintar");
                     sampleTexture(player,source,level,Blocks.BRICKS);tool.useOn(other);
                     var second=TextureSkinEntity.findAt(level,pos,face,other.getClickLocation());assertHalfSkin(h,second,half.getOpposite());
-                    h.assertTrue(second!=skin&&second.sample().is(Blocks.BRICKS)&&skin.sample().is(Blocks.STONE),"Painting second half preserves the first");
+                    h.assertTrue(second!=skin&&second.sample().is(Blocks.BRICKS)&&skin.sample().is(Blocks.STONE),"Pintar la segunda mitad conserva la primera");
                     player.setShiftKeyDown(true);tool.useOn(hit);player.setShiftKeyDown(false);
                     var copied=net.minecraft.nbt.NbtUtils.readBlockState(level.holderLookup(net.minecraft.core.registries.Registries.BLOCK),
                             player.getMainHandItem().get(DataComponents.CUSTOM_DATA).copyTag().getCompound("Sample"));
-                    h.assertTrue(copied.is(Blocks.STONE),"Sampling picks the painted half under the cursor");
+                    h.assertTrue(copied.is(Blocks.STONE),"La muestra toma la mitad pintada bajo el cursor");
                 }
-                h.assertTrue(level.getBlockState(pos).equals(paired),"Painting preserves slab state and collision");
+                h.assertTrue(level.getBlockState(pos).equals(paired),"Pintar conserva el estado y la colisión de la losa");
                 for(var skinEntity:level.getEntitiesOfClass(TextureSkinEntity.class,new AABB(pos).inflate(.1)))skinEntity.discard();
             }
         h.succeed();
@@ -295,19 +295,19 @@ public final class BuildingToolsGameTests {
         level.setBlockAndUpdate(pos,PostedSignage.BRICK_VERTICAL_SLAB_BLOCK.get().defaultBlockState()
                 .setValue(VerticalSlabBlock.FACING,Direction.WEST).setValue(VerticalSlabBlock.FILL,VerticalSlabBlock.Fill.QUARTZ));
         var old=TextureSkinEntity.apply(level,pos,Direction.UP,Blocks.BRICKS.defaultBlockState(),Direction.SOUTH,3);
-        h.assertTrue(old.half()==null,"Legacy layer covers the whole face");
+        h.assertTrue(old.half()==null,"La capa antigua cubre toda la cara");
         var left=TextureSkinEntity.apply(level,pos,Direction.UP,Blocks.STONE.defaultBlockState(),Direction.NORTH,1,Direction.WEST);
         var right=TextureSkinEntity.findAt(level,pos,Direction.UP,pos.getCenter().add(.25,.5,0));
         var cropped=TextureSkinSurface.uv(Direction.UP,.75,1,.5,right.rotation());
-        h.assertTrue(Math.abs(cropped.u()-.5)<.00001&&Math.abs(cropped.v()-.75)<.00001,"Unpainted half retains the original full-face UV scale and rotation");
-        h.assertTrue(old.isRemoved()&&right!=null&&right.sample().is(Blocks.BRICKS)&&right.rotation()==3,"Unpainted legacy half keeps its material and rotation");
+        h.assertTrue(Math.abs(cropped.u()-.5)<.00001&&Math.abs(cropped.v()-.75)<.00001,"La mitad sin pintar conserva la escala UV y la rotación originales de la cara completa");
+        h.assertTrue(old.isRemoved()&&right!=null&&right.sample().is(Blocks.BRICKS)&&right.rotation()==3,"La mitad antigua sin pintar conserva su material y rotación");
         assertHalfSkin(h,left,Direction.WEST);assertHalfSkin(h,right,Direction.EAST);
         var saved=new net.minecraft.nbt.CompoundTag();left.saveWithoutId(saved);
         var restored=new TextureSkinEntity(PostedSignage.TEXTURE_SKIN.get(),level);restored.load(saved);assertHalfSkin(h,restored,Direction.WEST);
         var synced=new TextureSkinEntity(PostedSignage.TEXTURE_SKIN.get(),level);
         synced.getEntityData().assignValues(right.getEntityData().getNonDefaultValues());assertHalfSkin(h,synced,Direction.EAST);
-        h.assertTrue(restored.sample().is(Blocks.STONE)&&restored.rotation()==1,"Half texture survives save/load");
-        h.assertTrue(!left.isPickable()&&!right.canBeCollidedWith(),"Layers do not add hitboxes");
+        h.assertTrue(restored.sample().is(Blocks.STONE)&&restored.rotation()==1,"La textura de la mitad sobrevive al guardar y cargar");
+        h.assertTrue(!left.isPickable()&&!right.canBeCollidedWith(),"Las capas no agregan cajas de colisión");
         h.succeed();
     }
     // Unir una segunda losa no extiende la pintura existente a la mitad nueva.
@@ -319,16 +319,16 @@ public final class BuildingToolsGameTests {
         sampleTexture(player,source,level,Blocks.STONE);var leftHit=halfContext(player,pos,Direction.UP,Direction.WEST);tool.useOn(leftHit);
         var left=TextureSkinEntity.findAt(level,pos,Direction.UP,leftHit.getClickLocation());assertHalfSkin(h,left,Direction.WEST);
         player.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(PostedSignage.SMOOTH_QUARTZ_VERTICAL_SLAB.get()));
-        h.assertTrue(player.getMainHandItem().useOn(context(player,pos,Direction.EAST)).consumesAction(),"Second slab joins painted half");
+        h.assertTrue(player.getMainHandItem().useOn(context(player,pos,Direction.EAST)).consumesAction(),"La segunda losa se une a la mitad pintada");
         assertHalfSkin(h,left,Direction.WEST);
         player.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(tool));var rightHit=halfContext(player,pos,Direction.UP,Direction.EAST);
         player.setShiftKeyDown(true);tool.useOn(rightHit);player.setShiftKeyDown(false);
         var copied=net.minecraft.nbt.NbtUtils.readBlockState(level.holderLookup(net.minecraft.core.registries.Registries.BLOCK),
                 player.getMainHandItem().get(DataComponents.CUSTOM_DATA).copyTag().getCompound("Sample"));
         h.assertTrue(copied.is(PostedSignage.SMOOTH_QUARTZ_VERTICAL_SLAB_BLOCK.get())&&copied.getValue(VerticalSlabBlock.FILL)==VerticalSlabBlock.Fill.NONE,
-                "Sampling the unpainted half chooses quartz, not brick or neighboring paint");
+                "La muestra de la mitad sin pintar elige cuarzo, no ladrillo ni pintura vecina");
         tool.useOn(rightHit);assertHalfSkin(h,TextureSkinEntity.findAt(level,pos,Direction.UP,rightHit.getClickLocation()),Direction.EAST);
-        h.assertTrue(left.sample().is(Blocks.STONE),"Original painted half remains independent");h.succeed();
+        h.assertTrue(left.sample().is(Blocks.STONE),"La mitad pintada original sigue siendo independiente");h.succeed();
     }
 
     // Repintar, recibir paquetes y cambiar la forma invalidan solo los datos necesarios.
@@ -336,25 +336,25 @@ public final class BuildingToolsGameTests {
         var level=h.getLevel();var pos=h.absolutePos(CENTER);
         var bottom=Blocks.STONE_SLAB.defaultBlockState();level.setBlockAndUpdate(pos,bottom);
         var skin=TextureSkinEntity.apply(level,pos,Direction.UP,Blocks.STONE.defaultBlockState(),Direction.UP,0);
-        var first=skin.surfaceBoxes();h.assertTrue(first==skin.surfaceBoxes(),"Static support reuses its clipped shape");
+        var first=skin.surfaceBoxes();h.assertTrue(first==skin.surfaceBoxes(),"El soporte estático reutiliza su forma recortada");
         TextureSkinEntity.apply(level,pos,Direction.UP,Blocks.BRICKS.defaultBlockState(),Direction.SOUTH,3);
-        h.assertTrue(skin.sample().is(Blocks.BRICKS)&&skin.sampleFace()==Direction.SOUTH&&skin.rotation()==3,"Repaint immediately updates decoded material and rotation");
+        h.assertTrue(skin.sample().is(Blocks.BRICKS)&&skin.sampleFace()==Direction.SOUTH&&skin.rotation()==3,"Repintar actualiza de inmediato el material decodificado y la rotación");
         var saved=new net.minecraft.nbt.CompoundTag();skin.saveWithoutId(saved);
         var receiver=new TextureSkinEntity(PostedSignage.TEXTURE_SKIN.get(),level);receiver.load(saved);
-        h.assertTrue(receiver.sample().is(Blocks.BRICKS),"Prime receiver cache before next packet");
+        h.assertTrue(receiver.sample().is(Blocks.BRICKS),"Preparar la caché del receptor antes del siguiente paquete");
         TextureSkinEntity.apply(level,pos,Direction.UP,Blocks.DIRT.defaultBlockState(),Direction.EAST,2);
         receiver.getEntityData().assignValues(skin.getEntityData().getNonDefaultValues());
-        h.assertTrue(receiver.sample().is(Blocks.DIRT)&&receiver.sampleFace()==Direction.EAST&&receiver.rotation()==2,"Incoming packet invalidates an already populated cache");
+        h.assertTrue(receiver.sample().is(Blocks.DIRT)&&receiver.sampleFace()==Direction.EAST&&receiver.rotation()==2,"Un paquete entrante invalida una caché ya llena");
         level.setBlockAndUpdate(pos,bottom.setValue(net.minecraft.world.level.block.SlabBlock.TYPE,net.minecraft.world.level.block.state.properties.SlabType.TOP));
-        var top=skin.surfaceBoxes();h.assertTrue(!top.equals(first)&&top.stream().allMatch(box->box.minY>=.5),"Support shape change updates the rendered surface");
+        var top=skin.surfaceBoxes();h.assertTrue(!top.equals(first)&&top.stream().allMatch(box->box.minY>=.5),"El cambio de forma del soporte actualiza la superficie dibujada");
         skin.discard();var glass=PostedSignage.CIT_GLASS.get();level.setBlockAndUpdate(pos,glass.defaultBlockState());
         level.setBlockAndUpdate(pos.above(),glass.defaultBlockState());
         var dynamic=TextureSkinEntity.apply(level,pos,Direction.SOUTH,Blocks.BRICKS.defaultBlockState(),Direction.NORTH,0);
         var stacked=dynamic.surfaceBoxes();
-        h.assertTrue(stacked==dynamic.surfaceBoxes(),"Unchanged dynamic geometry reuses the rendered mesh");
+        h.assertTrue(stacked==dynamic.surfaceBoxes(),"La geometría dinámica sin cambios reutiliza la malla dibujada");
         level.removeBlock(pos.above(),false);
-        h.assertTrue(!stacked.equals(dynamic.surfaceBoxes()),"Dynamic support keeps reacting to neighbor geometry changes");
-        h.assertTrue(dynamic.surfaceBoxes().equals(TextureSkinSurface.boxes(level.getBlockState(pos),level,pos,null)),"Dynamic clipping matches the current collision geometry");
+        h.assertTrue(!stacked.equals(dynamic.surfaceBoxes()),"El soporte dinámico sigue reaccionando a los cambios de geometría vecinos");
+        h.assertTrue(dynamic.surfaceBoxes().equals(TextureSkinSurface.boxes(level.getBlockState(pos),level,pos,null)),"El recorte dinámico coincide con la geometría de colisión actual");
         h.succeed();
     }
 
@@ -365,13 +365,13 @@ public final class BuildingToolsGameTests {
         var front=TextureSkinEntity.apply(level,pos,Direction.NORTH,Blocks.BRICKS.defaultBlockState(),Direction.NORTH,0);
         var back=TextureSkinEntity.apply(level,pos,Direction.SOUTH,Blocks.BRICKS.defaultBlockState(),Direction.NORTH,0);
         var cache=new TextureSkinFrameCache();var first=cache.boxes(front);
-        h.assertTrue(first==cache.boxes(back),"Same support and half share dynamic shape query");
+        h.assertTrue(first==cache.boxes(back),"El mismo soporte y mitad comparten la consulta de forma dinámica");
         level.setBlockAndUpdate(pos.above(),glass.defaultBlockState());cache.clear();
         var updated=cache.boxes(back);
-        h.assertTrue(!first.equals(updated),"Next frame sees a changed neighbor");
-        h.assertTrue(updated==cache.boxes(front),"Other face uses updated shape");
+        h.assertTrue(!first.equals(updated),"El siguiente fotograma detecta un vecino cambiado");
+        h.assertTrue(updated==cache.boxes(front),"La otra cara usa la forma actualizada");
         level.setBlockAndUpdate(pos,Blocks.STONE.defaultBlockState());
-        h.assertTrue(cache.boxes(front).equals(front.surfaceBoxes()),"Support replacement is immediate");
+        h.assertTrue(cache.boxes(front).equals(front.surfaceBoxes()),"El reemplazo del soporte es inmediato");
         h.succeed();
     }
 
@@ -390,11 +390,11 @@ public final class BuildingToolsGameTests {
                 for(int side:new int[]{-1,1}){
                     double x=centerX+normal.getStepX()*side*2-centerX;
                     double z=centerZ+normal.getStepZ()*side*2-centerZ;
-                    h.assertTrue(GlassSignMount.textFaceVisible(facing,side<0,x,z),"Visible text remains: "+facing+" glass="+glass);
-                    h.assertTrue(!GlassSignMount.textFaceVisible(facing,side>0,x,z),"Hidden text omitted: "+facing+" glass="+glass);
+                    h.assertTrue(GlassSignMount.textFaceVisible(facing,side<0,x,z),"El texto visible permanece:"+facing+" glass="+glass);
+                    h.assertTrue(!GlassSignMount.textFaceVisible(facing,side>0,x,z),"Texto oculto omitido:"+facing+" glass="+glass);
                 }
             }
-            h.assertTrue(GlassSignMount.textFaceVisible(facing,false,0,0)&&GlassSignMount.textFaceVisible(facing,true,0,0),"Grazing camera keeps both sides");
+            h.assertTrue(GlassSignMount.textFaceVisible(facing,false,0,0)&&GlassSignMount.textFaceVisible(facing,true,0,0),"La cámara rasante conserva ambos lados");
         }
         h.succeed();
     }
@@ -406,29 +406,29 @@ public final class BuildingToolsGameTests {
             Vec3 normal=Vec3.atLowerCornerOf(face.getNormal());
             Vec3 front=new Vec3(.5,.5,.5).add(normal.scale(2));
             Vec3 back=new Vec3(.5,.5,.5).subtract(normal.scale(2));
-            h.assertTrue(TextureSkinSurface.facesCamera(face,cube,front.x,front.y,front.z),"Front face remains visible: "+face);
-            h.assertTrue(!TextureSkinSurface.facesCamera(face,cube,back.x,back.y,back.z),"Back face is skipped: "+face);
+            h.assertTrue(TextureSkinSurface.facesCamera(face,cube,front.x,front.y,front.z),"La cara frontal sigue visible:"+face);
+            h.assertTrue(!TextureSkinSurface.facesCamera(face,cube,back.x,back.y,back.z),"Se omite la cara trasera:"+face);
             // El origen del mundo no influye: se usan coordenadas locales del soporte.
             BlockPos origin=new BlockPos(-117,63,205);Vec3 world=front.add(origin.getX(),origin.getY(),origin.getZ());
-            h.assertTrue(TextureSkinSurface.facesCamera(face,cube,world.x-origin.getX(),world.y-origin.getY(),world.z-origin.getZ()),"Negative world coordinates preserve visibility");
+            h.assertTrue(TextureSkinSurface.facesCamera(face,cube,world.x-origin.getX(),world.y-origin.getY(),world.z-origin.getZ()),"Las coordenadas negativas conservan la visibilidad");
         }
         var bottom=java.util.List.of(new AABB(0,0,0,1,.5,1));
         var top=java.util.List.of(new AABB(0,.5,0,1,1,1));
-        h.assertTrue(TextureSkinSurface.facesCamera(Direction.UP,bottom,.5,.75,.5),"Lower slab top is visible from within the cell");
-        h.assertTrue(TextureSkinSurface.facesCamera(Direction.DOWN,top,.5,.25,.5),"Upper slab underside is visible from within the cell");
+        h.assertTrue(TextureSkinSurface.facesCamera(Direction.UP,bottom,.5,.75,.5),"La parte superior de la losa inferior es visible desde la celda");
+        h.assertTrue(TextureSkinSurface.facesCamera(Direction.DOWN,top,.5,.25,.5),"La parte inferior de la losa superior es visible desde la celda");
         var west=java.util.List.of(new AABB(0,0,0,.5,1,1));
-        h.assertTrue(TextureSkinSurface.facesCamera(Direction.EAST,west,.75,.5,.5),"Vertical slab inner face remains visible");
+        h.assertTrue(TextureSkinSurface.facesCamera(Direction.EAST,west,.75,.5,.5),"La cara interna de la losa vertical sigue visible");
         var steps=java.util.List.of(new AABB(0,0,0,1,.5,1),new AABB(0,.5,.5,1,1,1));
-        h.assertTrue(TextureSkinSurface.facesCamera(Direction.UP,steps,.5,.75,.25),"One visible step keeps the layer");
-        h.assertTrue(!TextureSkinSurface.facesCamera(Direction.UP,steps,.5,.25,.25),"All step faces behind camera plane are skipped");
+        h.assertTrue(TextureSkinSurface.facesCamera(Direction.UP,steps,.5,.75,.25),"Un peldaño visible conserva la capa");
+        h.assertTrue(!TextureSkinSurface.facesCamera(Direction.UP,steps,.5,.25,.25),"Se omiten todas las caras del peldaño detrás del plano de la cámara");
         var tall=java.util.List.of(new AABB(0,0,0,1,1.5,1));
-        h.assertTrue(TextureSkinSurface.facesCamera(Direction.DOWN,tall,.5,-.5,.5),"Extended shapes use their own planes");
-        h.assertTrue(!TextureSkinSurface.facesCamera(Direction.UP,tall,.5,1.25,.5),"A tall support does not assume a unit cube");
-        h.assertTrue(!TextureSkinSurface.facesCamera(Direction.NORTH,java.util.List.of(),0,0,0),"An empty shape has nothing to draw");
+        h.assertTrue(TextureSkinSurface.facesCamera(Direction.DOWN,tall,.5,-.5,.5),"Las formas extendidas usan sus propios planos");
+        h.assertTrue(!TextureSkinSurface.facesCamera(Direction.UP,tall,.5,1.25,.5),"Un soporte alto no supone un cubo unitario");
+        h.assertTrue(!TextureSkinSurface.facesCamera(Direction.NORTH,java.util.List.of(),0,0,0),"Una forma vacía no tiene nada que dibujar");
         double e=TextureSkinSurface.SURFACE_OFFSET;
-        h.assertTrue(TextureSkinSurface.facesCamera(Direction.UP,bottom,.5,.5+e,.5),"Coplanar cameras remain conservative");
-        h.assertTrue(TextureSkinSurface.facesCamera(Direction.UP,bottom,.5,.5+e+.00001,.5),"Just in front of offset face stays visible");
-        h.assertTrue(!TextureSkinSurface.facesCamera(Direction.UP,bottom,.5,.5+e-.00001,.5),"Offset is shared with emitted vertices");
+        h.assertTrue(TextureSkinSurface.facesCamera(Direction.UP,bottom,.5,.5+e,.5),"Las cámaras coplanares siguen siendo conservadoras");
+        h.assertTrue(TextureSkinSurface.facesCamera(Direction.UP,bottom,.5,.5+e+.00001,.5),"Justo frente a la cara desplazada sigue visible");
+        h.assertTrue(!TextureSkinSurface.facesCamera(Direction.UP,bottom,.5,.5+e-.00001,.5),"El desplazamiento se comparte con los vértices emitidos");
         h.succeed();
     }
 

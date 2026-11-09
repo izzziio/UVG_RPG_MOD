@@ -67,7 +67,7 @@ public final class DrinkingFountainBlock extends HorizontalDirectionalBlock {
         BlockPos support = pos.relative(facing.getOpposite());
         return level.getBlockState(support).isFaceSturdy(level, support, facing);
     }
-    /** Each half independently requires a sturdy attachment face behind its own cell. */
+    /** Cada mitad requiere por separado una cara de apoyo firme detrás de su propia celda. */
     @Override protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) { return supported(state, level, pos); }
     // Completa el bebedero colocando su mitad superior.
     @Override public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {

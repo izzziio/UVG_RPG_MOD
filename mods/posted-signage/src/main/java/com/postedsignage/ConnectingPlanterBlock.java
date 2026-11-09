@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/** A planter that joins exactly one neighboring planter, similarly to a chest. */
+/** Jardinera que se une exactamente a una jardinera vecina, de forma similar a un cofre. */
 public final class ConnectingPlanterBlock extends Block {
     public static final MapCodec<ConnectingPlanterBlock> CODEC = simpleCodec(ConnectingPlanterBlock::new);
     public static final EnumProperty<PlanterConnection> CONNECTION =
@@ -48,7 +48,7 @@ public final class ConnectingPlanterBlock extends Block {
         return CODEC;
     }
 
-    /** Choose one unpaired neighbor in a stable order; existing pairs cannot accept a third planter. */
+    /** Elige una vecina sin pareja en un orden estable; los pares existentes no aceptan una tercera jardinera. */
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
