@@ -1,0 +1,229 @@
+{
+    "meta":  {
+                 "format_version":  "4.10",
+                 "model_format":  "java_block",
+                 "box_uv":  false
+             },
+    "name":  "statue_relief",
+    "geometry_name":  "",
+    "visible_box":  [
+                        1,
+                        1,
+                        1
+                    ],
+    "variable_placeholders":  "",
+    "resolution":  {
+                       "width":  2560,
+                       "height":  1024
+                   },
+    "elements":  [
+                     {
+                         "name":  "ten_wide_top_bar",
+                         "box_uv":  false,
+                         "rescale":  false,
+                         "locked":  false,
+                         "light_emission":  0,
+                         "render_order":  "default",
+                         "allow_mirror_modeling":  true,
+                         "from":  [
+                                      -48,
+                                      32,
+                                      15.5
+                                  ],
+                         "to":  [
+                                    112,
+                                    64,
+                                    16
+                                ],
+                         "autouv":  0,
+                         "color":  0,
+                         "origin":  [
+                                        8,
+                                        8,
+                                        8
+                                    ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  0
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                }
+                                   },
+                         "uuid":  "b02c1952-af7a-0097-077d-9768d4d635c3"
+                     },
+                     {
+                         "name":  "four_wide_center_stem",
+                         "box_uv":  false,
+                         "rescale":  false,
+                         "locked":  false,
+                         "light_emission":  0,
+                         "render_order":  "default",
+                         "allow_mirror_modeling":  true,
+                         "from":  [
+                                      0,
+                                      0,
+                                      15.5
+                                  ],
+                         "to":  [
+                                    64,
+                                    32,
+                                    16
+                                ],
+                         "autouv":  0,
+                         "color":  0,
+                         "origin":  [
+                                        8,
+                                        8,
+                                        8
+                                    ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                0,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  0
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  0
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  0
+                                                }
+                                   },
+                         "uuid":  "73e8b3c7-4131-ec6f-5d7b-8256c3ba3590"
+                     }
+                 ],
+    "outliner":  [
+                     "b02c1952-af7a-0097-077d-9768d4d635c3",
+                     "73e8b3c7-4131-ec6f-5d7b-8256c3ba3590"
+                 ],
+    "textures":  [
+                     {
+                         "path":  "textures/statue_relief.png",
+                         "name":  "statue_relief.png",
+                         "folder":  "textures",
+                         "namespace":  "posted_signage",
+                         "id":  "0",
+                         "particle":  true,
+                         "render_mode":  "default",
+                         "render_sides":  "auto",
+                         "frame_time":  1,
+                         "frame_order_type":  "loop",
+                         "frame_order":  "",
+                         "frame_interpolate":  false,
+                         "visible":  true,
+                         "internal":  false,
+                         "saved":  true,
+                         "uuid":  "f055b7e9-333f-8f20-b20b-010dec20915d"
+                     },
+                     {
+                         "path":  "minecraft:block/tuff",
+                         "name":  "tuff",
+                         "folder":  "textures",
+                         "namespace":  "posted_signage",
+                         "id":  "1",
+                         "particle":  false,
+                         "render_mode":  "default",
+                         "render_sides":  "auto",
+                         "frame_time":  1,
+                         "frame_order_type":  "loop",
+                         "frame_order":  "",
+                         "frame_interpolate":  false,
+                         "visible":  true,
+                         "internal":  false,
+                         "saved":  true,
+                         "uuid":  "5a285d5e-9842-a257-4a76-fa59e60a251a"
+                     }
+                 ]
+}
