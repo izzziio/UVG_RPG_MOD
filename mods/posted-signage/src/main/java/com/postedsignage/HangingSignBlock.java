@@ -18,14 +18,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A double-sided projecting sign attached to a vertical wall by its short edge.
- * FACING points away from the supporting wall and controls the projection axis.
- */
+/** Letrero de dos caras sujeto a la pared; FACING indica el eje de proyección. */
 public final class HangingSignBlock extends HorizontalDirectionalBlock {
     public static final MapCodec<HangingSignBlock> CODEC = simpleCodec(HangingSignBlock::new);
 
-    // Overall bounds include the panel, raised frame, wall plate, and supports.
+    // Los límites incluyen panel, marco, placa y soportes.
     private static final VoxelShape NORTH_SHAPE = Block.box(6.25, 2.5, 5.25, 9.75, 13.5, 16.0);
     private static final VoxelShape SOUTH_SHAPE = Block.box(6.25, 2.5, 0.0, 9.75, 13.5, 10.75);
     private static final VoxelShape WEST_SHAPE = Block.box(5.25, 2.5, 6.25, 16.0, 13.5, 9.75);
@@ -37,7 +34,7 @@ public final class HangingSignBlock extends HorizontalDirectionalBlock {
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(GlassSignMount.GLASS_MOUNTED, false));
     }
 
-    /** Minecraft uses this codec when reconstructing the block from registry data. */
+    /** Minecraft reconstruye el bloque mediante este códec. */
     @Override
     protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
         return CODEC;
@@ -51,8 +48,8 @@ public final class HangingSignBlock extends HorizontalDirectionalBlock {
         LevelReader level = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
-        // Match vanilla wall-mounted blocks: try the player's nearest horizontal
-        // directions and select the first orientation with a sturdy wall behind it.
+        // Prueba las direcciones horizontales cercanas al jugador
+        // y elige la primera orientación con pared firme detrás.
         for (Direction direction : context.getNearestLookingDirections()) {
             if (direction.getAxis().isHorizontal()) {
                 state = state.setValue(FACING, direction.getOpposite());
@@ -65,7 +62,7 @@ public final class HangingSignBlock extends HorizontalDirectionalBlock {
         return null;
     }
 
-    /** Check the sturdy wall face behind the outward-facing block. */
+    /** Comprueba el soporte sólido detrás del bloque. */
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         Direction facing = state.getValue(FACING);
@@ -73,7 +70,7 @@ public final class HangingSignBlock extends HorizontalDirectionalBlock {
         return GlassSignMount.supported(level,pos,facing);
     }
 
-    /** Recheck support after neighbor changes and remove the block when its attachment is lost. */
+    /** Revalida el soporte al cambiar vecinos y retira el bloque si se pierde. */
     @Override
     protected BlockState updateShape(
             BlockState state,
@@ -88,7 +85,7 @@ public final class HangingSignBlock extends HorizontalDirectionalBlock {
         return GlassSignMount.state(super.updateShape(state, direction, neighborState, level, pos, neighborPos),level,pos,state.getValue(FACING));
     }
 
-    /** Return bounds matching the placed orientation for outline selection and default collision handling. */
+    /** Devuelve límites de selección y colisión según la orientación. */
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         VoxelShape shape = switch (state.getValue(FACING)) {
@@ -100,19 +97,19 @@ public final class HangingSignBlock extends HorizontalDirectionalBlock {
         return GlassSignMount.shape(shape,state,state.getValue(FACING));
     }
 
-    /** Rotate the stored facing so structure rotations preserve the attachment orientation. */
+    /** Gira la orientación guardada conservando el soporte. */
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
-    /** Convert mirroring into the appropriate facing rotation. */
+    /** Convierte el reflejo en un giro de orientación. */
     @Override
     protected BlockState mirror(BlockState state, Mirror mirror) {
         return rotate(state, mirror.getRotation(state.getValue(FACING)));
     }
 
-    /** Declare the properties Minecraft serializes and uses to select blockstate model variants. */
+    /** Declara propiedades guardadas y usadas para elegir modelos. */
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, GlassSignMount.GLASS_MOUNTED);

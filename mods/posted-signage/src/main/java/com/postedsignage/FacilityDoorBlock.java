@@ -18,7 +18,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/** The wide door rotates one complete panel and its occupied footprint together. */
+/** La puerta ancha gira su panel y su área ocupada conjuntamente. */
 public final class FacilityDoorBlock extends FacilityMultiBlock {
     public static final BooleanProperty OPEN = BooleanProperty.create("open");
     public static final MapCodec<FacilityDoorBlock> CODEC = simpleCodec(p -> new FacilityDoorBlock(p, 1, 2));
@@ -30,7 +30,7 @@ public final class FacilityDoorBlock extends FacilityMultiBlock {
     }
     // Permite reconstruir el bloque desde su registro.
     @Override protected MapCodec<FacilityDoorBlock> codec() { return CODEC; }
-    /** Legacy world blocks recover as the current text-free door instead of a retired item. */
+    /** Recupera bloques antiguos como puertas actuales sin texto. */
     @Override public net.minecraft.world.item.Item asItem() {
         return width==2?PostedSignage.CLEAR_WIDE_DOOR_ITEM.get():PostedSignage.CLEAR_SHORT_DOOR_ITEM.get();
     }
@@ -61,7 +61,7 @@ public final class FacilityDoorBlock extends FacilityMultiBlock {
             BlockPos targetOrigin = toggledOrigin(anchor, state);
             var oldParts = new java.util.LinkedHashMap<BlockPos, BlockState>();
             var newParts = new java.util.LinkedHashMap<BlockPos, BlockState>();
-            // Check every part before making any change, including protection at other cells.
+            // Comprueba cada pieza y su protección antes de modificar.
             for (int x = 0; x < width; x++) for (int y = 0; y < height; y++) {
                 BlockPos part = anchor.relative(right, x).above(y);
                 if (!level.mayInteract(player, part) || !level.getBlockState(part).equals(
@@ -78,8 +78,8 @@ public final class FacilityDoorBlock extends FacilityMultiBlock {
                         || !level.isUnobstructed(entry.getValue(), target, CollisionContext.empty())) return InteractionResult.FAIL;
             }
             boolean open = !state.getValue(OPEN);
-            // Install the full target before sending neighbor updates, so no temporary
-            // missing anchor causes a multiblock collapse or loot during the swing.
+            // Coloca toda la estructura antes de avisar a vecinos para evitar que
+            // un ancla ausente desmonte piezas o suelte objetos durante el giro.
             for (BlockPos oldPos : oldParts.keySet()) {
                 if (!newParts.containsKey(oldPos)) level.setBlock(oldPos,
                         net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), UPDATE_CLIENTS | UPDATE_KNOWN_SHAPE);

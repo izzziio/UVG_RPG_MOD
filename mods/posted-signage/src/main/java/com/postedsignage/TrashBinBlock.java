@@ -38,7 +38,7 @@ public final class TrashBinBlock extends FacilityMultiBlock implements EntityBlo
             if (inserted == 0) player.displayClientMessage(
                     net.minecraft.network.chat.Component.translatable("message.posted_signage.bin_full"), true);
         }
-        // Consume even when full so held blocks, buckets and food are not used accidentally.
+        // Consume el clic aunque esté lleno para evitar usar el objeto sostenido.
         return ItemInteractionResult.sidedSuccess(level.isClientSide());
     }
     // Abre el inventario al usar la mano vacía.

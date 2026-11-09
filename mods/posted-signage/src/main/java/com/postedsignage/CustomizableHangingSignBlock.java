@@ -28,11 +28,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A wall-mounted projecting sign based on the real CIT room signs. Its fixed
- * color and CIT mark come from the block model texture; both broad faces retain
- * independently editable vanilla sign text.
- */
+/** Letrero CIT con textura fija y texto independiente en ambas caras. */
 public final class CustomizableHangingSignBlock extends SignBlock {
     // Abre la edición solo para operadores en Creativo.
     @Override public void openTextEdit(net.minecraft.world.entity.player.Player player,
@@ -81,13 +77,13 @@ public final class CustomizableHangingSignBlock extends SignBlock {
                 .setValue(WATERLOGGED, false));
     }
 
-    /** Minecraft uses this codec when reconstructing the block from registry data. */
+    /** Minecraft reconstruye el bloque mediante este códec. */
     @Override
     protected MapCodec<? extends SignBlock> codec() {
         return CODEC;
     }
 
-    /** Preserve waterlogging and try the player's nearest horizontal wall directions. */
+    /** Conserva el agua y prueba las paredes horizontales cercanas al jugador. */
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
@@ -108,7 +104,7 @@ public final class CustomizableHangingSignBlock extends SignBlock {
         return null;
     }
 
-    /** Check the sturdy wall face behind the outward-facing block. */
+    /** Comprueba el soporte sólido detrás del bloque. */
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         Direction facing = state.getValue(FACING);
@@ -116,7 +112,7 @@ public final class CustomizableHangingSignBlock extends SignBlock {
         return GlassSignMount.supported(level,pos,facing);
     }
 
-    /** Recheck support after neighbor changes and remove the block when its attachment is lost. */
+    /** Revalida el soporte al cambiar vecinos y retira el bloque si se pierde. */
     @Override
     protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
             LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
@@ -126,7 +122,7 @@ public final class CustomizableHangingSignBlock extends SignBlock {
         return GlassSignMount.state(super.updateShape(state, direction, neighborState, level, pos, neighborPos),level,pos,state.getValue(FACING));
     }
 
-    /** Return bounds matching the placed orientation for outline selection and default collision handling. */
+    /** Devuelve límites de selección y colisión según la orientación. */
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         VoxelShape shape = switch (state.getValue(FACING)) {
@@ -141,19 +137,19 @@ public final class CustomizableHangingSignBlock extends SignBlock {
     // Dibuja el panel JSON además del texto dinámico.
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        // BaseEntityBlock defaults to invisible because vanilla signs render
-        // their boards in a block-entity renderer. Our renderer draws only the
-        // editable text, so the fixed CIT panel must use its JSON block model.
+        // BaseEntityBlock es invisible por defecto porque los letreros dibujan
+        // sus paneles con un renderizador de entidad; este solo dibuja
+        // texto editable; el panel CIT fijo debe usar su modelo JSON.
         return RenderShape.MODEL;
     }
 
-    /** The sign projects perpendicular to the wall, so text orientation is offset by a quarter turn. */
+    /** El letrero sobresale perpendicularmente; el texto gira un cuarto de vuelta. */
     @Override
     public float getYRotationDegrees(BlockState state) {
         return state.getValue(FACING).getClockWise().toYRot();
     }
 
-    /** Offset the interaction center toward the projecting board for vanilla front/back editing. */
+    /** Desplaza el punto de interacción hacia el panel saliente. */
     @Override
     public Vec3 getSignHitboxCenterPosition(BlockState state) {
         Direction facing = state.getValue(FACING);
@@ -169,7 +165,7 @@ public final class CustomizableHangingSignBlock extends SignBlock {
         return new CustomizableHangingSignBlockEntity(pos, state);
     }
 
-    /** Reuse vanilla sign ticking to manage the editor session for this custom block-entity type. */
+    /** Reutiliza los ticks de letreros para gestionar la sesión de edición. */
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
             Level level, BlockState state, BlockEntityType<T> type) {
@@ -179,19 +175,19 @@ public final class CustomizableHangingSignBlock extends SignBlock {
                 SignBlockEntity::tick);
     }
 
-    /** Rotate the stored facing so structure rotations preserve the attachment orientation. */
+    /** Gira la orientación guardada conservando el soporte. */
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
-    /** Convert mirroring into the appropriate facing rotation. */
+    /** Convierte el reflejo en un giro de orientación. */
     @Override
     protected BlockState mirror(BlockState state, Mirror mirror) {
         return rotate(state, mirror.getRotation(state.getValue(FACING)));
     }
 
-    /** Declare the properties Minecraft serializes and uses to select blockstate model variants. */
+    /** Declara propiedades guardadas y usadas para elegir modelos. */
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, WATERLOGGED, GlassSignMount.GLASS_MOUNTED);

@@ -10,7 +10,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
-/** Client-only ten-drop hydration overlay, positioned after vanilla reserves space for food and air. */
+/** Indicador de diez gotas situado después del espacio de comida y aire. */
 @EventBusSubscriber(modid = PostedSignage.MOD_ID, value = Dist.CLIENT)
 public final class HydrationHud {
     /** Reserve one additional HUD row after air/food to avoid overlapping vanilla status bars. */
@@ -19,7 +19,7 @@ public final class HydrationHud {
             Minecraft mc = Minecraft.getInstance();
             if (mc.options.hideGui || mc.player == null || !Hydration.eligible(mc.player)) return;
             int right = gui.guiWidth() / 2 + 91;
-            // NeoForge reserves rightHeight for food, air and vehicle health before this layer.
+            // NeoForge reserva espacio para comida, aire y salud de monturas.
             int y = gui.guiHeight() - mc.gui.rightHeight;
             mc.gui.rightHeight += 10;
             int value = Hydration.level(mc.player);

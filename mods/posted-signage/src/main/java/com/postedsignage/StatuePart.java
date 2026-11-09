@@ -2,7 +2,7 @@ package com.postedsignage;
 
 import net.minecraft.util.StringRepresentable;
 
-/** One occupied square of the ten-wide, four-high T-shaped statue relief. */
+/** Una celda del mural en T de diez bloques por cuatro. */
 public enum StatuePart implements StringRepresentable {
     STEM_BOTTOM_0("stem_bottom_0", 0, 0),
     STEM_BOTTOM_1("stem_bottom_1", 1, 0),
@@ -54,7 +54,7 @@ public enum StatuePart implements StringRepresentable {
         return row;
     }
 
-    /** Use strict lookup when the caller requires an occupied grid cell; invalid coordinates indicate a logic error. */
+    /** Exige una celda ocupada; coordenadas inválidas indican un error. */
     public static StatuePart at(int column, int row) {
         StatuePart part = findAt(column, row);
         if (part != null) {
@@ -63,7 +63,7 @@ public enum StatuePart implements StringRepresentable {
         throw new IllegalArgumentException("No statue part at " + column + ", " + row);
     }
 
-    /** Return null for positions outside the T-shaped footprint, including its intentionally empty corners. */
+    /** Devuelve null fuera de la figura en T, incluidas sus esquinas vacías. */
     public static StatuePart findAt(int column, int row) {
         for (StatuePart part : values()) {
             if (part.column == column && part.row == row) {
@@ -73,12 +73,12 @@ public enum StatuePart implements StringRepresentable {
         return null;
     }
 
-    /** The four-cell stem spans columns 0..3, so mirroring maps each column to 3 minus itself. */
+    /** El reflejo de las cuatro columnas usa tres menos el índice. */
     public StatuePart mirrored() {
         return at(3 - column, row);
     }
 
-    /** Keep serialized state names stable because resource JSON and saved blockstates refer to them. */
+    /** Conserva nombres de estados usados en recursos y mundos guardados. */
     @Override
     public String getSerializedName() {
         return serializedName;

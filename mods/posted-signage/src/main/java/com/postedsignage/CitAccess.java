@@ -3,7 +3,7 @@ package com.postedsignage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 
-/** One server-side policy shared by door labels and the existing CIT signs. */
+/** Política de servidor compartida por puertas y letreros CIT. */
 public final class CitAccess {
     // Evita crear instancias de esta clase de utilidades.
     private CitAccess() {}

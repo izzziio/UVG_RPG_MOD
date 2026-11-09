@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/** Nine persistent slots; held stacks are stored and the menu provides explicit disposal. */
+/** Nueve espacios persistentes con depósito y eliminación desde el menú. */
 public final class TrashBinBlockEntity extends BaseContainerBlockEntity {
     private NonNullList<ItemStack> items = NonNullList.withSize(9, ItemStack.EMPTY);
 
