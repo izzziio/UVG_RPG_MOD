@@ -22,7 +22,7 @@ public enum PlanterConnection implements StringRepresentable {
         this.direction = direction;
     }
 
-    /** SINGLE has no partner direction; callers must handle null before moving to a neighbor. */
+    /** SINGLE no tiene dirección de pareja; quien llama debe manejar null antes de moverse a una vecina. */
     @Nullable
     public Direction direction() {
         return direction;
@@ -35,7 +35,7 @@ public enum PlanterConnection implements StringRepresentable {
             case EAST -> EAST;
             case SOUTH -> SOUTH;
             case WEST -> WEST;
-            default -> throw new IllegalArgumentException("Planter connections must be horizontal");
+            default -> throw new IllegalArgumentException("Las conexiones entre jardineras deben ser horizontales");
         };
     }
 

@@ -48,7 +48,7 @@ public final class TrashBinBlockEntity extends BaseContainerBlockEntity {
         if (!canAccess(player)) return 0;
         ItemStack held = player.getItemInHand(hand);
         int before = held.getCount();
-        // Fill compatible stacks first, then vacant slots. Never consume overflow.
+        // Llena primero las pilas compatibles y luego los espacios libres. Nunca consume el excedente.
         for (int pass = 0; pass < 2 && !held.isEmpty(); pass++) {
             for (int slot = 0; slot < getContainerSize() && !held.isEmpty(); slot++) {
                 ItemStack stored = getItem(slot);

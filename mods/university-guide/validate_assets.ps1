@@ -1,4 +1,4 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param()
 
 $ErrorActionPreference = 'Stop'
@@ -39,13 +39,13 @@ $parsedJson = @{}
 foreach ($file in $jsonFiles) {
     try {
         $rawJson = Get-Content -Raw -Encoding UTF8 -LiteralPath $file.FullName
-        # Windows PowerShell 5.1 rejects empty property names, which Minecraft
-        # uses for the default blockstate variant.
+        # Windows PowerShell 5.1 rechaza los nombres de propiedad vacíos, que Minecraft
+        # usa para la variante predeterminada del blockstate.
         $normalizedJson = $rawJson -replace '""\s*:', '"__default__":'
         $parsedJson[$file.FullName] = $normalizedJson | ConvertFrom-Json
     }
     catch {
-        Add-ValidationError "Invalid JSON in $($file.FullName): $($_.Exception.Message)"
+        Add-ValidationError "JSON inválido en $($file.FullName): $($_.Exception.Message)"
     }
 }
 
@@ -56,7 +56,7 @@ if ($parsedJson.ContainsKey($blockstatePath)) {
     $defaultVariant = $parsedJson[$blockstatePath].variants.PSObject.Properties['__default__']
     if ($null -eq $defaultVariant -or
             $defaultVariant.Value.model -ne 'universityguide:block/tour_stop') {
-        Add-ValidationError "tour_stop blockstate must reference universityguide:block/tour_stop"
+        Add-ValidationError "El blockstate tour_stop debe referenciar universityguide:block/tour_stop"
     }
 }
 if ($parsedJson.ContainsKey($itemModelPath) -and
@@ -68,7 +68,7 @@ foreach ($file in $jsonFiles | Where-Object FullName -Match '[\\/]assets[\\/]uni
     $raw = Get-Content -Raw -Encoding UTF8 -LiteralPath $file.FullName
     foreach ($match in [regex]::Matches($raw, '"(?:model|parent)"\s*:\s*"universityguide:(block|item)/([^"#]+)"')) {
         $modelPath = Join-Path $assetRoot "models/$($match.Groups[1].Value)/$($match.Groups[2].Value).json"
-        Require-File $modelPath "Broken model reference in $($file.FullName)"
+        Require-File $modelPath "Referencia de modelo rota en $($file.FullName)"
     }
 }
 
@@ -86,10 +86,10 @@ if ($languageKeys.Count -eq $languagePaths.Count) {
     $referenceKeys = $languageKeys[$languagePaths[0]]
     foreach ($languagePath in $languagePaths[1..($languagePaths.Count - 1)]) {
         foreach ($missing in @($referenceKeys | Where-Object { $_ -notin $languageKeys[$languagePath] })) {
-            Add-ValidationError "Missing translation key $missing in $languagePath"
+            Add-ValidationError "Falta la clave de traducción $missing en $languagePath"
         }
         foreach ($extra in @($languageKeys[$languagePath] | Where-Object { $_ -notin $referenceKeys })) {
-            Add-ValidationError "Translation key $extra is not present in $($languagePaths[0])"
+            Add-ValidationError "La clave de traducción $extra no está en $($languagePaths[0])"
         }
     }
 }
@@ -109,15 +109,15 @@ foreach ($languagePath in $languagePaths) {
     }
     foreach ($translation in $requiredTranslations) {
         if ($translation -notin $languageKeys[$languagePath]) {
-            Add-ValidationError "Missing required translation $translation in $languagePath"
+            Add-ValidationError "Falta la traducción obligatoria $translation en $languagePath"
         }
     }
 }
 
 if ($errors.Count -gt 0) {
-    Write-Error ("Asset validation failed with {0} error(s):`n- {1}" -f
+    Write-Error ("La validación de assets falló con {0} error(es):`n- {1}" -f
             $errors.Count, ($errors -join "`n- "))
     exit 1
 }
 
-Write-Host "Asset validation passed: $($jsonFiles.Count) JSON files and matching translations."
+Write-Host "Validación de assets correcta: $($jsonFiles.Count) archivos JSON y traducciones coincidentes."

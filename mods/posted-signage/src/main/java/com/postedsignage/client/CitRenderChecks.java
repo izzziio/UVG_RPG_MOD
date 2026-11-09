@@ -29,10 +29,10 @@ public final class CitRenderChecks {
                 byte[] before=vertices(format,mesh,pose,glass,false),after=vertices(format,mesh,pose,glass,true);
                 // El byte de relleno no forma parte de los atributos del vértice.
                 for(int i=0;i<before.length;i++)if(i%format.getVertexSize()!=format.getVertexSize()-1&&before[i]!=after[i])
-                    throw new IllegalStateException("Vertex path differs: case="+cases+" byte="+i);
+                    throw new IllegalStateException("La ruta de vértices difiere: caso="+cases+" byte="+i);
                 cases++;
             }
-        org.apache.logging.log4j.LogManager.getLogger().info("CIT render checks passed: {} vertex comparisons (BLOCK/NEW_ENTITY, transforms, normals, UV, color, light)",cases);
+        org.apache.logging.log4j.LogManager.getLogger().info("Comprobaciones de render CIT correctas: {} comparaciones de vértices (BLOCK/NEW_ENTITY, transformaciones, normales, UV, color, luz)",cases);
     }
     // Comprueba los modelos instalados en el cliente, sin cambiar ningún bloque del mundo.
     private static void checkTerrain(){
@@ -44,22 +44,22 @@ public final class CitRenderChecks {
                 var state=block.defaultBlockState();
                 state=block instanceof CitGlassBlock?state.setValue(CitGlassBlock.AXIS,facing.getAxis()):state.setValue(CitDoorBlock.FACING,facing);
                 var model=mc.getBlockRenderer().getBlockModel(state);
-                if(!(model instanceof CitFrameModel))throw new IllegalStateException("Missing terrain frame model: "+state);
+                if(!(model instanceof CitFrameModel))throw new IllegalStateException("Falta el modelo de marco de terreno: "+state);
                 var data=model.getModelData(mc.level,pos,state,net.neoforged.neoforge.client.model.data.ModelData.EMPTY);
                 var quads=model.getQuads(state,null,net.minecraft.util.RandomSource.create(42),data,net.minecraft.client.renderer.RenderType.solid());
                 float[] source=CitFrameGeometry.mesh(state,mc.level,pos);
-                if(quads.size()!=source.length/32)throw new IllegalStateException("Terrain frame has unexpected geometry");
+                if(quads.size()!=source.length/32)throw new IllegalStateException("El marco de terreno tiene una geometría inesperada");
                 for(var quad:quads){
-                    if(quad.isShade()||quad.hasAmbientOcclusion())throw new IllegalStateException("Frame shading changed");
-                    for(int i=3;i<32;i+=8)if(quad.getVertices()[i]!=0xFF2C2723)throw new IllegalStateException("Frame tint changed");
+                    if(quad.isShade()||quad.hasAmbientOcclusion())throw new IllegalStateException("Cambió el sombreado del marco");
+                    for(int i=3;i<32;i+=8)if(quad.getVertices()[i]!=0xFF2C2723)throw new IllegalStateException("Cambió el tinte del marco");
                 }
                 // El modelo de muestra conserva las superficies completas fuera del terreno.
                 var original=model.getQuads(state,null,net.minecraft.util.RandomSource.create(42));
-                if(original.isEmpty())throw new IllegalStateException("Inventory/sample fallback was lost");
+                if(original.isEmpty())throw new IllegalStateException("Se perdió el modelo alternativo de inventario y muestra");
                 cases++;
             }
         }
-        org.apache.logging.log4j.LogManager.getLogger().info("CIT terrain model checks passed: {} model/geometry/tint/shading/fallback cases",cases);
+        org.apache.logging.log4j.LogManager.getLogger().info("Comprobaciones del modelo de terreno CIT correctas: {} casos de modelo, geometría, tinte, sombreado y alternativa",cases);
     }
     private static byte[] vertices(VertexFormat format,float[] mesh,PoseStack pose,boolean glass,boolean fast){
         try(var storage=new ByteBufferBuilder(8192)){

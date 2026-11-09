@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/** A flat wall mural occupying a ten-wide by four-high T-shaped grid. */
+/** Mural plano de pared que ocupa una cuadrícula en forma de T de diez de ancho por cuatro de alto. */
 public final class StatueReliefBlock extends HorizontalDirectionalBlock {
     public static final MapCodec<StatueReliefBlock> CODEC = simpleCodec(StatueReliefBlock::new);
     public static final EnumProperty<StatuePart> PART = EnumProperty.create("part", StatuePart.class);

@@ -41,28 +41,28 @@ public final class FacilityGameTests {
         var hit = new BlockHitResult(pos.getCenter(), Direction.NORTH, pos, false);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(net.minecraft.world.item.Items.DIAMOND, 12));
         block.useItemOn(player.getMainHandItem(), state, level, pos, player, InteractionHand.MAIN_HAND, hit);
-        helper.assertTrue(player.getMainHandItem().isEmpty() && bin.getItem(0).getCount() == 12, "Right-click stores entire held stack");
+        helper.assertTrue(player.getMainHandItem().isEmpty() && bin.getItem(0).getCount() == 12, "El clic derecho guarda toda la pila en la mano");
         for (int i = 0; i < 9; i++) bin.setItem(i, new ItemStack(net.minecraft.world.item.Items.DIAMOND, 64));
         bin.getItem(0).setCount(60);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(net.minecraft.world.item.Items.DIAMOND, 12));
         block.useItemOn(player.getMainHandItem(), state, level, pos, player, InteractionHand.MAIN_HAND, hit);
-        helper.assertTrue(bin.getItem(0).getCount() == 64 && player.getMainHandItem().getCount() == 8, "Partial deposit leaves overflow in hand");
+        helper.assertTrue(bin.getItem(0).getCount() == 64 && player.getMainHandItem().getCount() == 8, "El depósito parcial deja el excedente en la mano");
         block.useItemOn(player.getMainHandItem(), state, level, pos, player, InteractionHand.MAIN_HAND, hit);
-        helper.assertTrue(player.getMainHandItem().getCount() == 8, "Full bin never deletes held items");
+        helper.assertTrue(player.getMainHandItem().getCount() == 8, "Un basurero lleno nunca elimina los objetos en la mano");
         bin.clearContent();
         ItemStack named = new ItemStack(net.minecraft.world.item.Items.DIAMOND, 3);
         named.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, net.minecraft.network.chat.Component.literal("Keep my name"));
         bin.setItem(0, new ItemStack(net.minecraft.world.item.Items.DIAMOND, 10));
         player.setItemInHand(InteractionHand.OFF_HAND, named);
-        helper.assertTrue(bin.storeHeldItems(player, InteractionHand.OFF_HAND) == 3, "Offhand can deposit");
+        helper.assertTrue(bin.storeHeldItems(player, InteractionHand.OFF_HAND) == 3, "La mano secundaria puede depositar");
         helper.assertTrue(bin.getItem(0).getCount() == 10 && bin.getItem(1).getCount() == 3
-                && bin.getItem(1).has(net.minecraft.core.component.DataComponents.CUSTOM_NAME), "Different components stay separate and intact");
+                && bin.getItem(1).has(net.minecraft.core.component.DataComponents.CUSTOM_NAME), "Los componentes distintos siguen separados e intactos");
         bin.clearContent();
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(net.minecraft.world.item.Items.DIAMOND_SWORD));
-        helper.assertTrue(bin.storeHeldItems(player, InteractionHand.MAIN_HAND) == 1 && bin.getItem(0).getCount() == 1, "Unstackable items stored safely");
+        helper.assertTrue(bin.storeHeldItems(player, InteractionHand.MAIN_HAND) == 1 && bin.getItem(0).getCount() == 1, "Los objetos no apilables se guardan de forma segura");
         player.setPos(pos.getX() + 100, pos.getY(), pos.getZ());
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(net.minecraft.world.item.Items.STONE, 8));
-        helper.assertTrue(bin.storeHeldItems(player, InteractionHand.MAIN_HAND) == 0 && player.getMainHandItem().getCount() == 8, "Distant deposit is rejected");
+        helper.assertTrue(bin.storeHeldItems(player, InteractionHand.MAIN_HAND) == 0 && player.getMainHandItem().getCount() == 8, "Se rechaza el depósito lejano");
         helper.succeed();
     }
 
@@ -83,22 +83,22 @@ public final class FacilityGameTests {
                     BlockPos currentOrigin = origin;
                     for (boolean open : new boolean[] {true, false}) {
                         BlockState before = level.getBlockState(selected);
-                        helper.assertTrue(block.useWithoutItem(level.getBlockState(selected), level, selected, player, hit).consumesAction(), "Door interaction succeeds");
+                        helper.assertTrue(block.useWithoutItem(level.getBlockState(selected), level, selected, player, hit).consumesAction(), "La interacción con la puerta funciona");
                         currentOrigin = block.toggledOrigin(currentOrigin, before);
                         selected = currentOrigin.relative(block.widthDirection(before.cycle(FacilityDoorBlock.OPEN)), selectedX).above(selectedY);
                         for (int x = 0; x < block.width; x++) for (int y = 0; y < block.height; y++) {
                             BlockPos partPos = currentOrigin.relative(block.widthDirection(before.cycle(FacilityDoorBlock.OPEN)), x).above(y);
                             var part = level.getBlockState(partPos);
-                            helper.assertTrue(part.getValue(FacilityDoorBlock.OPEN) == open, "All parts share open state");
+                            helper.assertTrue(part.getValue(FacilityDoorBlock.OPEN) == open, "Todas las partes comparten el estado abierto");
                             var corridor = facing.getAxis() == Direction.Axis.Z
                                     ? net.minecraft.world.level.block.Block.box(7, 0, 0, 9, 16, 16)
                                     : net.minecraft.world.level.block.Block.box(0, 0, 7, 16, 16, 9);
                             boolean blocked = net.minecraft.world.phys.shapes.Shapes.joinIsNotEmpty(
                                     part.getCollisionShape(level, partPos), corridor, net.minecraft.world.phys.shapes.BooleanOp.AND);
-                            if (block.width == 1 || !open) helper.assertTrue(blocked != open, "Opening clears the walk-through corridor");
-                            if (block.width == 2 && open) helper.assertTrue(level.isEmptyBlock(origin.above(y)), "Single wide leaf vacates the original entrance");
+                            if (block.width == 1 || !open) helper.assertTrue(blocked != open, "Abrir despeja el corredor de paso");
+                            if (block.width == 2 && open) helper.assertTrue(level.isEmptyBlock(origin.above(y)), "La hoja ancha única deja libre la entrada original");
                             var restored = net.minecraft.nbt.NbtUtils.readBlockState(level.holderLookup(net.minecraft.core.registries.Registries.BLOCK), net.minecraft.nbt.NbtUtils.writeBlockState(part));
-                            helper.assertTrue(restored.equals(part), "Open state persists in saved palette");
+                            helper.assertTrue(restored.equals(part), "El estado abierto persiste en la paleta guardada");
                         }
                     }
                     BlockState before = level.getBlockState(selected);
@@ -125,9 +125,9 @@ public final class FacilityGameTests {
         player.containerMenu = menu;
         player.getInventory().setItem(0, new ItemStack(net.minecraft.world.item.Items.EMERALD, 5));
         helper.assertTrue(menu.quickMoveStack(player, 36).getCount() == 5
-                && bin.getItem(0).getCount() == 5 && player.getInventory().getItem(0).isEmpty(), "Shift-click stores player items");
+                && bin.getItem(0).getCount() == 5 && player.getInventory().getItem(0).isEmpty(), "Mayús + clic guarda los objetos del jugador");
         helper.assertTrue(menu.quickMoveStack(player, 0).getCount() == 5 && bin.isEmpty()
-                && player.getInventory().countItem(net.minecraft.world.item.Items.EMERALD) == 5, "Shift-click recovers bin items without loss or duplication");
+                && player.getInventory().countItem(net.minecraft.world.item.Items.EMERALD) == 5, "Mayús + clic recupera los objetos del basurero sin pérdidas ni duplicados");
         bin.setItem(0, new ItemStack(net.minecraft.world.item.Items.DIAMOND, 7));
         var visitor = helper.makeMockPlayer(GameType.ADVENTURE);
         // El jugador de prueba redefine consultas de modo sin iniciar sus habilidades.
@@ -136,12 +136,12 @@ public final class FacilityGameTests {
         var deniedMenu = new TrashBinMenu(5, visitor.getInventory(), bin);
         visitor.containerMenu = deniedMenu;
         visitor.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(net.minecraft.world.item.Items.STONE, 4));
-        helper.assertTrue(!deniedMenu.clickMenuButton(visitor, 0) && !bin.isEmpty(), "Adventure cannot empty bin");
+        helper.assertTrue(!deniedMenu.clickMenuButton(visitor, 0) && !bin.isEmpty(), "En Aventura no se puede vaciar el basurero");
         helper.assertTrue(bin.storeHeldItems(visitor, InteractionHand.MAIN_HAND) == 0
-                && visitor.getMainHandItem().getCount() == 4, "Adventure cannot deposit");
+                && visitor.getMainHandItem().getCount() == 4, "En Aventura no se puede depositar");
         var other = helper.makeMockPlayer(GameType.SURVIVAL);
         other.setPos(pos.getX() + .5, pos.getY(), pos.getZ() + 2);
-        helper.assertTrue(!menu.clickMenuButton(other, 0) && !bin.isEmpty(), "Another player's menu cannot be reused");
+        helper.assertTrue(!menu.clickMenuButton(other, 0) && !bin.isEmpty(), "No se puede reutilizar el menú de otro jugador");
         player.containerMenu = player.inventoryMenu;
         visitor.containerMenu = visitor.inventoryMenu;
         helper.succeed();
@@ -154,37 +154,37 @@ public final class FacilityGameTests {
         BlockPos pos = helper.absolutePos(START);
         var block = PostedSignage.TRASH_BIN_BLOCK.get();
         level.setBlockAndUpdate(pos, block.defaultBlockState());
-        helper.assertTrue(level.isEmptyBlock(pos.above()), "Bin occupies only one block");
+        helper.assertTrue(level.isEmptyBlock(pos.above()), "El basurero ocupa solo un bloque");
         var bin = (TrashBinBlockEntity) level.getBlockEntity(pos);
         var player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 2);
         bin.setItem(0, new ItemStack(net.minecraft.world.item.Items.DIAMOND, 7));
         var menu = bin.createMenu(1, player.getInventory(), player);
-        helper.assertTrue(menu != null && menu.slots.size() == 45, "Nine storage slots and player inventory available");
+        helper.assertTrue(menu != null && menu.slots.size() == 45, "Nueve espacios de almacenamiento e inventario del jugador disponibles");
         menu.removed(player);
-        helper.assertTrue(bin.getItem(0).getCount() == 7, "Closing storage never destroys items");
+        helper.assertTrue(bin.getItem(0).getCount() == 7, "Cerrar el almacenamiento nunca destruye objetos");
         var restored = new TrashBinBlockEntity(pos, bin.getBlockState());
         restored.loadWithComponents(bin.saveWithFullMetadata(level.registryAccess()), level.registryAccess());
-        helper.assertTrue(restored.getItem(0).getCount() == 7, "Stored items survive reload");
-        helper.assertTrue(menu instanceof TrashBinMenu, "Bin uses dedicated menu");
-        helper.assertTrue(!menu.clickMenuButton(player, 0) && !bin.isEmpty(), "Closed menu cannot empty bin");
+        helper.assertTrue(restored.getItem(0).getCount() == 7, "Los objetos guardados sobreviven a la recarga");
+        helper.assertTrue(menu instanceof TrashBinMenu, "El basurero usa un menú propio");
+        helper.assertTrue(!menu.clickMenuButton(player, 0) && !bin.isEmpty(), "Un menú cerrado no puede vaciar el basurero");
         player.containerMenu = menu;
-        helper.assertTrue(!menu.clickMenuButton(player, 99) && !bin.isEmpty(), "Unknown button cannot empty bin");
+        helper.assertTrue(!menu.clickMenuButton(player, 99) && !bin.isEmpty(), "Un botón desconocido no puede vaciar el basurero");
         player.setPos(pos.getX() + 100, pos.getY(), pos.getZ());
-        helper.assertTrue(!menu.clickMenuButton(player, 0) && !bin.isEmpty(), "Distant button request rejected");
+        helper.assertTrue(!menu.clickMenuButton(player, 0) && !bin.isEmpty(), "Se rechaza la solicitud lejana del botón");
         player.setPos(pos.getX() + .5, pos.getY(), pos.getZ() + 2);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(net.minecraft.world.item.Items.EMERALD, 5));
         menu.setCarried(new ItemStack(net.minecraft.world.item.Items.GOLD_INGOT, 2));
-        helper.assertTrue(menu.clickMenuButton(player, 0) && bin.isEmpty(), "Empty button deletes stored contents in one click");
-        helper.assertTrue(player.getMainHandItem().getCount() == 5 && menu.getCarried().getCount() == 2, "Disposal preserves player inventory and cursor");
-        helper.assertTrue(!menu.clickMenuButton(player, 0), "Empty bin button is harmless");
+        helper.assertTrue(menu.clickMenuButton(player, 0) && bin.isEmpty(), "El botón de vaciar elimina el contenido guardado con un clic");
+        helper.assertTrue(player.getMainHandItem().getCount() == 5 && menu.getCarried().getCount() == 2, "El vaciado conserva el inventario y el cursor del jugador");
+        helper.assertTrue(!menu.clickMenuButton(player, 0), "El botón de vaciar un basurero vacío es inofensivo");
         menu.setCarried(ItemStack.EMPTY);
         player.containerMenu = player.inventoryMenu;
         bin.setItem(0, new ItemStack(net.minecraft.world.item.Items.DIAMOND, 7));
         breakAndCount(helper, pos, pos, block.asItem(), GameType.SURVIVAL);
         int diamonds = level.getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(2), e -> e.getItem().is(net.minecraft.world.item.Items.DIAMOND))
                 .stream().mapToInt(e -> e.getItem().getCount()).sum();
-        helper.assertTrue(diamonds == 7, "Breaking bin returns all undeleted contents");
+        helper.assertTrue(diamonds == 7, "Romper el basurero devuelve todo el contenido no eliminado");
         helper.succeed();
     }
 
@@ -195,8 +195,8 @@ public final class FacilityGameTests {
         BlockPos pos = helper.absolutePos(START);
         var shortDoor = PostedSignage.SHORT_GLASS_DOOR_BLOCK.get();
         var oldName = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(PostedSignage.MOD_ID, "glass_door");
-        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(oldName) == shortDoor, "Retired block ID aliases short door");
-        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(oldName) == shortDoor.asItem(), "Retired inventory item aliases short door");
+        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(oldName) == shortDoor, "El ID de bloque retirado apunta a la puerta corta");
+        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(oldName) == shortDoor.asItem(), "El objeto retirado del inventario apunta a la puerta corta");
         for (FacilityMultiBlock block : new FacilityMultiBlock[] {PostedSignage.TRASH_BIN_BLOCK.get(), shortDoor}) {
             var state = block.defaultBlockState();
             level.setBlockAndUpdate(pos, state);
@@ -204,8 +204,8 @@ public final class FacilityGameTests {
             BlockPos obsolete = pos.above(block.height);
             level.setBlock(obsolete, state.setValue(FacilityMultiBlock.PART_Y, block.height), 18);
             FacilityMigration.removeObsoleteCell(level, obsolete);
-            helper.assertTrue(level.isEmptyBlock(obsolete), "Obsolete upper cell removed");
-            helper.assertTrue(level.getBlockState(pos).is(block), "Retained origin preserved");
+            helper.assertTrue(level.isEmptyBlock(obsolete), "Se retira la celda superior obsoleta");
+            helper.assertTrue(level.getBlockState(pos).is(block), "Se conserva el origen retenido");
             block.playerWillDestroy(level, pos, state, helper.makeMockPlayer(GameType.CREATIVE));
             level.removeBlock(pos, false);
         }
@@ -234,7 +234,7 @@ public final class FacilityGameTests {
                         breakAndCount(helper, selected, origin, block.asItem(), mode);
                         for (int px = 0; px < widths[i]; px++) for (int py = 0; py < heights[i]; py++) {
                             helper.assertTrue(level.getBlockState(origin.relative(facing.getClockWise(), px).above(py)).isAir(),
-                                    "All facility parts removed: " + mode + " " + facing + " " + x + "," + y);
+                                    "Todas las partes de la instalación retiradas:" + mode + " " + facing + " " + x + "," + y);
                         }
                     }
                 }
@@ -263,7 +263,7 @@ public final class FacilityGameTests {
                     breakAndCount(helper, selectedPos, origin, block.asItem(), mode);
                     for (StatuePart part : StatuePart.values()) {
                         BlockPos pos = origin.relative(facing.getCounterClockWise(), part.column()).above(part.row());
-                        helper.assertTrue(level.getBlockState(pos).isAir(), "All mural parts removed: " + mode + " " + selected);
+                        helper.assertTrue(level.getBlockState(pos).isAir(), "Todas las partes del mural retiradas:" + mode + " " + selected);
                         level.setBlock(pos.relative(facing.getOpposite()), Blocks.AIR.defaultBlockState(), 18);
                     }
                 }
@@ -281,12 +281,12 @@ public final class FacilityGameTests {
         player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
         var existingDrops = new java.util.HashSet<>(level.getEntitiesOfClass(ItemEntity.class,
                 new AABB(origin).inflate(12)));
-        helper.assertTrue(player.gameMode.destroyBlock(selected), "Server player successfully breaks selected part");
+        helper.assertTrue(player.gameMode.destroyBlock(selected), "El jugador del servidor rompe la parte seleccionada");
         var drops = level.getEntitiesOfClass(ItemEntity.class, new AABB(origin).inflate(12),
                 entity -> entity.getItem().is(item) && !existingDrops.contains(entity));
         int count = drops.stream().mapToInt(entity -> entity.getItem().getCount()).sum();
         helper.assertTrue(count == (mode == GameType.CREATIVE ? 0 : 1),
-                "Exact drop count for " + item + " in " + mode + ": " + count);
+                "Cantidad exacta de objetos soltados para" + item + " in " + mode + ": " + count);
         drops.forEach(ItemEntity::discard);
     }
 
@@ -325,20 +325,20 @@ public final class FacilityGameTests {
                 floor.getCenter().add(0, 0.5, 0), Direction.UP, floor, false);
         var context = new BlockPlaceContext(player, InteractionHand.MAIN_HAND, stack, hit);
         BlockState preview = block.getStateForPlacement(context);
-        helper.assertTrue(preview != null, "Facility has enough room for placement");
-        helper.assertTrue(preview.canSurvive(level, origin), "Facility origin can enter the world");
-        helper.assertTrue(stack.useOn(context).consumesAction(), "Facility BlockItem accepts placement");
+        helper.assertTrue(preview != null, "La instalación tiene espacio suficiente para colocarse");
+        helper.assertTrue(preview.canSurvive(level, origin), "El origen de la instalación puede entrar al mundo");
+        helper.assertTrue(stack.useOn(context).consumesAction(), "El BlockItem de la instalación acepta la colocación");
 
         Direction widthDirection = preview.getValue(FacilityMultiBlock.FACING).getClockWise();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 BlockState part = level.getBlockState(origin.relative(widthDirection, x).above(y));
-                helper.assertTrue(part.is(block), "BlockItem creates facility part " + x + "," + y);
+                helper.assertTrue(part.is(block), "BlockItem crea la parte de la instalación" + x + "," + y);
             }
         }
 
         // Reutiliza una zona aislada para que la orientación del jugador no
-        // make one successfully placed facility obstruct another test case.
+        // haga que una instalación ya colocada obstruya otro caso de prueba.
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 level.setBlock(origin.relative(widthDirection, x).above(y), Blocks.AIR.defaultBlockState(),
@@ -365,10 +365,10 @@ public final class FacilityGameTests {
             for (int y = 0; y < height; y++) {
                 BlockPos partPos = origin.relative(widthDirection, x).above(y);
                 BlockState part = level.getBlockState(partPos);
-                helper.assertTrue(part.is(block), "Facility part exists at " + x + "," + y);
-                helper.assertTrue(part.getValue(FacilityMultiBlock.PART_X) == x, "Facility part_x is correct");
-                helper.assertTrue(part.getValue(FacilityMultiBlock.PART_Y) == y, "Facility part_y is correct");
-                helper.assertTrue(part.getValue(FacilityMultiBlock.FACING) == Direction.NORTH, "Facility facing is preserved");
+                helper.assertTrue(part.is(block), "La parte de la instalación existe en" + x + "," + y);
+                helper.assertTrue(part.getValue(FacilityMultiBlock.PART_X) == x, "El part_x de la instalación es correcto");
+                helper.assertTrue(part.getValue(FacilityMultiBlock.PART_Y) == y, "El part_y de la instalación es correcto");
+                helper.assertTrue(part.getValue(FacilityMultiBlock.FACING) == Direction.NORTH, "Se conserva la orientación de la instalación");
             }
         }
 
@@ -380,7 +380,7 @@ public final class FacilityGameTests {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 BlockPos partPos = origin.relative(widthDirection, x).above(y);
-                helper.assertTrue(level.getBlockState(partPos).is(Blocks.AIR), "Breaking one part removes the whole facility");
+                helper.assertTrue(level.getBlockState(partPos).is(Blocks.AIR), "Romper una parte retira toda la instalación");
             }
         }
     }
