@@ -17,7 +17,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 
-/** Per-dimension persistent UUID index; menus can list stops without loading every destination chunk. */
+/** Índice persistente de UUID por dimensión; los menús pueden listar paradas sin cargar cada chunk de destino. */
 public final class TourStopSavedData extends SavedData {
     public static final int SUMMARY_LENGTH=160;
     private static final String FILE_NAME = "universityguide_stops";
@@ -31,7 +31,7 @@ public final class TourStopSavedData extends SavedData {
         return level.getDataStorage().computeIfAbsent(FACTORY, FILE_NAME);
     }
 
-    /** Skip records lacking a UUID or valid position rather than constructing unusable destinations. */
+    /** Omite los registros sin UUID o posición válida en lugar de construir destinos inutilizables. */
     private static TourStopSavedData load(CompoundTag tag, HolderLookup.Provider registries) {
         TourStopSavedData data = new TourStopSavedData();
         ListTag list = tag.getList("Stops", Tag.TAG_COMPOUND);
@@ -80,7 +80,7 @@ public final class TourStopSavedData extends SavedData {
         return Optional.ofNullable(entries.get(id));
     }
 
-    /** Sort names without case sensitivity so destination pagination remains predictable. */
+    /** Ordena los nombres sin distinguir mayúsculas para que la paginación de destinos sea predecible. */
     public List<Entry> sortedEntries() {
         return entries.values().stream()
                 .sorted(Comparator.comparing(Entry::name, String.CASE_INSENSITIVE_ORDER))

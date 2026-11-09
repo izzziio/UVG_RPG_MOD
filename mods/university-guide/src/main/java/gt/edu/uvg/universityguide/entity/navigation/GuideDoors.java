@@ -28,15 +28,15 @@ public final class GuideDoors {
     }
     public static boolean isDoor(BlockState state){
         if(ACCESS==null)return false;
-        try{return (boolean)ACCESS.isDoor.invokeExact(state);}catch(Throwable failure){throw new IllegalStateException("CIT door integration",failure);}
+        try{return (boolean)ACCESS.isDoor.invokeExact(state);}catch(Throwable failure){throw new IllegalStateException("Integración de puertas CIT",failure);}
     }
     public static VoxelShape shape(BlockGetter level,BlockPos pos){
         if(ACCESS==null)return null;
-        try{return (VoxelShape)ACCESS.shape.invokeExact(level,pos);}catch(Throwable failure){throw new IllegalStateException("CIT door geometry",failure);}
+        try{return (VoxelShape)ACCESS.shape.invokeExact(level,pos);}catch(Throwable failure){throw new IllegalStateException("Geometría de puertas CIT",failure);}
     }
     public static Vec3 waypoint(BlockGetter level,BlockPos pos,double floor,double width,double height){
         if(ACCESS==null)return new Vec3(pos.getX()+.5,floor,pos.getZ()+.5);
-        try{return (Vec3)ACCESS.waypoint.invokeExact(level,pos,floor,width,height);}catch(Throwable failure){throw new IllegalStateException("CIT door waypoint",failure);}
+        try{return (Vec3)ACCESS.waypoint.invokeExact(level,pos,floor,width,height);}catch(Throwable failure){throw new IllegalStateException("Punto de paso de puertas CIT",failure);}
     }
     // Solo abre puertas en el tramo inmediato, antes de entrar en su colisión.
     public static boolean openAhead(Mob guide,Vec3 target){
@@ -53,7 +53,7 @@ public final class GuideDoors {
             for(var box:state.getCollisionShape(guide.level(),cursor).toAabbs())if(box.move(cursor).intersects(area)){touches=true;break;}
             if(touches)try{
                 if(!(boolean)ACCESS.open.invokeExact(guide,cursor.immutable()))return false;
-            }catch(Throwable failure){throw new IllegalStateException("CIT door opening",failure);}
+            }catch(Throwable failure){throw new IllegalStateException("Apertura de puertas CIT",failure);}
         }
         return true;
     }
